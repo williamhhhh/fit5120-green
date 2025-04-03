@@ -1,47 +1,49 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import BHeader from './components/BHeader.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <BHeader />
   </header>
 
-  <main>
-    <TheWelcome />
+  <main class="main-box">
+    <router-view></router-view>
   </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.main-content {
+  padding: 20px;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+@media (max-width: 576px) {
+  .main-content {
+    padding: 10px;
+    font-size: 14px;
+  }
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+@media (min-width: 577px) and (max-width: 768px) {
+  .main-content {
+    padding: 15px;
+    font-size: 16px;
   }
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
+@media (min-width: 769px) {
+  .main-content {
+    padding: 20px;
+    font-size: 18px;
   }
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 80vw;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #75be3a;
+  border-radius: 10px;
 }
 </style>

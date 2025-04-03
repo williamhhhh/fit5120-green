@@ -1,79 +1,84 @@
 <template>
     <div class="desc-container">
-      <div class="img-bg w-100" :style="backgroundStyle" alt="Sun illustration">
-        <div class="welcome-content">
-          <h1 class="welcome-title">
-            Welcome to <br /><span class="highlight">SunAware</span>
-          </h1>
-          <p class="welcome-text col-md-6">
-            SunAware is a web application that provides real-time UV index data
-            for Australian suburbs. Type in a suburb and click search to find the real-time UV!
-          </p>
-        </div>
-
-        <div class="search-box">
-          <input
-            type="text"
-            v-model="query"
-            @input="searchLocations"
-            placeholder="Type a suburb..."
-            class="search-input"
-          />
-          <button
-            type="submit"
-            class="search-btn"
-            @click="searchUvIndex"
-          >
-            <img
-              src="https://i.imgur.com/sijPEYJ.png"
-              alt="Search"
-            />
-          </button>
-        </div>
-        <ul v-if="suggestions.length > 0" class="suggestions">
-          <li
-            v-for="(location, index) in suggestions"
-            :key="index"
-            @click="selectLocation(location)"
-          >
-            {{ location.display_name }}
-          </li>
-        </ul>
-      </div>
-  
-      <div v-if="uvData" class="uv-container">
-        <div class="uv-index-top" id="uv-container-home">
-          <div class="uv-index-display" :style="{ borderColor: getUvColor(uvData.now.uvi) }">
-            <h2>Current UV Index</h2>
-            <div class="uv-index-value">
-              <span :style="{ color: getUvColor(uvData.now.uvi) }">{{ uvData.now.uvi }}</span>
-            </div>
-            <p class="uv-index-label" :style="{ color: getUvColor(uvData.now.uvi) }">
-              {{ getUvLevel(uvData.now.uvi) }}
+        <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
+        <!-- <div class="title-container">
+            <h1 class="title">Melbourne is Getting Hotter - Let's Cool It Down Together</h1>
+            <p class="description">
+                Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
             </p>
-          </div>
-  
-          <div class="uv-risk-scale">
-            <h2>UV Risk Scale</h2>
-            <div class="uv-risk-level" v-for="(level, index) in uvLevels" :key="index">
-              <span class="uv-color-box" :style="{ backgroundColor: level.color }"></span>
-              <span class="uv-level-text">{{ level.text }}</span>
-            </div>
-          </div>
+            <button class="button-get-started">Get Started</button>
+        </div> -->
+        <div
+        class="position-absolute top-50 p-4"
+        style="max-width: 600px; background: none; border-radius: 10px; color: white;"
+        >
+        <h1 class="h3 h1-md fw-bold">
+            Melbourne is Getting Hotter – Let's Cool It Down Together
+        </h1>
+        <p class="lead d-none d-sm-block">
+            Join us in tackling urban heat and reducing CO₂ emissions through small, everyday actions.
+        </p>
+        <button class="btn btn-light mt-3">Get Started</button>
         </div>
-  
-        <div class="uv-chart">
-          <h2>UV Index Chart</h2>
-          <canvas ref="uvChart"></canvas>
-        </div>
-      </div>
     </div>
-  </template>
-  
-  <script>
-  
-  </script>
-  
-  <style scoped>
+</template>
 
-  </style>
+<script>
+
+</script>
+
+<style scoped>
+.green-city {
+    width: 100%;
+    position: absolute;
+    height: auto;
+    margin-bottom: 20px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(290.75deg, rgba(164, 161, 71, 0.6) 11.38%, rgba(255, 255, 255, 0) 44.52%);
+    transform: matrix(-1, 0, 0, 1, 0, 0);
+    filter: brightness(50%);
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 16px;
+
+    position: absolute;
+    width: 724px;
+    height: 272px;
+    left: 70px;
+    top: 486px;
+    color: white;
+    z-index: 100;
+}
+
+.title{
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.button-get-started{
+    width: 120px;
+    height: 40px;
+    background: #ffffff;
+    position: relative;
+    border-radius: 5px;
+    border: none;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.button-get-started:hover{
+    background: #5a9e2b;
+}
+
+.button-get-started:active{
+    background: #4a7e23;
+}
+
+</style>

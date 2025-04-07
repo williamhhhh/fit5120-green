@@ -1,5 +1,6 @@
 <script setup>
 import BHeader from './components/BHeader.vue'
+import BFooter from './components/BFooter.vue'
 </script>
 
 <template>
@@ -10,11 +11,17 @@ import BHeader from './components/BHeader.vue'
   <main class="main-box">
     <router-view></router-view>
   </main>
+
+  <footer>
+    <BFooter />
+  </footer>
+
 </template>
 
 <style scoped>
 .main-content {
   padding: 20px;
+  position: relative;
 }
 
 @media (max-width: 576px) {

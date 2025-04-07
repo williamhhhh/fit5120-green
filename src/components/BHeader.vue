@@ -1,37 +1,126 @@
 <template>
   <!-- -------------------------------------------- -->
-   <div class="row">
-        <div class="col-md-2">
-            <div><Text class="text">cool the city</Text></div>
+   <div class="container-header">
+
+        <div><Text class="text">cool the city</Text></div>
+
+        <div class="hamburger" @click= "isMenuOpen = !isMenuOpen">
+            <span>&#9776;</span>
         </div>
-        <div class="col-md-8">
-            <header class="d-flex justify-content-center py-3">
-            <ul class="nav nav-pills">
-                <li class="nav-item">
-                <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
-                </li>
-                <li class="nav-item">
-                <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-                </li>
-                <li class="nav-item">
-                <router-link to="/impact" class="nav-link" active-class="active">UV impact</router-link>
-                </li>
-                <li class="nav-item">
-                <router-link to="/clothing" class="nav-link" active-class="active">Clothing Recommendation</router-link>
-                </li>
-                <li class="nav-item">
-                <router-link to="/personalisation" class="nav-link" active-class="active">Personalisation</router-link>
-                </li>
-            </ul>
-            </header>
+
+        <header class="d-none d-md-flex justify-content-center py-3">
+        <!-- <ul class="nav nav-pills"> -->
+            <li class="nav-item">
+            <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+            </li>
+            <li class="nav-item">
+            <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+            </li>
+        <!-- </ul> -->
+        </header>
+        
+        <div v-if="isMenuOpen" class="dropdown-menu-mobile">
+            <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+            <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
         </div>
-        <div class="col-md-2">
+        <!-- <div class="col-md-2">
             <div><button class="button-get-started">get started</button></div>
-        </div>
+        </div> -->
     </div>
-  </template>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+
+const isMenuOpen = ref(false);
+
+</script>  
+
+<style scoped>
+
+  @media (min-width: 768px){
+  .container-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 10px 30px;
+    gap: 100px;
+
+    position: absolute;
+    width: 676px;
+    height: 72px;
+    left: calc(50% - 676px/2);
+    top: 24px;
+
+    background: #E4FDE2;
+    backdrop-filter: blur(17px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 70px;
+    z-index: 100;
+  }
+  }
+
+  @media (max-width: 767px){
+  .container-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 10px 30px;
+    gap: 100px;
+
+    position: absolute;
+    width: 80%;
+    height: 35px;
+    left: 10%;
+    right: 10%;
+    top: 15px;
+
+    background: #E4FDE2;
+    backdrop-filter: blur(17px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 70px;
+    z-index: 100;
+  }
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  .dropdown-menu-mobile {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: #e4fde2;
+    border-radius: 10px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (max-width: 767px) {
+    .hamburger {
+      display: block;
+    }
+    .dropdown-menu-mobile {
+      display: none;
+    }
+  }
   
-  <style scoped>
+  .hamburger:hover {
+    background-color: #E4FDE2;
+  }
+
+  .hamburger:active {
+    background-color: #E4FDE2;
+  }
+
   .header {
     background-color: #c3e6f2;
     padding: 30px 0;
@@ -49,9 +138,23 @@
     color: rgb(8, 8, 109);
     margin: 0;
   }
-  
-  .nav-pills{
-    /* border-bottom: 1px solid #ddd; */
+
+
+  .nav-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 22px;
+    gap: 12px;
+
+    margin: 0 auto;
+    width: 135px;
+    height: 52px;
+
+    background: #90CF8E;
+    border-radius: 48px;
+
   }
   
   .nav-pills .nav-link{
@@ -71,14 +174,16 @@
     margin: 0 auto;
     width: 121px;
     height: 26px;
-    padding-top: 35px;
+
     font-family: 'Domaine Display Narrow';
     font-style: italic;
     font-weight: 600;
     font-size: 22px;
     line-height: 26px;
+    /* identical to box height, or 118% */
     display: flex;
     align-items: center;
+
     color: #000000;
   }
 
@@ -108,5 +213,5 @@
     background: #4a8b23;
 }
 
-  </style>
+</style>
   

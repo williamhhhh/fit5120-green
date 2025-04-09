@@ -8,13 +8,19 @@
             <span>&#9776;</span>
         </div>
 
-        <header class="d-none d-md-flex justify-content-center py-3">
+        <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
         <!-- <ul class="nav nav-pills"> -->
             <li class="nav-item">
             <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" active>
             <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+            </li>
+            <li class="nav-item">
+            <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
             </li>
         <!-- </ul> -->
         </header>
@@ -34,6 +40,16 @@ import { ref } from 'vue';
 
 const isMenuOpen = ref(false);
 
+// const navItems = document.querySelectorAll('.nav-item');
+
+// navItems.forEach(item => {
+//   item.addEventListener('click', () => {
+//     navItems.forEach(i => i.classList.remove('active')); // Remove from all
+//     item.classList.add('active'); // Add to clicked
+//   });
+// });
+
+
 </script>  
 
 <style scoped>
@@ -45,7 +61,7 @@ const isMenuOpen = ref(false);
     justify-content: space-between;
     align-items: center;
     padding: 10px 10px 10px 30px;
-    gap: 100px;
+    gap: 80px;
 
     position: absolute;
     width: 676px;
@@ -86,14 +102,52 @@ const isMenuOpen = ref(false);
   }
 
   .hamburger {
-    display: none;
-    font-size: 2rem;
-    cursor: pointer;
-  }
+  width: 30px;
+  height: 70px;
+  font-size: 40px;
+  /* background-color: #333; */
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Add pseudo-lines for the hamburger bars */
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger::before {
+  top: -10px;
+}
+
+.hamburger::after {
+  top: 10px;
+}
+
+/* Hover effect */
+.hamburger:hover {
+  transform: scale(1.1);
+  background-color: #75BE3A;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Active effect (like a click animation) */
+.hamburger:active {
+  transform: scale(0.95);
+  background-color: #5a9e2b;
+}
 
   .dropdown-menu-mobile {
     position: absolute;
-    top: 80px;
+    top: 35px;
     left: 0;
     right: 0;
     background-color: #e4fde2;
@@ -108,18 +162,18 @@ const isMenuOpen = ref(false);
     .hamburger {
       display: block;
     }
+  }
+
+  @media (min-width: 768px) {
     .dropdown-menu-mobile {
+      display: none;
+    }
+
+    .hamburger {
       display: none;
     }
   }
   
-  .hamburger:hover {
-    background-color: #E4FDE2;
-  }
-
-  .hamburger:active {
-    background-color: #E4FDE2;
-  }
 
   .header {
     background-color: #c3e6f2;
@@ -149,13 +203,59 @@ const isMenuOpen = ref(false);
     gap: 12px;
 
     margin: 0 auto;
-    width: 135px;
-    height: 52px;
+    width: 100px;
+    height: 40px;
 
-    background: #90CF8E;
+    /* background: #90CF8E; */
     border-radius: 48px;
 
   }
+
+.nav-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 22px;
+    gap: 12px;
+
+    margin: 0 auto;
+    width: 100px;
+    height: 40px;
+
+    /* background: #90CF8E; */
+    border-radius: 48px;
+}
+
+
+/* .nav-item:hover {
+  background: #75BE3A;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.active {
+  background: #75BE3A;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 2px #5a9e2b;
+} */
+
+.nav-link:hover {
+  background: #75BE3A;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Active state */
+.nav-link.active {
+  background: #75BE3A;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 2px #5a9e2b;
+}
   
   .nav-pills .nav-link{
     color: #9b9696;

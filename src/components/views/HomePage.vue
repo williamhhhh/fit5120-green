@@ -1,4 +1,5 @@
 <template>
+<div class="main-contianer">
     <div class="desc-container">
         <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
         <div class="title-container">
@@ -22,7 +23,6 @@
         </div> -->
     </div>
 
-    
     <div class="why-container">
         <div class="row">
             <div class="col-md-5">
@@ -69,6 +69,8 @@
             </div>
         </div>
     </div>
+
+</div>
 
     <div class="solution-container">
         <div class="solution-tittle">Our Two-Part Solution</div>
@@ -118,8 +120,21 @@
 
 <style scoped>
 
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px;
+    gap: 0px;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff00;
+}
 
-/* @media (min-width: 768px) { */
+
+@media (min-width: 768px) {
     .solution-container {
         /* Auto layout */
     display: flex;
@@ -142,12 +157,36 @@
     align-self: stretch;
     flex-grow: 0;
 }
-/* } */
+}
+
+@media (max-width: 768px) {
+    .solution-container {
+        /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    gap: 32px;
+    position: relative;
+    width: 80%;
+    margin: auto;
+    max-width: 768px;
+    height: 653px;
+    /* margin: 0 auto;  */
+    /* top: 1694px; */
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+}
 
 .solution-tittle {
     width: 100%;
     height: 66px;
-
     font-family: 'Domaine Display Narrow';
     font-style: italic;
     font-weight: 600;
@@ -175,20 +214,15 @@
     align-items: center;
     padding: 0px;
     gap: 20px;
-
     width: 100%;
-    max-width: 1000px;
+    max-width: 1280px;
     height: 555px;
 
     /* Inside auto layout */
     flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
 }
 
 @media (max-width: 768px) {
-
 .twosolution-container {
     /* Auto layout */
     display: flex;
@@ -196,7 +230,6 @@
     align-items: center;
     padding: 0px;
     gap: 20px;
-
     width: 100%;
     max-width: 1000px;
     height: 555px;
@@ -674,7 +707,8 @@ flex-grow: 0;
     .desc-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+
     margin: auto;
     /* display: flex; */
     align-items: center;
@@ -685,7 +719,9 @@ flex-grow: 0;
 .desc-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    max-width: 1580px;
+    max-height: 680px;
     margin: auto;
     margin-bottom: 0px;
     /* display: flex; */
@@ -741,6 +777,7 @@ flex-grow: 0;
 @media (min-width: 768px) {
     .why-container {
     display: flex;
+
     flex-direction: row;
     align-items: center;
     margin: auto;
@@ -751,6 +788,7 @@ flex-grow: 0;
     max-width: 1000px;
     position: relative;
     width: 90%;
+
     height: 653px;
     background-color: white;
     /* top: 961px; */
@@ -939,7 +977,7 @@ flex-grow: 0;
 
 .why-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding: 20px;
     top: 20px;

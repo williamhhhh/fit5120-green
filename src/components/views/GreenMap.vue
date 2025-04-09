@@ -29,6 +29,7 @@
   import mapboxgl from 'mapbox-gl'
   import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
   import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
+  import axios from 'axios'
   
   // mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
@@ -46,9 +47,36 @@
       container: 'map', // Container ID
       style: 'mapbox://styles/mapbox/streets-v11', // Map style
       center: [144.9631, -37.8136],
-      zoom: 12
+      zoom: 12,
+      maxBounds: [
+        [144.5, -38], // Southwest coordinates
+        [145.5, -37]  // Northeast coordinates
+      ]
     })
-  
+
+    // map click to see rating
+    map.on('click', async(e) =>{
+      const lng = e.lngLat.lng
+      const lat = e.lngLat.lat
+      new mapboxgl.Marker({ color: 'green'}).setLngLat([lng, lat]).addTo(map)
+      console.log(`Clicked coordinates: ${lng}, ${lat}`)
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/green_score', {
+          params: {
+          lng: lng,
+          lat: lat
+          }
+        })
+        console.log(response.data)
+
+        const rating = response.data.green_score
+        alert(`The green score is ${rating}`)
+
+      }catch (error) {
+        console.error('Error fetching rating:', error)
+      }
+    })
+
     // Add directions control
     directions = new MapboxDirections({
       accessToken: mapboxgl.accessToken,

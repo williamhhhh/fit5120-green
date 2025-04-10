@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify
 from app.services import green_score_service
 from openai import OpenAI
 
-client = OpenAI(api_key=APIKey)
+# OpenAIapi_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key="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")
 
 green_score_bp = Blueprint('green_score', __name__)
 chat = Blueprint('chat', __name__)

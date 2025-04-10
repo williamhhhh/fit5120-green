@@ -161,7 +161,7 @@ onMounted(() => {
     })
 
     try {
-      const response = await axios.post('https://green-proxy.spikejoe329.workers.dev/', {
+      const response = await axios.post('https://green-proxy.spikejoe329.workers.dev/green-score', {
         lng: lng,
         lat: lat
       },

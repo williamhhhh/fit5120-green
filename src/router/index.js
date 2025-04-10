@@ -4,6 +4,7 @@ import GreenAdvice from '../components/views/GreenAdvice.vue'
 // import { name } from '@vue/eslint-config-prettier/skip-formatting'
 import GreenMap from '../components/views/GreenMap.vue'
 // import { name } from '@vue/eslint-config-prettier/skip-formatting'
+import ChatPage from '@/components/views/ChatPage.vue'
 
 
 const routes = [
@@ -21,7 +22,12 @@ const routes = [
       path: '/GreenMap',
       name: 'GreenMap',
       component: GreenMap,
-    }
+    },
+    {
+      path: '/Chat',
+      name: 'ChatPage',
+      component: ChatPage,
+    },
   ]
 
   const router = createRouter({

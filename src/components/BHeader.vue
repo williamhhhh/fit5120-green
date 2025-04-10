@@ -22,6 +22,9 @@
             <li class="nav-item">
               <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
             </li>
+            <li class="nav-item">
+              <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
+            </li>
         <!-- </ul> -->
         </header>
         
@@ -64,7 +67,7 @@ const isMenuOpen = ref(false);
     gap: 80px;
 
     position: absolute;
-    width: 676px;
+    width: 760px;
     height: 72px;
     left: calc(50% - 676px/2);
     top: 24px;

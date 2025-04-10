@@ -18,7 +18,7 @@ import BFooter from './components/BFooter.vue'
 
 </template>
 
-<style scoped>
+<style scoped>  
 .main-content {
   padding: 20px;
   position: relative;

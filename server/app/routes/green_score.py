@@ -1,11 +1,15 @@
 from flask import Blueprint, request, jsonify
 from app.services import green_score_service
 from openai import OpenAI
+import os
 
-client = OpenAI(api_key="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")
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("OPENAI_API_KEY environment variable is not set.")
+client = OpenAI(api_key)
 
 green_score_bp = Blueprint('green_score', __name__)
-chat = Blueprint('chat', __name__)
+chat_bp = Blueprint('chat', __name__)
 
 @green_score_bp.route('/green_score', methods=['POST'])
 def green_score():
@@ -18,7 +22,7 @@ def green_score():
     response = jsonify({'green_score': score})
     return response
 
-@chat.route("/chat", methods=["POST"])
+@chat_bp.route("/chat", methods=["POST"])
 def chat():
     try:
         data = request.json

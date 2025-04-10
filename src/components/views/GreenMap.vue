@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- Search Input for Places -->
-    <input
+    <!-- <input
       type="text"
       v-model="searchQuery"
       placeholder="Search for a place"
       @keyup.enter="searchPlace"
       class="search-input"
-    />
+    /> -->
 
     <!-- Search Result -->
     <div v-if="searchResult">
@@ -161,7 +161,7 @@ onMounted(() => {
     })
 
     try {
-      const response = await axios.post('https://54.252.189.158/green_score', {
+      const response = await axios.post('http://54.252.189.158/green_score', {
         lng: lng,
         lat: lat
       })

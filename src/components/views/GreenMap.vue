@@ -164,7 +164,13 @@ onMounted(() => {
       const response = await axios.post('https://54.252.189.158/green_score', {
         lng: lng,
         lat: lat
-      })
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+    },
+  })
       console.log(response.data)
 
       const rating = response.data.green_score

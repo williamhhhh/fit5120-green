@@ -30,6 +30,8 @@
   import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
   import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
   import axios from 'axios'
+  import * as turf from '@turf/turf'
+
   
   // mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
 
@@ -39,8 +41,53 @@
   // State Variables
   const searchQuery = ref('')
   const searchResult = ref(null)
-  let map, directions, startMarker, endMarker
-  
+  let map, directions, startMarker, endMarker, melbourneGeojson
+  let currentMarker = null
+
+  fetch('/municipal-boundary.geojson')
+    .then(response => response.json())
+    .then(data => {
+      melbourneGeojson = data
+
+      const bbox = turf.bbox(melbourneGeojson)
+
+      console.log('Bounding Box:', bbox)
+
+      const world = turf.polygon([[
+        [-180, -90],
+        [180, -90],
+        [180, 90],
+        [-180, 90],
+        [-180, -90]
+      ]])
+      console.log('World Geometry Type:', world.geometry.type)               // should be 'Polygon'
+      console.log('Melbourne Geometry Type:', melbourneGeojson.features[0].geometry.type)
+
+      const melbourneGeometry = melbourneGeojson.features[0].geometry
+      const melbournePolygon = turf.feature(melbourneGeometry)
+      const mask = turf.difference(world, melbournePolygon)
+
+      map.addSource('mask', {
+      type: 'geojson',
+      data: mask
+    })
+
+    map.addLayer({
+      id: 'mask-layer',
+      type: 'fill',
+      source: 'mask',
+      paint: {
+        'fill-color': '#000000',
+        'fill-opacity': 0.5
+      }
+    })
+
+    })
+    .catch(error => {
+      console.error('Error fetching GeoJSON:', error)
+    })
+
+
   // Initialize the map
   onMounted(() => {
     map = new mapboxgl.Map({
@@ -48,24 +95,72 @@
       style: 'mapbox://styles/mapbox/streets-v11', // Map style
       center: [144.9631, -37.8136],
       zoom: 12,
-      maxBounds: [
-        [144.5, -38], // Southwest coordinates
-        [145.5, -37]  // Northeast coordinates
-      ]
+      minZoom: 9
     })
+    map.setMaxBounds([
+        [144.8469619379468, -37.9006602026218],   // Southwest corner
+        [145.0412978955415, -37.72544812918211]    // Northeast corner
+      ])
+
+    map.on('load', () => {
+
+    map.addSource('melbourne', {
+      type: 'geojson',
+      data: '/municipal-boundary.geojson'
+    })
+
+    map.addLayer({
+      id: 'melbourne-outline',
+      type: 'line',
+      source: 'melbourne',
+      paint: {
+        'line-color': '#00aa00',
+        'line-width': 2
+      }
+    })
+  })
 
     // map click to see rating
     map.on('click', async(e) =>{
       const lng = e.lngLat.lng
       const lat = e.lngLat.lat
-      new mapboxgl.Marker({ color: 'green'}).setLngLat([lng, lat]).addTo(map)
+
+      if (currentMarker) {
+        currentMarker.remove() // Remove previous marker if it exists
+      }
+
+      currentMarker = new mapboxgl.Marker({ color: 'green'}).setLngLat([lng, lat]).addTo(map)
       console.log(`Clicked coordinates: ${lng}, ${lat}`)
+
+      const circle = turf.circle([lng, lat], 0.3, {
+        steps: 64,
+        units: 'kilometers',
+      })
+
+      if(map.getSource('circle')){
+        map.removeLayer('circle-layer')
+        map.removeSource('circle')
+      }
+
+      map.addSource('circle', {
+        type: 'geojson',
+        data: circle
+      })
+
+      map.addLayer({
+        id: 'circle-layer',
+        type: 'fill',
+        source: 'circle',
+        paint: {
+          'fill-color': '#888',
+          'fill-opacity': 0.3
+        }
+      })
+
       try {
         const response = await axios.post('http://127.0.0.1:5000/green_score', {
-          params: {
           lng: lng,
           lat: lat
-          }
         })
         console.log(response.data)
 
@@ -77,16 +172,16 @@
       }
     })
 
-    // Add directions control
-    directions = new MapboxDirections({
-      accessToken: mapboxgl.accessToken,
-      unit: 'metric',
-      profile: 'mapbox/driving',
-      interactive: false
-    })
+    // // Add directions control
+    // directions = new MapboxDirections({
+    //   accessToken: mapboxgl.accessToken,
+    //   unit: 'metric',
+    //   profile: 'mapbox/driving',
+    //   interactive: false
+    // })
   
-    // Add Directions control to the map
-    map.addControl(directions, 'top-left')
+    // // Add Directions control to the map
+    // map.addControl(directions, 'top-left')
   })
   
   // Search for places using Geocoding API

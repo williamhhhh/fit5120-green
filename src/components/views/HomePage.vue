@@ -7,7 +7,7 @@
             <p class="description">
                 Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
             </p>
-            <button class="button-get-started">Get Started</button>
+            <button @click="navigateTo('/GreenMap')" class="button-get-started">Get Started</button>
         </div>
         <!-- <div
         class="position-absolute top-50 p-4"
@@ -84,9 +84,8 @@
                                     <div class="g1-desc">Adding more plants in our homes, communities, and public spaces helps combat heatwaves and improve air quality.</div>
                                 </div>
 
-                                <div class="g1-link">
-                                    <div class="g1-link-text">Learn More</div>
-                                </div>
+
+                                    <button @click="navigateTo('https://www.plt.org/educator-tips/urban-green-spaces/')" class="g1-link-text">Learn More</button>
                                 
                             </div>
                         </div>
@@ -101,9 +100,7 @@
                                     <div class="g2-desc">Reducing car emissions by shifting to E-bikes and cleaner transport can significantly cut down pollution.</div>
                                 </div>
 
-                                <div class="g2-link">
-                                    <div class="g2-link-text">Learn More</div>
-                                </div>
+                                    <button @click="navigateTo('https://www.mckinsey.com/industries/automotive-and-assembly/our-insights/why-the-automotive-future-is-electric')" class="g2-link-text">Learn More</button>
 
                             </div>
                         </div>
@@ -115,7 +112,13 @@
 </template>
 
 <script>
-
+export default {
+  methods: {
+    navigateTo(link) {
+      window.location.href = link; // 跳转到指定链接
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -287,23 +290,14 @@
 }
 
 .group1-text-button {
-    /* Auto layout */
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 12px;
     align-items: center;
-
-    width: 598px;
-    height: 84px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
+    justify-content: space-between; 
+    padding: 0;
+    gap: 12px;
+    width: 100%; 
+    height: auto;
 }
 
 
@@ -387,27 +381,6 @@
     flex-grow: 0;
 }
 
-.g1-link-text{
-    /* Learn More */
-
-    width: 87px;
-    height: 24px;
-
-    font-family: 'DM Sans';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    /* identical to box height, or 150% */
-    display: flex;
-    align-items: center;
-    color: #000000;
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-
-}
 
 /* Group 2 */
 
@@ -458,21 +431,14 @@
 }
 
 .group2-text-button {
-    /* Auto layout */
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0px;
+    justify-content: space-between; 
+    padding: 0;
     gap: 12px;
-    width: 598px;
-    height: 84px;
-    flex-direction: row-reverse;
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    align-self: stretch;
-    flex-grow: 0;
-    
+    width: 100%; 
+    height: auto; 
 }
 
 .group2-text {
@@ -552,25 +518,39 @@ flex-grow: 0;
     flex-grow: 0;
 }
 
-.g2-link-text{
-    /* Learn More */
+.g1-link-text,
+.g2-link-text {
+  /* Auto layout */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 22px;
+  gap: 12px;
+  width: 131px;
+  height: 52px;
+  background: #ffffff;
+  border-radius: 48px;
 
-    width: 87px;
-    height: 24px;
+  position: relative;
+  z-index: 1; 
 
-    font-family: 'DM Sans';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    /* identical to box height, or 150% */
-    display: flex;
-    align-items: center;
-    color: #000000;
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
+  cursor: pointer; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
+}
+
+.g1-link-text:hover,
+.g2-link-text:hover {
+  background: #f0f0f0;
+}
+
+
+.g1-link-text,
+.g2-link-text {
+  display: inline-flex;
+  width: auto;
+  text-align: center;
 }
 
 .icon-desc {

@@ -3,15 +3,16 @@ from app.services import green_score_service
 from openai import OpenAI
 import os
 
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise RuntimeError("OPENAI_API_KEY environment variable is not set.")
-client = OpenAI(api_key)
+# api_key = os.getenv("OPENAI_API_KEY")
+# if not api_key:
+#     raise RuntimeError("OPENAI_API_KEY environment variable is not set.")
+# client = OpenAI(api_key)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 green_score_bp = Blueprint('green_score', __name__)
 chat_bp = Blueprint('chat', __name__)
 
-@green_score_bp.route('/green_score', methods=['POST'])
+@green_score_bp.route('/green_score', methods=['POST','GET'])
 def green_score():
     data = request.get_json()
     lng = data.get('lng')
@@ -22,7 +23,7 @@ def green_score():
     response = jsonify({'green_score': score})
     return response
 
-@chat_bp.route("/chat", methods=["POST"])
+@chat_bp.route("/chat", methods=["POST", "GET"])
 def chat():
     try:
         data = request.json

@@ -1,5 +1,4 @@
 <template>
-<div class="main-contianer">
     <div class="desc-container">
         <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
         <div class="title-container">
@@ -23,7 +22,7 @@
         </div> -->
     </div>
 
-    <div class="why-container">
+    <!-- <div class="why-container">
         <div class="row">
             <div class="col-md-5">
                 <div class="why-title">Why is Melbourne Heating up</div>
@@ -68,11 +67,9 @@
                 <img src="https://i.imgur.com/oYvKyT9.png" alt="why" class="img-fluid">
             </div>
         </div>
-    </div>
+    </div> -->
 
-</div>
-
-    <div class="solution-container">
+    <!-- <div class="solution-container">
         <div class="solution-tittle">Our Two-Part Solution</div>
             <div class="twosolution-container">
                     <div class="group1">
@@ -107,7 +104,7 @@
                         <div class="g2-image"></div>
                     </div>
         </div>
-    </div>
+    </div> -->
 
 </template>
 

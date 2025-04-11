@@ -12,9 +12,9 @@ import BFooter from './components/BFooter.vue'
     <router-view></router-view>
   </main>
 
-  <footer>
+  <!-- <footer>
     <BFooter />
-  </footer>
+  </footer> -->
 
 </template>
 

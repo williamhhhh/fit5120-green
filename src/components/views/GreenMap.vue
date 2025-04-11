@@ -161,7 +161,7 @@ onMounted(() => {
     })
 
     try {
-      const response = await axios.post('https://api.coolthecities/green_score', {
+      const response = await axios.post('https://api.coolthecities.com/green_score', {
         lng: lng,
         lat: lat
       })

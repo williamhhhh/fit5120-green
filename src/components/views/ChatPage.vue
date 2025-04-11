@@ -86,7 +86,7 @@ export default {
             this.loading = true;
 
             try {
-                const response = await axios.post("https://54.252.189.158/chat", {
+                const response = await axios.post("https://api.coolthecities.com/chat", {
                     prompt: userMessage,
                 });
 

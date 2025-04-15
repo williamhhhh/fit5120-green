@@ -1,61 +1,92 @@
 <template>
-  <!-- -------------------------------------------- -->
-   <div class="container-header">
+  <transition
+    name="nav-animation"
+    mode="out-in"
+  >
+    <div class="container-header" v-if="isNavVisible">
+      <div>
+        <div class="text">cool the city</div>
+      </div>
 
-        <div><Text class="text">cool the city</Text></div>
+      <div class="hamburger" @click="isMenuOpen = !isMenuOpen">
+        <span>&#9776;</span>
+      </div>
 
-        <div class="hamburger" @click= "isMenuOpen = !isMenuOpen">
-            <span>&#9776;</span>
-        </div>
+      <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
+        <li class="nav-item">
+          <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
+        </li>
+      </header>
 
-        <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
-        <!-- <ul class="nav nav-pills"> -->
-            <li class="nav-item">
-            <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
-            </li>
-            <li class="nav-item" active>
-            <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-            </li>
-            <li class="nav-item">
-            <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
-            </li>
-        <!-- </ul> -->
-        </header>
-        
-        <div v-if="isMenuOpen" class="dropdown-menu-mobile">
-            <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
-            <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-        </div>
-        <!-- <div class="col-md-2">
-            <div><button class="button-get-started">get started</button></div>
-        </div> -->
+      <div v-if="isMenuOpen" class="dropdown-menu-mobile">
+        <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+        <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+      </div>
     </div>
+  </transition>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const isMenuOpen = ref(false);
+const isNavVisible = ref(true);
 
-// const navItems = document.querySelectorAll('.nav-item');
-
-// navItems.forEach(item => {
-//   item.addEventListener('click', () => {
-//     navItems.forEach(i => i.classList.remove('active')); // Remove from all
-//     item.classList.add('active'); // Add to clicked
-//   });
-// });
+const route = useRoute();
 
 
-</script>  
+watch(
+  () => route.path,
+  () => {
+    isNavVisible.value = false;
+    setTimeout(() => {
+      isNavVisible.value = true;
+    }, 500);
+  }
+);
+</script>
 
 <style scoped>
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes slide-out-elliptic-top-bck {
+  0% {
+    transform: translateY(0) rotateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-600px) rotateX(30deg);
+    opacity: 0;
+  }
+}
+.nav-animation-enter-active {
+  animation: bounce-in 0.5s ease both;
+}
+.nav-animation-leave-active {
+  animation: slide-out-elliptic-top-bck 0.5s ease both;
+}
+
 
   @media (min-width: 768px){
   .container-header {

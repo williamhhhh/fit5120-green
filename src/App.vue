@@ -4,18 +4,19 @@ import BFooter from './components/BFooter.vue'
 </script>
 
 <template>
-  <header>
-    <BHeader />
-  </header>
+  <div id="app">
+    <header>
+      <BHeader />
+    </header>
 
-  <main class="main-box">
-    <router-view></router-view>
-  </main>
+    <main class="main-box">
+      <router-view></router-view>
+    </main>
 
-  <!-- <footer>
-    <BFooter />
-  </footer> -->
-
+    <!-- <footer>
+      <BFooter />
+    </footer> -->
+</div>
 </template>
 
 <style scoped>  
@@ -52,5 +53,12 @@ import BFooter from './components/BFooter.vue'
   padding: 20px;
   background-color: #75be3a;
   border-radius: 10px;
+}
+
+#app {
+  background: linear-gradient(to bottom right, #75be3a, #f0f0f0);
+  min-height: 100vh;
+  background-size: cover;
+  background-attachment: fixed;
 }
 </style>

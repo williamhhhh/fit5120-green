@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div class="desc-container">
         <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
         <div class="title-container">
@@ -133,6 +133,14 @@ export default {
     background-color: #ffffff00;
 }
 
+.desc-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* display: flex; */
+    align-items: center;
+    background: none;
+}
 
 @media (min-width: 768px) {
     .solution-container {
@@ -357,9 +365,7 @@ export default {
     flex-grow: 0;
 }
 
-
 .g1-link{
-
     /* Auto layout */
     display: flex;
     flex-direction: row;
@@ -710,10 +716,8 @@ flex-grow: 0;
 .green-city {
     width: 100%;
     position: absolute;
-    height: auto;
-    margin: auto;
+    height: 100%;
     background-size: contain;
-    margin-bottom: 10px;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(290.75deg, rgba(164, 161, 71, 0.6) 11.38%, rgba(255, 255, 255, 0) 44.52%);
     transform: matrix(-1, 0, 0, 1, 0, 0);
     filter: brightness(50%);
@@ -724,23 +728,11 @@ flex-grow: 0;
         width: 100%;
         position: absolute;
         height: auto;
-        margin-bottom: 10px;
-        margin: auto;
         background-size: contain;
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(290.75deg, rgba(164, 161, 71, 0.6) 11.38%, rgba(255, 255, 255, 0) 44.52%);
         transform: matrix(-1, 0, 0, 1, 0, 0);
         filter: brightness(50%);
     }
-}
-
-.green-city {
-    width: 100%; 
-    position: absolute;
-    height: auto;
-    margin-bottom: 10px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(290.75deg, rgba(164, 161, 71, 0.6) 11.38%, rgba(255, 255, 255, 0) 44.52%);
-    transform: matrix(-1, 0, 0, 1, 0, 0);
-    filter: brightness(50%);
 }
 
 .why-image {

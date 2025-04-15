@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
     <!-- Search Input for Places -->
     <!-- <input
       type="text"
@@ -10,17 +10,40 @@
     /> -->
 
     <!-- Search Result -->
-    <div v-if="searchResult">
+    <!-- <div v-if="searchResult">
       <h3>Search Result:</h3>
       <p>{{ searchResult.place_name }}</p>
       <button @click="navigateTo(searchResult.geometry.coordinates)">
         Navigate to this location
       </button>
-    </div>
+    </div> -->
 
     <!-- Map Container -->
-    <div id="map" class="map-container"></div>
-  </div>
+    <div class="container main-container">
+      <!-- First Row -->
+      <div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
+        <div class="col-12 col-md-10 col-lg-4 text-center">
+          <h1>Let's discover green spaces</h1>
+        </div>
+      </div>
+
+      <!-- Second Row -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-4 mb-3 text-center">
+          <h2>Search for a place</h2>
+          <!-- <select v-model="transportMode" @change="updateTransportMode" class="transport-select">
+            <option value="mapbox/walking">🚶 Walking</option>
+            <option value="mapbox/driving">🚗 Driving</option>
+            <option value="mapbox/cycling">🚴 Cycling</option>
+          </select> -->
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div id="map" class="map-container"></div>
+        </div>
+      </div>
+    </div>
+
+  <!-- </div> -->
 </template>
 
 <script setup>
@@ -30,6 +53,7 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
 import axios from 'axios'
 import * as turf from '@turf/turf'
+import osmtogeojson from 'osmtogeojson'
 
 // Set Mapbox Access Token
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
@@ -37,51 +61,13 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM
 // State Variables
 const searchQuery = ref('')
 const searchResult = ref(null)
-let map, directions, startMarker, endMarker, melbourneGeojson
+const transportMode = ref('mapbox/walking')
+const userLocationBool = ref(false)
+const userInMelbourne = ref(false)
+let map, directions, startMarker, endMarker
+let melbourneGeojson
 let currentMarker = null
 let currentPopup = null
-
-fetch('/municipal-boundary.geojson')
-  .then(response => response.json())
-  .then(data => {
-    melbourneGeojson = data
-
-    const bbox = turf.bbox(melbourneGeojson)
-
-    console.log('Bounding Box:', bbox)
-
-    const world = turf.polygon([[
-      [-180, -90],
-      [180, -90],
-      [180, 90],
-      [-180, 90],
-      [-180, -90]
-    ]])
-    console.log('World Geometry Type:', world.geometry.type) // should be 'Polygon'
-    console.log('Melbourne Geometry Type:', melbourneGeojson.features[0].geometry.type)
-
-    const melbourneGeometry = melbourneGeojson.features[0].geometry
-    const melbournePolygon = turf.feature(melbourneGeometry)
-    const mask = turf.difference(world, melbournePolygon)
-
-    map.addSource('mask', {
-      type: 'geojson',
-      data: mask
-    })
-
-    map.addLayer({
-      id: 'mask-layer',
-      type: 'fill',
-      source: 'mask',
-      paint: {
-        'fill-color': '#000000',
-        'fill-opacity': 0.5
-      }
-    })
-  })
-  .catch(error => {
-    console.error('Error fetching GeoJSON:', error)
-  })
 
 // Initialize the map
 onMounted(() => {
@@ -98,6 +84,40 @@ onMounted(() => {
   ])
 
   map.on('load', () => {
+    fetch('/municipal-boundary.geojson')
+      .then(response => response.json())
+      .then(data => {
+        melbourneGeojson = data
+        console.log('Melbourne GeoJSON:', melbourneGeojson)
+
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const userCoords = [position.coords.longitude, position.coords.latitude]
+            const userPoint = turf.point(userCoords)
+            const melbPolygon = turf.polygon(melbourneGeojson.features[0].geometry.coordinates[0])
+            console.log(turf.booleanPointInPolygon(userPoint, melbPolygon))
+            if (turf.booleanPointInPolygon(userPoint, melbPolygon)) {
+              map.setCenter(userCoords)
+              map.setZoom(14)
+              console.log('User is in Melbourne:', userCoords)
+              // Add a marker for the user's location
+              startMarker = new mapboxgl.Marker({ color: 'blue' })
+                .setLngLat(userCoords)
+                .addTo(map)
+              await loadNearbyGreenSpaces()
+              console.log('Nearby green spaces loaded')
+            } else {
+              await loadAllGreenSpaces()
+            }
+            async (error) => {
+              // If location denied
+              console.error('Error getting location:', error)
+              await loadAllGreenSpaces()
+            }
+          }
+        )
+      })
+
     map.addSource('melbourne', {
       type: 'geojson',
       data: '/municipal-boundary.geojson'
@@ -114,72 +134,200 @@ onMounted(() => {
     })
   })
 
-  // Map click to see rating and show popup
-  map.on('click', async (e) => {
-    const lng = e.lngLat.lng
-    const lat = e.lngLat.lat
+  loadMelbourneBoundary()
 
-    if (currentMarker) {
-      currentMarker.remove() // Remove previous marker if it exists
-    }
+  directions = new MapboxDirections({
+  accessToken: mapboxgl.accessToken,
+  unit: 'metric',
+  profile: transportMode.value,
+  controls: {
+    inputs: false,
+    instructions: true
+  }
+})
 
-    // Add a marker at the clicked location
-    currentMarker = new mapboxgl.Marker({ color: 'green' })
-      .setLngLat([lng, lat])
-      .addTo(map)
+map.addControl(directions, 'top-left')
 
-    // Remove existing popup if present
-    if (currentPopup) {
-      currentPopup.remove()
-    }
+})
 
-    console.log(`Clicked coordinates: ${lng}, ${lat}`)
+const updateTransportMode = () => {
+  directions.setProfile(transportMode.value)
+}
 
-    const circle = turf.circle([lng, lat], 0.3, {
-      steps: 64,
-      units: 'kilometers',
-    })
+const loadMelbourneBoundary = async () => {
+  const res = await fetch('/municipal-boundary.geojson')
+  melbourneGeojson = await res.json()
 
-    if (map.getSource('circle')) {
-      map.removeLayer('circle-layer')
-      map.removeSource('circle')
-    }
+  const melbGeometry = melbourneGeojson.features[0].geometry
 
-    map.addSource('circle', {
+  let melbPolygon
+  if (melbGeometry.type === 'MultiPolygon') {
+    melbPolygon = turf.multiPolygon(melbGeometry.coordinates)
+  } else if (melbGeometry.type === 'Polygon') {
+    melbPolygon = turf.polygon(melbGeometry.coordinates)
+  }
+  // Now safe to use melbPolygon
+  // e.g., filtering parks within it
+}
+
+
+//search for nearby green
+
+// Load nearby green spaces
+const loadAllGreenSpaces = async () => {
+  
+  const query = `
+    [out:json][timeout:25];
+    area["name"="City of Melbourne"]["admin_level"="6"]->.searchArea;
+    (
+      way["leisure"="park"](area.searchArea);
+      way["leisure"="garden"](area.searchArea);
+      way["leisure"="nature_reserve"](area.searchArea);
+    );
+    out body;
+    >;
+    out skel qt;
+  `
+
+  try {
+    const response = await fetch(
+      'https://overpass-api.de/api/interpreter',
+      {
+        method: 'POST',
+        body: query
+      }
+    )
+
+    console.log('Response:', response)
+
+    const osmData = await response.json()
+    const geojson = osmtogeojson(osmData)
+
+    geojson.features.forEach((feature) => {
+  const name = feature.properties.name || 'Unnamed Green Space'
+  const center = turf.centroid(feature).geometry.coordinates
+
+  const marker = new mapboxgl.Marker({ color: 'green' })
+    .setLngLat(center)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 }).setHTML(`
+        <strong>${name}</strong><br/>
+        <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px;">Navigate Here</button>
+      `)
+    )
+    .addTo(map)
+
+  // Open the popup when marker is clicked
+  marker.getElement().addEventListener('click', () => {
+    // Delay to ensure popup is rendered
+    setTimeout(() => {
+      const btn = document.getElementById(`go-to-${name.replace(/\s+/g, '-')}`)
+      if (btn) {
+        btn.addEventListener('click', () => {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const userCoords = [position.coords.longitude, position.coords.latitude]
+            directions.setOrigin(userCoords)
+            directions.setDestination(center)
+          })
+        })
+      }
+    }, 300)
+  })
+})
+
+
+
+    map.addSource('green-spaces', {
       type: 'geojson',
-      data: circle
+      data: geojson
     })
 
     map.addLayer({
-      id: 'circle-layer',
+      id: 'green-spaces-layer',
       type: 'fill',
-      source: 'circle',
+      source: 'green-spaces',
       paint: {
-        'fill-color': '#888',
-        'fill-opacity': 0.3
+        'fill-color': '#00FF00',
+        'fill-opacity': 0.5
       }
     })
+  } catch (err) {
+    console.error('Failed to load Overpass data:', err)
+  }
+}
 
-    try {
-      const response = await axios.post('https://api.coolthecities.com/green_score', {
-        lng: lng,
-        lat: lat
-      })
-      console.log(response.data)
+// get nearby parks quety
+const getNearbyParks = (lat, lon) => {
+    // Bounding box ~ 2km around user
+  const delta = 0.01 // ~1km in degrees
+  const south = lat - delta
+  const north = lat + delta
+  const west = lon - delta
+  const east = lon + delta
 
-      const rating = response.data.green_score
+  return `
+    [out:json][timeout:25];
+    (
+      way["leisure"="park"](${south},${west},${north},${east});
+      way["leisure"="garden"](${south},${west},${north},${east});
+      way["leisure"="nature_reserve"](${south},${west},${north},${east});
+    );
+    out body;
+    >;
+    out skel qt;
+  `
+}
 
-      // Display a popup with the green score
-      currentPopup = new mapboxgl.Popup({ offset: 25 })
-        .setLngLat([lng, lat])
-        .setHTML(`<h3>Green Score</h3><p>${rating}</p>`)
-        .addTo(map)
+// Load all parks in Melbourne
+const loadNearbyGreenSpaces = async (coords) => {
+  const lat = coords[1]
+  const lon = coords[0]
+  const query = getNearbyParks(lat, lon)
 
-    } catch (error) {
-      console.error('Error fetching rating:', error)
-    }
+  const response = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain'
+    },
+    body: query
   })
-})
+
+  const osmJson = await response.json()
+  const geojson = osmtogeojson(osmJson)
+
+  // 💡 Add markers with popups (e.g., park name)
+  geojson.features.forEach((feature) => {
+      const center = turf.centroid(feature).geometry.coordinates
+      const name = feature.properties.name || 'Unnamed Green Space'
+      const type = feature.properties.leisure || 'Unknown Type'
+
+      new mapboxgl.Marker({ color: 'green' })
+        .setLngLat(center)
+        .setPopup(new mapboxgl.Popup().setHTML(`
+          <strong>${name}</strong><br/>
+          Type: ${type}
+        `))
+        .addTo(map)
+    })
+
+  // Center the map on user's location
+  map.setCenter([lon, lat])
+  map.setZoom(14)
+}
+
+// Render markers on the map
+const renderMarkers = (results) => {
+  results.forEach((result) => {
+    const coordinates = result.geometry.coordinates
+    const marker = new mapboxgl.Marker({ color: 'green' })
+      .setLngLat(coordinates)
+      .addTo(map)
+
+    marker.getElement().addEventListener('click', () => {
+      navigateTo(coordinates)
+    })
+  })
+}
 
 // Search for places using Geocoding API
 const searchPlace = async () => {
@@ -212,6 +360,11 @@ const searchPlace = async () => {
   }
 }
 
+// route planner
+window.planRoute = (coords) => {
+  navigateTo(coords)
+}
+
 // Navigate to the selected place
 const navigateTo = (coordinates) => {
   if (endMarker) endMarker.remove() // Remove previous end marker
@@ -238,6 +391,7 @@ const navigateTo = (coordinates) => {
 }
 </script>
 
+
 <style scoped>
 @import 'https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css';
 
@@ -245,8 +399,6 @@ const navigateTo = (coordinates) => {
   width: 100%;
   height: 500px;
   position: relative;
-  margin-bottom: 20px;
-  margin-top: 120px;
 }
 
 .search-input {
@@ -254,5 +406,9 @@ const navigateTo = (coordinates) => {
   margin-bottom: 10px;
   padding: 10px;
   width: 300px;
+}
+
+.top-custom {
+  top: 120px;
 }
 </style>

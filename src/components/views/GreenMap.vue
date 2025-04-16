@@ -24,6 +24,7 @@
       <div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
         <div class="col-12 col-md-10 col-lg-4 text-center">
           <h1 class="vibrate">Let's discover parks and gardens in melbourne city!</h1>
+          <p> (✅Hint) Click on the marker and press navigate to navigate to the park!</p>
         </div>
       </div>
 
@@ -33,7 +34,7 @@
           <div class="col-12 col-md-4 col-lg-4 mb-3 text-center">
             <div class="row fade-in">
               <div class="col-6">
-                <h5>Search for a place</h5>
+                <h5>Select a range</h5>
               </div>
               <div class="col-6">
                             <!-- Distance Selector -->
@@ -42,15 +43,18 @@
                 <option value="0.1">1km</option>
                 <option value="0.2">2km</option>
                 <option value="0.3">3km</option>
+                <option value="0.4">4km</option>
+                <option value="0.5">5km</option>
+                <option value="0.8">8km</option>
                 <option value="1">10km</option>
-                <option value="all">All Parks</option>
+                <option value="all">All Parks in Melbourne</option>
               </select>
               <!-- <p v-if="locationError" class="textDanger">{{ locationError }}</p> -->
               </div>
             </div>
 
             <div class="row fade-in" style="margin-top: 50px;">
-              <div class="col-6"><h5>Select green spaces size</h5></div>
+              <div class="col-6"><h5>Select a park size</h5></div>
               <div class="col-6">
             <select id="sizeSelect" v-model="sizeSelect" class="form-select mb-3">
               <option value="20000">large</option>
@@ -253,6 +257,7 @@ const handleLoadClick = () => {
   }
   else {
     alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
+    selectedDistance.value = "all"
     locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
   }
 }
@@ -513,6 +518,11 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
     })
   })
 
+  if(filteredFeatures.length <= 0) {
+    alert('No parks found in the selected range.')
+    
+  }
+
     
   // Center the map on user's location
   map.setCenter([lon, lat])
@@ -630,8 +640,8 @@ h1 {
   color: #fff;
   border: none;
   border-radius: 20px;
-  height: 40px;
-  width: 150px;
+  height: 60px;
+  width: 250px;
   transform: scale(1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, background-color 0.3s ease;

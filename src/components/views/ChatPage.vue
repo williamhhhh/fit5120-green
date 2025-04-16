@@ -1,15 +1,15 @@
 <template>
     <div class="plant-app" style="padding-top: 100px;">
         <header class="fade-in">
-            <h1>Plant Assistant</h1>
-            <p>Chat with me,Learn about how to plant together!</p>
+            <h1>🌞 Plant Assistant 💦</h1>
+            <p>Chat with me, Learn about how to plant together!</p>
         </header>
 
         <!-- User Guide  -->
         <transition name="modal" appear>
             <div class="modal" v-if="showUserGuide">
                 <div class="modal-content swing-in-top-fwd">
-                    <h2>Let's explore!! </h2>
+                    <h2>🌻 Let's explore!! 🌼</h2>
                     <ul>
                         <li>Type your plant-related questions in the chat input below.</li>
                         <li>Click the "Send" button or press "Enter" to send your message.</li>

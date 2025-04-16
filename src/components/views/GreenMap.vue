@@ -19,26 +19,62 @@
     </div> -->
 
     <!-- Map Container -->
-    <div class="container main-container">
+    <div class="container">
       <!-- First Row -->
       <div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
         <div class="col-12 col-md-10 col-lg-4 text-center">
-          <h1>Let's discover green spaces</h1>
+          <h1>Let's discover parks and gardens in melbourne city!</h1>
         </div>
       </div>
 
+      <!-- <select v-model="transportMode" @change="updateTransportMode" class="transport-select">
+              <option value="mapbox/walking">🚶 Walking</option>
+              <option value="mapbox/driving">🚗 Driving</option>
+              <option value="mapbox/cycling">🚴 Cycling</option>
+            </select> -->
+
       <!-- Second Row -->
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-4 mb-3 text-center">
-          <h2>Search for a place</h2>
-          <!-- <select v-model="transportMode" @change="updateTransportMode" class="transport-select">
-            <option value="mapbox/walking">🚶 Walking</option>
-            <option value="mapbox/driving">🚗 Driving</option>
-            <option value="mapbox/cycling">🚴 Cycling</option>
-          </select> -->
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div id="map" class="map-container"></div>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-4 col-lg-4 mb-3 text-center">
+            <div class="row">
+              <div class="col-6">
+                <h5>Search for a place</h5>
+              </div>
+              <div class="col-6">
+                            <!-- Distance Selector -->
+              <select id="distanceSelect" v-model="selectedDistance" class="form-select mb-3">
+                <option value="0.05">500m</option>
+                <option value="0.1">1km</option>
+                <option value="0.2">2km</option>
+                <option value="0.3">3km</option>
+                <option value="1">10km</option>
+                <option value="all">All Parks</option>
+              </select>
+              <!-- <p v-if="locationError" class="textDanger">{{ locationError }}</p> -->
+              </div>
+            </div>
+
+            <div class="row" style="margin-top: 50px;">
+              <div class="col-6"><h5>Select green spaces size</h5></div>
+              <div class="col-6">
+            <select id="sizeSelect" v-model="sizeSelect" class="form-select mb-3">
+              <option value="20000">large</option>
+              <option value="10000">medium</option>
+              <option value="5000">small</option>
+            </select></div>
+            </div>
+            
+            <button  @click="handleLoadClick" class="btn-load" style="margin-top: 50px;">
+              Load Green Spaces
+            </button>
+
+          </div>
+          <div class="col-12 col-md-8 col-lg-6">
+            <div class="map-wrapper">
+              <div id="map" class="map-container"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -64,13 +100,21 @@ const searchResult = ref(null)
 const transportMode = ref('mapbox/walking')
 const userLocationBool = ref(false)
 const userInMelbourne = ref(false)
+const selectedDistance = ref(0.1)
+const locationError = ref('')
+const sizeSelect = ref('5000') // Default size filter
+
 let map, directions, startMarker, endMarker
 let melbourneGeojson
+let userCoords = null
 let currentMarker = null
 let currentPopup = null
+let greenSpaceMarkers = []
+
 
 // Initialize the map
 onMounted(() => {
+
   map = new mapboxgl.Map({
     container: 'map', // Container ID
     style: 'mapbox://styles/mapbox/streets-v11', // Map style
@@ -78,10 +122,12 @@ onMounted(() => {
     zoom: 12,
     minZoom: 9
   })
+
   map.setMaxBounds([
-    [144.8469619379468, -37.9006602026218],   // Southwest corner
-    [145.0412978955415, -37.72544812918211]  // Northeast corner
-  ])
+  [144.593742, -38.433859], // Southwest corner
+  [145.512529, -37.511274]  // Northeast corner
+]);
+
 
   map.on('load', () => {
     fetch('/municipal-boundary.geojson')
@@ -91,31 +137,40 @@ onMounted(() => {
         console.log('Melbourne GeoJSON:', melbourneGeojson)
 
         navigator.geolocation.getCurrentPosition(
+          // ✅ Success callback
           async (position) => {
-            const userCoords = [position.coords.longitude, position.coords.latitude]
+            userCoords = [position.coords.longitude, position.coords.latitude]
             const userPoint = turf.point(userCoords)
             const melbPolygon = turf.polygon(melbourneGeojson.features[0].geometry.coordinates[0])
-            console.log(turf.booleanPointInPolygon(userPoint, melbPolygon))
-            if (turf.booleanPointInPolygon(userPoint, melbPolygon)) {
+
+            const inMelbourne = turf.booleanPointInPolygon(userPoint, melbPolygon)
+
+            userLocationBool.value = true
+            userInMelbourne.value = inMelbourne
+
+            if (inMelbourne) {
               map.setCenter(userCoords)
               map.setZoom(14)
-              console.log('User is in Melbourne:', userCoords)
-              // Add a marker for the user's location
+
               startMarker = new mapboxgl.Marker({ color: 'blue' })
                 .setLngLat(userCoords)
                 .addTo(map)
-              await loadNearbyGreenSpaces()
-              console.log('Nearby green spaces loaded')
             } else {
-              await loadAllGreenSpaces()
+
+              locationError.value = '⚠️ You are outside Melbourne. You can only view parks in Melbourne with green space size filter.'
             }
-            async (error) => {
-              // If location denied
-              console.error('Error getting location:', error)
-              await loadAllGreenSpaces()
-            }
+          },
+
+          // ❌ Error callback — e.g. user denies location
+          async (error) => {
+            console.error('❌ Error getting location:', error)
+            userLocationBool.value = false
+            userInMelbourne.value = false
+            // Show error message or fallback
+            locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
           }
         )
+
       })
 
     map.addSource('melbourne', {
@@ -150,8 +205,25 @@ map.addControl(directions, 'top-left')
 
 })
 
+console.log(userCoords)
+
 const updateTransportMode = () => {
   directions.setProfile(transportMode.value)
+}
+
+const handleLoadClick = () => {
+  const selectedDistanceValue = parseFloat(selectedDistance.value)
+  if (selectedDistanceValue && userLocationBool.value && userInMelbourne.value) {
+    loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
+  } else if (!userLocationBool.value && !selectedDistanceValue) {
+    loadAllGreenSpaces(sizeSelect.value)
+  } else if (userLocationBool.value && !userInMelbourne.value) {
+    alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
+    loadAllGreenSpaces(sizeSelect.value)
+  } else {
+    alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
+    locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
+  }
 }
 
 const loadMelbourneBoundary = async () => {
@@ -174,7 +246,7 @@ const loadMelbourneBoundary = async () => {
 //search for nearby green
 
 // Load nearby green spaces
-const loadAllGreenSpaces = async () => {
+const loadAllGreenSpaces = async (parkSize) => {
   
   const query = `
     [out:json][timeout:25];
@@ -203,43 +275,34 @@ const loadAllGreenSpaces = async () => {
     const osmData = await response.json()
     const geojson = osmtogeojson(osmData)
 
-    geojson.features.forEach((feature) => {
-  const name = feature.properties.name || 'Unnamed Green Space'
-  const center = turf.centroid(feature).geometry.coordinates
 
-  const marker = new mapboxgl.Marker({ color: 'green' })
-    .setLngLat(center)
-    .setPopup(
-      new mapboxgl.Popup({ offset: 25 }).setHTML(`
-        <strong>${name}</strong><br/>
-        <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px;">Navigate Here</button>
-      `)
-    )
-    .addTo(map)
+    const filteredFeatures = geojson.features.filter((feature) => {
+      const area = turf.area(feature)
 
-  // Open the popup when marker is clicked
-  marker.getElement().addEventListener('click', () => {
-    // Delay to ensure popup is rendered
-    setTimeout(() => {
-      const btn = document.getElementById(`go-to-${name.replace(/\s+/g, '-')}`)
-      if (btn) {
-        btn.addEventListener('click', () => {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const userCoords = [position.coords.longitude, position.coords.latitude]
-            directions.setOrigin(userCoords)
-            directions.setDestination(center)
-          })
-        })
-      }
-    }, 300)
-  })
-})
+      if (parkSize === '5000') return area < 5000
+      if (parkSize === '10000') return area >= 5000 && area <= 20000
+      if (parkSize === '20000') return area > 20000
+      return true // If no parkSize filter, show all
+      
+    })
 
+    // Remove previous layer and source if they exist 
+    if (map.getLayer('green-spaces-layer')) {
+      map.removeLayer('green-spaces-layer')
+    }
+    if (map.getSource('green-spaces')) {
+      map.removeSource('green-spaces')
+    }
 
+    // Add new filtered layer
+    const filteredGeoJSON = {
+      type: 'FeatureCollection',
+      features: filteredFeatures
+    }
 
     map.addSource('green-spaces', {
       type: 'geojson',
-      data: geojson
+      data: filteredGeoJSON
     })
 
     map.addLayer({
@@ -251,38 +314,78 @@ const loadAllGreenSpaces = async () => {
         'fill-opacity': 0.5
       }
     })
+
+    // Remove previous markers if they exist
+    greenSpaceMarkers.forEach(currentMarker => currentMarker.remove())
+    greenSpaceMarkers = [] // Clear the array
+
+    filteredFeatures.forEach((feature) => {
+    const name = feature.properties.name || 'Unnamed Green Space'
+    const center = turf.centroid(feature).geometry.coordinates
+
+    const currentMarker = new mapboxgl.Marker({ color: 'green' })
+      .setLngLat(center)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }).setHTML(`
+          <strong>${name}</strong><br/>
+          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px;">Navigate Here</button>
+        `)
+      )
+      .addTo(map)
+    
+    greenSpaceMarkers.push(currentMarker) // Store the marker in the array
+
+    // Open the popup when marker is clicked
+    currentMarker.getElement().addEventListener('click', () => {
+      // Delay to ensure popup is rendered
+      setTimeout(() => {
+        const btn = document.getElementById(`go-to-${name.replace(/\s+/g, '-')}`)
+        if (btn) {
+          btn.addEventListener('click', () => {
+            navigator.geolocation.getCurrentPosition((position) => {
+              const userCoords = [position.coords.longitude, position.coords.latitude]
+              directions.setOrigin(userCoords)
+              directions.setDestination(center)
+            },
+          (error) => {
+            console.error('Error getting user location:', error)
+            alert('Unable to get your location. Please allow location access.')
+          })
+          })
+        }
+      }, 300)
+    })
+
+  })
+
   } catch (err) {
     console.error('Failed to load Overpass data:', err)
   }
 }
 
 // get nearby parks quety
-const getNearbyParks = (lat, lon) => {
-    // Bounding box ~ 2km around user
-  const delta = 0.01 // ~1km in degrees
-  const south = lat - delta
-  const north = lat + delta
-  const west = lon - delta
-  const east = lon + delta
+const getNearbyParks = (lat, lon, distance) => {
+  const distanceMeters = distance * 1000
 
-  return `
-    [out:json][timeout:25];
-    (
-      way["leisure"="park"](${south},${west},${north},${east});
-      way["leisure"="garden"](${south},${west},${north},${east});
-      way["leisure"="nature_reserve"](${south},${west},${north},${east});
-    );
-    out body;
-    >;
-    out skel qt;
-  `
+return `
+  [out:json][timeout:25];
+  (
+    way["leisure"="park"](around:${distanceMeters},${lat},${lon});
+    way["leisure"="garden"](around:${distanceMeters},${lat},${lon});
+    way["leisure"="nature_reserve"](around:${distanceMeters},${lat},${lon});
+  );
+  out body;
+  >;
+  out skel qt;
+`
 }
 
 // Load all parks in Melbourne
-const loadNearbyGreenSpaces = async (coords) => {
+const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
+  console.log(coords)
   const lat = coords[1]
   const lon = coords[0]
-  const query = getNearbyParks(lat, lon)
+  const query = getNearbyParks(lat, lon, distance)
 
   const response = await fetch('https://overpass-api.de/api/interpreter', {
     method: 'POST',
@@ -295,19 +398,63 @@ const loadNearbyGreenSpaces = async (coords) => {
   const osmJson = await response.json()
   const geojson = osmtogeojson(osmJson)
 
+
+  const filteredFeatures = geojson.features.filter((feature) => {
+      const area = turf.area(feature)
+
+      if (parkSize === '5000') return area < 1000
+      if (parkSize === '10000') return area >= 1000 && area <= 5000
+      if (parkSize === '20000') return area > 5000
+      // return true // If no parkSize filter, show all
+    })
+
+  // Add new filtered layer
+  const filteredGeoJSON = {
+    type: 'FeatureCollection',
+    features: filteredFeatures
+  }
+
+  // Remove previous layer and source if they exist
+  if (map.getLayer('green-spaces-layer')) {
+    map.removeLayer('green-spaces-layer')
+  }
+  if (map.getSource('green-spaces')) {
+    map.removeSource('green-spaces')
+  }
+
+  map.addSource('green-spaces', {
+    type: 'geojson',
+    data: filteredGeoJSON
+  })
+
+  map.addLayer({
+    id: 'green-spaces-layer',
+    type: 'fill',
+    source: 'green-spaces',
+    paint: {
+      'fill-color': '#00FF00',
+      'fill-opacity': 0.5
+    }
+  })
+
+  // Remove previous markers if they exist
+  greenSpaceMarkers.forEach(currentMarker => currentMarker.remove())
+  greenSpaceMarkers = [] // Clear the array
+  
   // 💡 Add markers with popups (e.g., park name)
-  geojson.features.forEach((feature) => {
+  filteredFeatures.forEach((feature) => {
       const center = turf.centroid(feature).geometry.coordinates
       const name = feature.properties.name || 'Unnamed Green Space'
       const type = feature.properties.leisure || 'Unknown Type'
 
-      new mapboxgl.Marker({ color: 'green' })
+      currentMarker = new mapboxgl.Marker({ color: 'green' })
         .setLngLat(center)
         .setPopup(new mapboxgl.Popup().setHTML(`
           <strong>${name}</strong><br/>
           Type: ${type}
         `))
         .addTo(map)
+      greenSpaceMarkers.push(currentMarker) // Store the marker in the array
     })
 
   // Center the map on user's location
@@ -329,36 +476,6 @@ const renderMarkers = (results) => {
   })
 }
 
-// Search for places using Geocoding API
-const searchPlace = async () => {
-  try {
-    const response = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-        searchQuery.value
-      )}.json?access_token=pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ`
-    )
-    const data = await response.json()
-    if (data.features.length > 0) {
-      searchResult.value = data.features[0]
-      // Get the coordinates of the search result
-      const [longitude, latitude] = searchResult.value.geometry.coordinates
-
-      // Center the map on the search result's location
-      map.setCenter([longitude, latitude])
-      map.setZoom(14)
-
-      // Add a marker to the search result's location
-      if (endMarker) endMarker.remove() // Remove previous marker, if any
-      endMarker = new mapboxgl.Marker({ color: 'red' })
-        .setLngLat([longitude, latitude])
-        .addTo(map)
-    } else {
-      alert('No results found')
-    }
-  } catch (error) {
-    console.error('Error searching place:', error)
-  }
-}
 
 // route planner
 window.planRoute = (coords) => {
@@ -397,8 +514,9 @@ const navigateTo = (coordinates) => {
 
 .map-container {
   width: 100%;
-  height: 500px;
+  height: 460px;
   position: relative;
+  border-radius: 5px;
 }
 
 .search-input {
@@ -408,7 +526,49 @@ const navigateTo = (coordinates) => {
   width: 300px;
 }
 
-.top-custom {
-  top: 120px;
+.container {
+  background: none;
 }
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background-color: #E4FDE2;
+  border-radius: 10px;
+  border-width: 2px;
+  box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+h1 {
+  font-family: Garamond, serif;
+}
+
+.btn-load {
+  background: #75BE3A;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-style: none;
+  border-radius: 20px;
+  height: 40px;
+  width: 150px;
+}
+
+.btn-load:hover {
+  background: #70ce23;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-load:active {
+  background: #77e91a;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 </style>

@@ -6,7 +6,7 @@
         <p class="description">
           Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
         </p>
-        <button @click="navigateTo('/GreenMap')" class="button-get-started">Get Started</button>
+        <button @click="navigateTo('/GreenMap')" class="button-get-started">Let's tackle it!</button>
       </div>
     </div>
   </template>
@@ -149,8 +149,8 @@
   }
   
   .button-get-started {
-    width: 120px;
-    height: 40px;
+    width: 150px;
+    height: 60px;
     background: #ffffff;
     border-radius: 5px;
     border: none;

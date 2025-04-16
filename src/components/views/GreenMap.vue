@@ -1,22 +1,19 @@
 <template>
-  <!-- <div> -->
-    <!-- Search Input for Places -->
-    <!-- <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="Search for a place"
-      @keyup.enter="searchPlace"
-      class="search-input"
-    /> -->
-
-    <!-- Search Result -->
-    <!-- <div v-if="searchResult">
-      <h3>Search Result:</h3>
-      <p>{{ searchResult.place_name }}</p>
-      <button @click="navigateTo(searchResult.geometry.coordinates)">
-        Navigate to this location
-      </button>
-    </div> -->
+        <!-- User Guide  -->
+    <transition name="modal" appear>
+    <div class="modal" v-if="showUserGuide">
+        <div class="modal-content swing-in-top-fwd">
+          <h2>Welcome to GreenMap! 🌳</h2>
+              <ul>
+                <li>Allow location access to see parks near your current position within Melbourne.</li>
+                <li>Adjust the green space size filter to explore parks of different sizes.</li>
+                <li>Click the "Load green Spaces" button to find nearby parks or view all parks in Greater Melbourne.</li>
+                <li>Tap on a green marker to view park details, then click “Navigate Here” to get directions from your location.</li>
+              </ul>
+            <button @click="hideUserGuide">Got it!</button>
+        </div>
+    </div>
+    </transition>
 
     <!-- Map Container -->
     <div class="container">
@@ -62,19 +59,6 @@
               <option value="5000">small</option>
             </select></div>
             </div>
-
-            <div class="row fade-in" style="margin-top: 50px;">
-              <div class="col-6">
-                <h5>Transport Mode</h5>
-              </div>
-              <div class="col-6">
-                <select v-model="transportMode" @change="updateTransportMode" class="form-select mb-3">
-                  <option value="mapbox/walking">🚶 Walking</option>
-                  <option value="mapbox/driving">🚗 Driving</option>
-                  <option value="mapbox/cycling">🚴 Cycling</option>
-                </select>
-              </div>
-            </div>
             
             <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px;">
               Load Green Spaces
@@ -86,6 +70,15 @@
               <div id="map" class="map-container"></div>
             </div>
           </div>
+        </div>
+
+        <div class="row justify-content-center" style="margin-top: 30px;">
+          <div class="col-6 col-md-8 col-lg-6 text-center">
+            <h3 style="margin-top: 30px;">Want to grow plants for yourself? Click to to find out how!➡️</h3>
+          </div>
+          <div class="col-6 col-md-6 col-lg-6 text-center">
+            <button @click="navigateToChat" class="btn-load" style="margin-top: 20px;">Chat with Green specialist</button>
+          </div>  
         </div>
       </div>
     </div>
@@ -115,6 +108,7 @@ const userInMelbourne = ref(false)
 const selectedDistance = ref(0.1)
 const locationError = ref('')
 const sizeSelect = ref('5000') // Default size filter
+const showUserGuide = ref(false) // Show user guide by default
 
 let map, directions, startMarker, endMarker
 let melbourneGeojson
@@ -127,6 +121,7 @@ let greenSpaceMarkers = []
 // Initialize the map
 onMounted(() => {
 
+  showUserGuide.value = true // Show user guide when the component is mounted
   map = new mapboxgl.Map({
     container: 'map', // Container ID
     style: 'mapbox://styles/mapbox/streets-v11', // Map style
@@ -202,23 +197,15 @@ onMounted(() => {
 
   loadMelbourneBoundary()
 
-  directions = new MapboxDirections({
-  accessToken: mapboxgl.accessToken,
-  unit: 'metric',
-  profile: transportMode.value,
-  controls: {
-    inputs: false,
-    instructions: true
-  }
 })
 
-map.addControl(directions, 'top-left')
+const navigateToChat = () => {
+  window.location.href = '/chat'
+}
 
-map.off('click', directions._onMapClick)
-
-})
-
-
+const hideUserGuide = () => {
+  showUserGuide.value = false
+}
 
 const updateTransportMode = () => {
 
@@ -239,8 +226,9 @@ const updateTransportMode = () => {
   map.addControl(directions, 'top-left')
   // Optional: turn off map click-to-set
   map.off('click', directions._onMapClick)
-  
+
   }
+
 
 
 const handleLoadClick = () => {
@@ -372,16 +360,20 @@ const loadAllGreenSpaces = async (parkSize) => {
     greenSpaceMarkers.push(currentMarker) // Store the marker in the array
 
     // Open the popup when marker is clicked
-    currentMarker.getElement().addEventListener('click', () => {
+    currentMarker.getElement().addEventListener('click', async() => {
       // Delay to ensure popup is rendered
       setTimeout(() => {
         const btn = document.getElementById(`go-to-${name.replace(/\s+/g, '-')}`)
         if (btn) {
           btn.addEventListener('click', () => {
-            navigator.geolocation.getCurrentPosition((position) => {
+            navigator.geolocation.getCurrentPosition(async (position) => {
               const userCoords = [position.coords.longitude, position.coords.latitude]
-              directions.setOrigin(userCoords)
-              directions.setDestination(center)
+              const originStr = `${userCoords[1]},${userCoords[0]}` // lat,lon
+              const destStr = `${center[1]},${center[0]}` // lat,lon
+
+              const gmapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originStr}&destination=${destStr}&travelmode=driving`
+
+              window.open(gmapsUrl, '_blank')
             },
           (error) => {
             console.error('Error getting user location:', error)
@@ -503,9 +495,12 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
           btn.addEventListener('click', () => {
             navigator.geolocation.getCurrentPosition((position) => {
               const userCoords = [position.coords.longitude, position.coords.latitude]
-              console.log(userCoords)
-              directions.setOrigin(userCoords)
-              directions.setDestination(center)
+              const originStr = `${userCoords[1]},${userCoords[0]}` // lat,lon
+              const destStr = `${center[1]},${center[0]}` // lat,lon
+
+              const gmapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originStr}&destination=${destStr}&travelmode=driving`
+
+              window.open(gmapsUrl, '_blank')
 
             },
           (error) => {
@@ -520,7 +515,7 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
 
   if(filteredFeatures.length <= 0) {
     alert('No parks found in the selected range.')
-    
+
   }
 
     
@@ -528,51 +523,6 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
   map.setCenter([lon, lat])
   map.setZoom(14)
 }
-
-// // Render markers on the map
-// const renderMarkers = (results) => {
-//   results.forEach((result) => {
-//     const coordinates = result.geometry.coordinates
-//     const marker = new mapboxgl.Marker({ color: 'green' })
-//       .setLngLat(coordinates)
-//       .addTo(map)
-
-//     marker.getElement().addEventListener('click', () => {
-//       navigateTo(coordinates)
-//     })
-//   })
-// }
-
-
-// // route planner
-// window.planRoute = (coords) => {
-//   navigateTo(coords)
-// }
-
-// // Navigate to the selected place
-// const navigateTo = (coordinates) => {
-//   if (endMarker) endMarker.remove() // Remove previous end marker
-
-//   // Add a marker for the destination
-//   endMarker = new mapboxgl.Marker({ color: 'red' })
-//     .setLngLat(coordinates)
-//     .addTo(map)
-
-//   // Get current location as the start point
-//   navigator.geolocation.getCurrentPosition((position) => {
-//     const start = [position.coords.longitude, position.coords.latitude]
-//     if (startMarker) startMarker.remove() // Remove previous start marker
-
-//     // Add a marker for the start location
-//     startMarker = new mapboxgl.Marker({ color: 'blue' })
-//       .setLngLat(start)
-//       .addTo(map)
-
-//     // Get the route using Mapbox Directions API
-//     directions.setOrigin(start) // Start point
-//     directions.setDestination(coordinates) // End point
-//   })
-// }
 </script>
 
 
@@ -704,6 +654,84 @@ h1 {
   font-size: 2rem;
   font-weight: bold;
   animation: vibrate 0.7s linear infinite;
+}
+
+.modal-enter-active {
+    animation: swing-in-top-fwd 4.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+}
+
+.modal-leave-active {
+    animation: swing-out-top-fwd 1s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
+}
+
+/* @keyframes swing-in-top-fwd {
+    0% {
+        transform: rotateX(-100deg);
+        transform-origin: top;
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+    }
+}
+
+@keyframes swing-out-top-fwd {
+    0% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(-100deg);
+        transform-origin: top;
+        opacity: 0;
+    }
+} */
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+.modal-content h2 {
+    color: #2c7f4b;
+    margin-bottom: 10px;
+}
+
+.modal-content ul {
+    margin-bottom: 20px;
+}
+
+.modal-content li {
+    margin-bottom: 10px;
+}
+
+.modal-content button {
+    background-color: #2c7f4b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
 }
 
 </style>

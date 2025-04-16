@@ -3,6 +3,7 @@ import BHeader from './components/BHeader.vue'
 import BFooter from './components/BFooter.vue'
 </script>
 
+
 <template>
   <div id="app">
     <header>
@@ -10,16 +11,45 @@ import BFooter from './components/BFooter.vue'
     </header>
 
     <main class="main-box">
-      <router-view></router-view>
+      <transition name="fade-slide" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </main>
-
-    <!-- <footer>
-      <BFooter />
-    </footer> -->
-</div>
+  </div>
 </template>
 
 <style scoped>  
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+.fade-slide-enter-active {
+  animation: fadeInLeft 0.5s ease forwards;
+}
+
+.fade-slide-leave-active {
+  animation: fadeOutLeft 0.5s ease forwards;
+}
+
+
 .main-content {
   padding: 20px;
   position: relative;

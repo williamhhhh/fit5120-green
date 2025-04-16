@@ -352,7 +352,7 @@ const loadAllGreenSpaces = async (parkSize) => {
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }).setHTML(`
           <strong>${name}</strong><br/>
-          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; background-colour:#75BE3A">Navigate Here</button>
+          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; color: white; background-color: #75BE3A">Navigate Here</button>
         `)
       )
       .addTo(map)
@@ -479,7 +479,7 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }).setHTML(`
           <strong>${name}</strong><br/>
-          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; background-colour:#75BE3A">Navigate Here</button>
+          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; color: white; background-color: #75BE3A">Navigate Here</button>
         `)
       )
       .addTo(map)
@@ -560,6 +560,18 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
 
 h1 {
   font-family: Garamond, serif;
+}
+
+.btn-navigator {
+  background: #75BE3A;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  height: 40px;
+  width: 120px;
+  transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .btn-load:active {

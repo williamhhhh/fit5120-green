@@ -16,12 +16,12 @@
         <li class="nav-item">
           <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
         </li>
         <li class="nav-item">
           <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
-        </li>
+        </li> -->
         <li class="nav-item">
           <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
         </li>

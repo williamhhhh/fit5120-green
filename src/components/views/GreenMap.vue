@@ -23,21 +23,15 @@
       <!-- First Row -->
       <div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
         <div class="col-12 col-md-10 col-lg-4 text-center">
-          <h1>Let's discover parks and gardens in melbourne city!</h1>
+          <h1 class="vibrate">Let's discover parks and gardens in melbourne city!</h1>
         </div>
       </div>
-
-      <!-- <select v-model="transportMode" @change="updateTransportMode" class="transport-select">
-              <option value="mapbox/walking">🚶 Walking</option>
-              <option value="mapbox/driving">🚗 Driving</option>
-              <option value="mapbox/cycling">🚴 Cycling</option>
-            </select> -->
 
       <!-- Second Row -->
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12 col-md-4 col-lg-4 mb-3 text-center">
-            <div class="row">
+            <div class="row fade-in">
               <div class="col-6">
                 <h5>Search for a place</h5>
               </div>
@@ -55,7 +49,7 @@
               </div>
             </div>
 
-            <div class="row" style="margin-top: 50px;">
+            <div class="row fade-in" style="margin-top: 50px;">
               <div class="col-6"><h5>Select green spaces size</h5></div>
               <div class="col-6">
             <select id="sizeSelect" v-model="sizeSelect" class="form-select mb-3">
@@ -64,14 +58,27 @@
               <option value="5000">small</option>
             </select></div>
             </div>
+
+            <div class="row fade-in" style="margin-top: 50px;">
+              <div class="col-6">
+                <h5>Transport Mode</h5>
+              </div>
+              <div class="col-6">
+                <select v-model="transportMode" @change="updateTransportMode" class="form-select mb-3">
+                  <option value="mapbox/walking">🚶 Walking</option>
+                  <option value="mapbox/driving">🚗 Driving</option>
+                  <option value="mapbox/cycling">🚴 Cycling</option>
+                </select>
+              </div>
+            </div>
             
-            <button  @click="handleLoadClick" class="btn-load" style="margin-top: 50px;">
+            <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px;">
               Load Green Spaces
             </button>
 
           </div>
           <div class="col-12 col-md-8 col-lg-6">
-            <div class="map-wrapper">
+            <div class="map-wrapper zoom-in">
               <div id="map" class="map-container"></div>
             </div>
           </div>
@@ -90,6 +97,7 @@ import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import axios from 'axios'
 import * as turf from '@turf/turf'
 import osmtogeojson from 'osmtogeojson'
+import { IftaLabel } from 'primevue'
 
 // Set Mapbox Access Token
 mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
@@ -170,7 +178,6 @@ onMounted(() => {
             locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
           }
         )
-
       })
 
     map.addSource('melbourne', {
@@ -203,13 +210,34 @@ onMounted(() => {
 
 map.addControl(directions, 'top-left')
 
+map.off('click', directions._onMapClick)
+
 })
 
-console.log(userCoords)
+
 
 const updateTransportMode = () => {
-  directions.setProfile(transportMode.value)
-}
+
+  if (directions) {
+    map.removeControl(directions) // Remove old one
+  }
+
+  directions = new MapboxDirections({
+    accessToken: mapboxgl.accessToken,
+    unit: 'metric',
+    profile: transportMode.value,
+    controls: {
+      inputs: false,
+      instructions: true
+    }
+  })
+
+  map.addControl(directions, 'top-left')
+  // Optional: turn off map click-to-set
+  map.off('click', directions._onMapClick)
+  
+  }
+
 
 const handleLoadClick = () => {
   const selectedDistanceValue = parseFloat(selectedDistance.value)
@@ -220,7 +248,10 @@ const handleLoadClick = () => {
   } else if (userLocationBool.value && !userInMelbourne.value) {
     alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
     loadAllGreenSpaces(sizeSelect.value)
-  } else {
+  } else if(!selectedDistanceValue && userInMelbourne.value){
+    loadAllGreenSpaces(sizeSelect.value)
+  }
+  else {
     alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
     locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
   }
@@ -328,7 +359,7 @@ const loadAllGreenSpaces = async (parkSize) => {
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }).setHTML(`
           <strong>${name}</strong><br/>
-          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px;">Navigate Here</button>
+          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; background-colour:#75BE3A">Navigate Here</button>
         `)
       )
       .addTo(map)
@@ -443,69 +474,95 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
   
   // 💡 Add markers with popups (e.g., park name)
   filteredFeatures.forEach((feature) => {
-      const center = turf.centroid(feature).geometry.coordinates
-      const name = feature.properties.name || 'Unnamed Green Space'
-      const type = feature.properties.leisure || 'Unknown Type'
+    const name = feature.properties.name || 'Unnamed Green Space'
+    const center = turf.centroid(feature).geometry.coordinates
 
-      currentMarker = new mapboxgl.Marker({ color: 'green' })
-        .setLngLat(center)
-        .setPopup(new mapboxgl.Popup().setHTML(`
+    const currentMarker = new mapboxgl.Marker({ color: 'green' })
+      .setLngLat(center)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }).setHTML(`
           <strong>${name}</strong><br/>
-          Type: ${type}
-        `))
-        .addTo(map)
-      greenSpaceMarkers.push(currentMarker) // Store the marker in the array
-    })
+          <button id="go-to-${name.replace(/\s+/g, '-')}" style="margin-top:5px; border-radius:10px; background-colour:#75BE3A">Navigate Here</button>
+        `)
+      )
+      .addTo(map)
+    
+    greenSpaceMarkers.push(currentMarker) // Store the marker in the array
 
+    // Open the popup when marker is clicked
+    currentMarker.getElement().addEventListener('click', () => {
+      // Delay to ensure popup is rendered
+      setTimeout(() => {
+        const btn = document.getElementById(`go-to-${name.replace(/\s+/g, '-')}`)
+        if (btn) {
+          btn.addEventListener('click', () => {
+            navigator.geolocation.getCurrentPosition((position) => {
+              const userCoords = [position.coords.longitude, position.coords.latitude]
+              console.log(userCoords)
+              directions.setOrigin(userCoords)
+              directions.setDestination(center)
+
+            },
+          (error) => {
+            console.error('Error getting user location:', error)
+            alert('Unable to get your location. Please allow location access.')
+          })
+          })
+        }
+      }, 300)
+    })
+  })
+
+    
   // Center the map on user's location
   map.setCenter([lon, lat])
   map.setZoom(14)
 }
 
-// Render markers on the map
-const renderMarkers = (results) => {
-  results.forEach((result) => {
-    const coordinates = result.geometry.coordinates
-    const marker = new mapboxgl.Marker({ color: 'green' })
-      .setLngLat(coordinates)
-      .addTo(map)
+// // Render markers on the map
+// const renderMarkers = (results) => {
+//   results.forEach((result) => {
+//     const coordinates = result.geometry.coordinates
+//     const marker = new mapboxgl.Marker({ color: 'green' })
+//       .setLngLat(coordinates)
+//       .addTo(map)
 
-    marker.getElement().addEventListener('click', () => {
-      navigateTo(coordinates)
-    })
-  })
-}
+//     marker.getElement().addEventListener('click', () => {
+//       navigateTo(coordinates)
+//     })
+//   })
+// }
 
 
-// route planner
-window.planRoute = (coords) => {
-  navigateTo(coords)
-}
+// // route planner
+// window.planRoute = (coords) => {
+//   navigateTo(coords)
+// }
 
-// Navigate to the selected place
-const navigateTo = (coordinates) => {
-  if (endMarker) endMarker.remove() // Remove previous end marker
+// // Navigate to the selected place
+// const navigateTo = (coordinates) => {
+//   if (endMarker) endMarker.remove() // Remove previous end marker
 
-  // Add a marker for the destination
-  endMarker = new mapboxgl.Marker({ color: 'red' })
-    .setLngLat(coordinates)
-    .addTo(map)
+//   // Add a marker for the destination
+//   endMarker = new mapboxgl.Marker({ color: 'red' })
+//     .setLngLat(coordinates)
+//     .addTo(map)
 
-  // Get current location as the start point
-  navigator.geolocation.getCurrentPosition((position) => {
-    const start = [position.coords.longitude, position.coords.latitude]
-    if (startMarker) startMarker.remove() // Remove previous start marker
+//   // Get current location as the start point
+//   navigator.geolocation.getCurrentPosition((position) => {
+//     const start = [position.coords.longitude, position.coords.latitude]
+//     if (startMarker) startMarker.remove() // Remove previous start marker
 
-    // Add a marker for the start location
-    startMarker = new mapboxgl.Marker({ color: 'blue' })
-      .setLngLat(start)
-      .addTo(map)
+//     // Add a marker for the start location
+//     startMarker = new mapboxgl.Marker({ color: 'blue' })
+//       .setLngLat(start)
+//       .addTo(map)
 
-    // Get the route using Mapbox Directions API
-    directions.setOrigin(start) // Start point
-    directions.setDestination(coordinates) // End point
-  })
-}
+//     // Get the route using Mapbox Directions API
+//     directions.setOrigin(start) // Start point
+//     directions.setDestination(coordinates) // End point
+//   })
+// }
 </script>
 
 
@@ -545,30 +602,98 @@ h1 {
   font-family: Garamond, serif;
 }
 
-.btn-load {
-  background: #75BE3A;
-  color: #fff;
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-style: none;
-  border-radius: 20px;
-  height: 40px;
-  width: 150px;
-}
-
-.btn-load:hover {
-  background: #70ce23;
-  color: #fff;
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
 .btn-load:active {
   background: #77e91a;
   color: #fff;
   transform: scale(1.03);
+  box-shadow: 0 8px 12px 0px rgba(0, 0, 0, 0.1);
+}
+
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.zoom-in {
+  animation: zoomIn 1s ease-in-out;
+}
+
+.btn-load {
+  background: #75BE3A;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  height: 40px;
+  width: 150px;
+  transform: scale(1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-load:hover {
+  background: #70ce23;
+  transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.form-select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+@keyframes vibrate {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+.vibrate {
+  display: inline-block;
+  font-family: Garamond, serif;
+  font-size: 2rem;
+  font-weight: bold;
+  animation: vibrate 0.7s linear infinite;
 }
 
 </style>

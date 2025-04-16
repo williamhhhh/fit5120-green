@@ -1,12 +1,28 @@
 <template>
     <div class="plant-app" style="padding-top: 100px;">
-        <header>
+        <header class="fade-in">
             <h1>Plant Assistant</h1>
             <p>Chat with me,Learn about how to plant together!</p>
         </header>
 
+        <!-- User Guide  -->
+        <transition name="modal" appear>
+            <div class="modal" v-if="showUserGuide">
+                <div class="modal-content swing-in-top-fwd">
+                    <h2>Let's explore!! </h2>
+                    <ul>
+                        <li>Type your plant-related questions in the chat input below.</li>
+                        <li>Click the "Send" button or press "Enter" to send your message.</li>
+                        <li>I will provide answers and advice based on your questions.</li>
+                        <li>Scroll down to see the plant cards and click "Learn More" for detailed information.</li>
+                    </ul>
+                    <button @click="hideUserGuide">Got it!</button>
+                </div>
+            </div>
+        </transition>
+
         <!-- Chatbot Window -->
-        <section class="chat-area">
+        <section class="chat-container slide-in-bottom">
             <div class="chat-box" ref="chatBox">
                 <div v-for="(message, index) in messages" :key="index" :class="['chat-bubble', message.role]">
                     <div v-if="message.role === 'assistant'" v-html="message.content"></div>
@@ -20,7 +36,7 @@
         </section>
 
         <!-- Plant infomation card -->
-        <section class="plant-cards">
+        <section class="plant-cards slide-in-left">
             <div v-for="plant in plants" :key="plant.id" class="plant-card">
                 <img :src="plant.image" :alt="plant.name" />
                 <h3>{{ plant.name }}</h3>
@@ -48,7 +64,13 @@ export default {
                 { id: 3, name: 'Cactus', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SYOl3WIUcbEBXMwi8mNYmXBtoGh19qwWMQ&s', brief: 'Cactus are extremely drought tolerant and can survive without water for months.' },
             ],
             loading: false,
+            showUserGuide: false,
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.showUserGuide = true; 
+        }, 1050); 
     },
     methods: {
         async sendMessage() {
@@ -108,6 +130,9 @@ export default {
                 .replace(/- (.*?)\n/g, '<li>$1</li>')
                 .replace(/\n/g, '<br>');
         },
+        hideUserGuide() {
+            this.showUserGuide = false;
+        },
     },
 }
 </script>
@@ -118,41 +143,130 @@ export default {
     margin: auto;
     position: relative;
 }
+
 header {
     text-align: center;
     margin-bottom: 20px;
 }
+
 h1 {
     color: #2c7f4b;
 }
-.chat-area {
+
+.modal-enter-active {
+    animation: swing-in-top-fwd 4.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+}
+
+.modal-leave-active {
+    animation: swing-out-top-fwd 1s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
+}
+
+@keyframes swing-in-top-fwd {
+    0% {
+        transform: rotateX(-100deg);
+        transform-origin: top;
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+    }
+}
+
+@keyframes swing-out-top-fwd {
+    0% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+    }
+    100% {
+        transform: rotateX(-100deg);
+        transform-origin: top;
+        opacity: 0;
+    }
+}
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    max-width: 500px;
+}
+
+.modal-content h2 {
+    color: #2c7f4b;
+    margin-bottom: 10px;
+}
+
+.modal-content ul {
+    margin-bottom: 20px;
+}
+
+.modal-content li {
+    margin-bottom: 10px;
+}
+
+.modal-content button {
+    background-color: #2c7f4b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+.chat-container {
+    background-color: #E4FDE2;
     border: 1px solid #ddd;
     padding: 20px;
     height: 400px;
     display: flex;
     flex-direction: column;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
+
 .chat-box {
     flex: 1;
     overflow-y: auto;
 }
+
 .chat-bubble {
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
     max-width: 80%;
 }
+
 .user {
     background: #e8f5e9;
     align-self: flex-end;
 }
+
 .assistant {
     background: #e3f2fd;
 }
+
 .input-area {
     display: flex;
     margin-top: 20px;
 }
+
 input {
     flex: 1;
     padding: 8px;
@@ -160,6 +274,7 @@ input {
     border-radius: 4px;
     outline: none;
 }
+
 button {
     background: #2c7f4b;
     color: white;
@@ -169,29 +284,78 @@ button {
     margin-left: 10px;
     cursor: pointer;
 }
+
 button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
+
 .plant-cards {
     margin-top: 40px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
+
 .plant-card {
     padding: 15px;
-    text-align: center; 
+    text-align: center;
     background: #c8e6c9;
     border-radius: 8px;
 }
+
 .plant-card img {
     width: 100%;
     border-radius: 4px;
     margin-bottom: 10px;
 }
+
 .plant-card a {
     color: #2c7f4b;
 }
+
+.fade-in {
+    animation: fade-in 1s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.slide-in-bottom {
+    animation: slide-in-bottom 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.slide-in-left {
+    animation: slide-in-left 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-bottom {
+    0% {
+        transform: translateY(1000px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-left {
+    0% {
+        transform: translateX(-1000px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 
 </style>

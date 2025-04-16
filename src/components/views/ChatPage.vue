@@ -1,351 +1,197 @@
 <template>
-    <div class="chat-page">
-        <div class="chat-header">
-            <h1>Grow Your Own Green Space at Home</h1>
-        </div>
-        <div class="main-content">
-            <div class="sidebar">
-                <h2>Chat history</h2>
-                <ul>
-                    <li
-                        v-for="(conversation, index) in conversations"
-                        :key="index"
-                        @click="selectConversation(index)"
-                        :class="{ active: selectedConversation === index }"
-                        class="conversation-item"
-                    >
-                        <span>Conversation {{ index + 1 }}</span>
-                        <button
-                            @click.stop="deleteConversation(index)"
-                            class="delete-btn"
-                        >
-                            X
-                        </button>
-                    </li>
-                </ul>
-                <button @click="startNewConversation">+ New Chat</button>
-            </div>
-            <div class="chat-container">
-                <div class="messages">
-                    <div
-                        v-for="(message, index) in messages"
-                        :key="index"
-                        :class="['message', message.role === 'assistant' ? 'ai-message' : 'user-message']">
+    <div class="plant-app" style="padding-top: 100px;">
+        <header>
+            <h1>Plant Assistant</h1>
+            <p>Chat with me,Learn about how to plant together!</p>
+        </header>
 
-                        <div v-if="message.role === 'assistant'" v-html="parseMarkdown(message.content)"></div>
-                        <p v-else>{{ message.content }}</p>
-                    </div>
-                </div>
-                <div class="input-container">
-                    <input
-                        v-model="newMessage"
-                        @keyup.enter="sendMessage"
-                        type="text"
-                        placeholder="Send a message..."
-                    />
-                    <button @click="sendMessage" :disabled="loading">Send</button>
+        <!-- Chatbot Window -->
+        <section class="chat-area">
+            <div class="chat-box" ref="chatBox">
+                <div v-for="(message, index) in messages" :key="index" :class="['chat-bubble', message.role]">
+                    <div v-if="message.role === 'assistant'" v-html="message.content"></div>
+                    <p v-else>{{ message.content }}</p>
                 </div>
             </div>
-        </div>
+            <div class="input-area">
+                <input v-model="userInput" @keyup.enter="sendMessage" placeholder="Please type your plant..." />
+                <button @click="sendMessage" :disabled="loading">Send</button>
+            </div>
+        </section>
+
+        <!-- Plant infomation card -->
+        <section class="plant-cards">
+            <div v-for="plant in plants" :key="plant.id" class="plant-card">
+                <img :src="plant.image" :alt="plant.name" />
+                <h3>{{ plant.name }}</h3>
+                <p>{{ plant.brief }}</p>
+                <a href="#" @click="GetPlantDetail(plant)">Learn More</a>
+            </div>
+        </section>
+
     </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
-    name: "ChatPage",
     data() {
         return {
-            conversations: [], // Stores all chat histories
-            selectedConversation: null, // The currently selected conversation
-            messages: [], // Messages in the current conversation
-            newMessage: "", // User input
-            loading: false, // Loading state for API requests
-        };
+            userInput: '',
+            messages: [
+                { role: 'assistant', content: 'Hello! I &#39m your plant assistant. welcome to my world. Let &#39s talk about plant care!  What do you want to know?' },
+            ],
+            plants: [
+                { id: 1, name: 'Dracaena trifasciata', image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSFVeGcFNwNPOV9HvhJDGWbDFbD5uFzy7TcwZZKkdOfVegXcz1KFcRLgkMh6yz9P9S5IUvH7FTFpD_gy1HF_-FSyw', brief: 'Dracaena trifasciata like bright and ventilated environment, not hardy, pay attention to shade in summer.' },
+                { id: 2, name: 'Monstera deliciosa', image: 'https://p2.itc.cn/images01/20220716/656eb023b18044e9972384b3fe839fed.png', brief: 'Monstera deliciosa are more shade-tolerant, the ornaments should be loose and airy, and watering should be moderate.' },
+                { id: 3, name: 'Cactus', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SYOl3WIUcbEBXMwi8mNYmXBtoGh19qwWMQ&s', brief: 'Cactus are extremely drought tolerant and can survive without water for months.' },
+            ],
+            loading: false,
+        }
     },
     methods: {
         async sendMessage() {
-            if (this.newMessage.trim() === "") {
-                alert("Please enter a message!");
-                return;
+            if (this.userInput.trim()) {
+                const newMessage = { role: 'user', content: this.userInput };
+                this.messages.push(newMessage);
+                this.userInput = '';
+
+                this.loading = true;
+
+                try {
+                    const response = await axios.post('https://api.coolthecities.com/chat', {
+                        prompt: newMessage.content,
+                    });
+
+                    const aiResponse = response.data.message;
+                    const formattedResponse = this.parseMarkdown(aiResponse);
+                    this.messages.push({ role: 'assistant', content: formattedResponse });
+                } catch (error) {
+                    console.error('Error requesting ChatGPT API:', error);
+                    this.messages.push({
+                        role: 'assistant',
+                        content: 'Sorry, I can&#39t answer your question right now. Please try again later.',
+                    });
+                } finally {
+                    this.loading = false;
+                    this.$nextTick(() => {
+                        this.$refs.chatBox.scrollTop = this.$refs.chatBox.scrollHeight;
+                    });
+                }
             }
-
-            if (this.selectedConversation === null) {
-                this.startNewConversation();
+        },
+        GetPlantDetail(plant) {
+            let url = ''
+            switch(plant.id) {
+                case 1:
+                    url = 'https://en.wikipedia.org/wiki/Dracaena_trifasciata';
+                    break;
+                case 2:
+                    url = 'https://en.wikipedia.org/wiki/Monstera_deliciosa';
+                    break;
+                case 3:
+                    url = 'https://en.wikipedia.org/wiki/Cactus';
+                    break;
+                default:
+                    return '#';
             }
-
-            // Add user message to the current conversation
-            this.messages.push({ role: "user", content: this.newMessage });
-
-            // Save the input and clear the text field
-            const userMessage = this.newMessage;
-            this.newMessage = "";
-
-            // Set loading state
-            this.loading = true;
-
-            try {
-                const response = await axios.post("https://api.coolthecities.com/chat", {
-                    prompt: userMessage,
-                });
-
-                // Add assistant response to messages
-                const aiResponse = response.data.message;
-                this.messages.push({ role: "assistant", content: aiResponse });
-            } catch (error) {
-                console.error("Error:", error);
-                this.messages.push({
-                    role: "assistant",
-                    content: "Error: Unable to fetch response from the server.",
-                });
-            } finally {
-                this.loading = false;
-            }
-
-            this.saveConversations();
-        },
-        startNewConversation() {
-            this.conversations.push([]);
-            this.selectedConversation = this.conversations.length - 1;
-            this.messages = this.conversations[this.selectedConversation];
-
-            // Save the updated conversations to localStorage
-            this.saveConversations();
-        },
-        selectConversation(index) {
-            // Switch to the selected conversation
-            this.selectedConversation = index;
-            this.messages = this.conversations[index];
-        },
-        deleteConversation(index) {
-            // Remove the selected conversation
-            this.conversations.splice(index, 1);
-
-            // Update selected conversation
-            if (this.selectedConversation === index) {
-                this.selectedConversation = this.conversations.length > 0 ? 0 : null;
-                this.messages =
-                    this.selectedConversation !== null
-                        ? this.conversations[this.selectedConversation]
-                        : [];
-            } else if (this.selectedConversation > index) {
-                this.selectedConversation -= 1;
-            }
-
-            // Save the updated conversations to localStorage
-            this.saveConversations();
-        },
-        saveConversations() {
-            // Save conversations to localStorage
-            localStorage.setItem("chatConversations", JSON.stringify(this.conversations));
-        },
-        loadConversations() {
-            // Load conversations from localStorage
-            const storedConversations = localStorage.getItem("chatConversations");
-            if (storedConversations) {
-                this.conversations = JSON.parse(storedConversations);
-                this.selectedConversation = this.conversations.length > 0 ? 0 : null;
-                this.messages =
-                    this.selectedConversation !== null
-                        ? this.conversations[this.selectedConversation]
-                        : [];
-            } else {
-                // Initialize with the first conversation if no data in localStorage
-                this.startNewConversation();
-            }
+            window.open(url, '_blank');
         },
         parseMarkdown(markdownText) {
             return markdownText
                 .replace(/### (.*?)\n/g, '<h3>$1</h3>')
-                .replace(/## (.*?)\n/g, '<h2>$1</h2>') 
-                .replace(/# (.*?)\n/g, '<h1>$1</h1>') 
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                .replace(/## (.*?)\n/g, '<h2>$1</h2>')
+                .replace(/# (.*?)\n/g, '<h1>$1</h1>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/- (.*?)\n/g, '<li>$1</li>') 
-                .replace(/\n/g, '<br>'); 
+                .replace(/- (.*?)\n/g, '<li>$1</li>')
+                .replace(/\n/g, '<br>');
         },
     },
-    mounted() {
-        this.loadConversations();
-    },
-};
+}
 </script>
 
 <style scoped>
-.chat-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    margin-top: 110px;
+.plant-app {
+    max-width: 600px;
+    margin: auto;
+    position: relative;
 }
-
-.chat-header {
-    color: green;
-    padding: 10px 20px;
+header {
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    border-top: 1px solid #d3d3d3;
-    flex-shrink: 0;
+    margin-bottom: 20px;
 }
-
-.main-content {
-    display: flex;
-    flex-grow: 1;
-    overflow: hidden;
+h1 {
+    color: #2c7f4b;
 }
-
-.sidebar {
-    width: 350px;
-    background-color: #f0f0f0;
+.chat-area {
+    border: 1px solid #ddd;
     padding: 20px;
-    overflow-y: auto;
-    flex-shrink: 0;
-}
-
-.conversation-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    transition: transform 0.2s, background-color 0.2s;
-    cursor: pointer;
-}
-
-.conversation-item:hover {
-    transform: scale(1.05);
-    background-color: #e6f7ff;
-}
-
-.conversation-item.active {
-    background-color: #d6eaff;
-    font-weight: bold;
-}
-
-.delete-btn {
-    background-color: transparent;
-    color: #ff4d4f;
-    border: 1px solid #ff4d4f;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.delete-btn:hover {
-    background-color: #ff4d4f;
-    color: white;
-}
-
-.chat-container {
+    height: 400px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    border-left: 1px solid #ddd;
-    background-color: white;
-    overflow: hidden; 
 }
-
-.message {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    max-width: 75%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.ai-message {
-background-color: #e1e1e1;
-align-self: flex-start;
-}
-
-.user-message {
-background-color: rgb(26, 205, 26);
-color: white;
-align-self: flex-end;
-font-weight: bold;
-}
-
-.messages {
-    flex-grow: 1;
-    padding: 20px;
+.chat-box {
+    flex: 1;
     overflow-y: auto;
-    max-height: calc(100vh - 150px);
-    background-color: #f7f7f8;
 }
-
-.message h1,
-.message h2,
-.message h3 {
-    margin: 10px 0;
-    font-weight: bold;
-    color: #333;
+.chat-bubble {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 80%;
 }
-
-.message p {
-    margin: 10px 0;
-    line-height: 1.6;
-    font-size: 22px;
-    color: #555;
+.user {
+    background: #e8f5e9;
+    align-self: flex-end;
 }
-
-.message li {
-    margin-left: 20px;
-    list-style-type: disc;
-    color: #555;
+.assistant {
+    background: #e3f2fd;
 }
-
-.message strong {
-    font-weight: bold;
-    color: #000;
-}
-
-.message em {
-    font-style: italic;
-    color: #666;
-}
-
-.input-container {
+.input-area {
     display: flex;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    background-color: #fff;
-    flex-shrink: 0;
+    margin-top: 20px;
 }
-
 input {
-    flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
 }
-
 button {
-    padding: 10px 20px;
-    background-color: #007bff;
+    background: #2c7f4b;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    padding: 8px 15px;
+    margin-left: 10px;
     cursor: pointer;
 }
-
-button:hover {
-    background-color: #0056b3;
-}
-
 button:disabled {
-    background-color: #ccc;
+    background: #ccc;
     cursor: not-allowed;
 }
+.plant-cards {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.plant-card {
+    padding: 15px;
+    text-align: center; 
+    background: #c8e6c9;
+    border-radius: 8px;
+}
+.plant-card img {
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.plant-card a {
+    color: #2c7f4b;
+}
+
 </style>

@@ -20,7 +20,7 @@
       <!-- First Row -->
       <div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
         <div class="col-12 col-md-10 col-lg-4 text-center">
-          <h1 class="vibrate">Let's discover parks and gardens in melbourne city!</h1>
+          <h1>Let's discover parks and gardens in melbourne city!</h1>
           <p> (✅Hint) Click on the marker and press navigate to navigate to the park!</p>
         </div>
       </div>
@@ -60,11 +60,11 @@
             </select></div>
             </div>
             
-            <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px;">
+            <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif;">
               Load Green Spaces
             </button>
-
           </div>
+
           <div class="col-12 col-md-8 col-lg-6">
             <div class="map-wrapper zoom-in">
               <div id="map" class="map-container"></div>
@@ -74,12 +74,13 @@
 
         <div class="row justify-content-center" style="margin-top: 30px;">
           <div class="col-6 col-md-8 col-lg-6 text-center">
-            <h3 style="margin-top: 30px;">Want to grow plants for yourself? Click to to find out how!➡️</h3>
+            <h3 style="margin-top: 30px; font-family: Garamond, serif;">Want to grow plants for yourself? Click to to find out how!➡️</h3>
           </div>
           <div class="col-6 col-md-6 col-lg-6 text-center">
-            <button @click="navigateToChat" class="btn-load" style="margin-top: 20px;">Chat with Green specialist</button>
+            <button @click="navigateToChat" class="btn-load" style="margin-top: 20px; font-family: Garamond, serif; ">Chat with Green specialist</button>
           </div>  
         </div>
+
       </div>
     </div>
 
@@ -746,4 +747,11 @@ h1 {
     cursor: pointer;
 }
 
+p{
+  font-family: Garamond, serif;
+}
+
+h5{
+  font-family: Garamond, serif;
+}
 </style>

@@ -5,6 +5,7 @@ import GreenAdvice from '../components/views/GreenAdvice.vue'
 import GreenMap from '../components/views/GreenMap.vue'
 // import { name } from '@vue/eslint-config-prettier/skip-formatting'
 import ChatPage from '@/components/views/ChatPage.vue'
+import GreenCalculator from '@/components/views/GreenCalculator.vue'
 
 
 const routes = [
@@ -28,6 +29,11 @@ const routes = [
       name: 'ChatPage',
       component: ChatPage,
     },
+    {
+      path: '/GreenCalculator',
+      name: 'GreenCalculator',
+      component: GreenCalculator,
+    }
   ]
 
   const router = createRouter({

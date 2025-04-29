@@ -158,7 +158,7 @@
                     </div>
 
                     <div class="result-container">
-                        <div class="result-text-container">
+                        <div class="result-text-container" style="margin-bottom: 20px;">
                             <div class="result-intro">Your Estimated Annual Carbon Footprint Per Year is:</div>
                             <div class="result-result">{{ calculateCarbonFootprint() }} tonnes</div>
                             <div class="result-result-desc">of carbon dioxide equivalent (tCO2e.)</div>
@@ -197,11 +197,13 @@
                                     <div class="result-card-desc">km driven in a petrol car</div>
                                 </div>
                             </div>
-
-                            <div class="result-infor-row">
-
-                            </div>
                         </div>
+                    </div>
+
+                    <div class="result-infor-container">
+                                <div class="result-infor-text">The average Australian household has an annual carbon footprint of approximately 15-20 tCO2e.</div>
+                                <div class="result-infor-text">According to the UN, to limit global warming to 1.5 degrees by 2050 we must limit our per-person emissions to 2 tCO2e per year.</div>
+                                <div class="result-infor-text">Now go through our user journey to lower the carbonFootprint</div>
                     </div>
 
                     <div class="button-box">
@@ -222,6 +224,9 @@
                             Raise Your Awareness
                         </button>
                     </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -905,6 +910,29 @@ color: #064612;
     padding: 5% 4% 5% 4%;
     gap: 20px;
     width: 100%;
+}
+
+.result-infor-container {
+    display: flex;
+    justify-content: flex-start;
+    /* align-items: center; */
+    flex-direction: column;
+    padding: 0px;
+    gap: 20px;
+    width: 100%;
+}
+
+.result-infor-text {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 21px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.02em;
+
+    color: #064612;
 }
 
 /* 

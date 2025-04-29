@@ -8,10 +8,6 @@
         <div class="text">cool the city</div>
       </div>
 
-      <div class="hamburger" @click="isMenuOpen = !isMenuOpen">
-        <span>&#9776;</span>
-      </div>
-
       <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
         <li class="nav-item">
           <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
@@ -33,10 +29,32 @@
         </li>
       </header>
 
+      <!-- <div v-if="isMenuOpen" class="dropdown-menu-mobile">
+        <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+        <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+      </div> -->
+
+    <!-- Correct toggler button -->
+      <button
+        class="navbar-toggler custom-toggler"
+        type="button"
+        @click="isMenuOpen = !isMenuOpen"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
       <div v-if="isMenuOpen" class="dropdown-menu-mobile">
         <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
         <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
+        <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
+        <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
+        <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
+        <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
       </div>
+
     </div>
   </transition>
 </template>
@@ -138,80 +156,6 @@ watch(
   }
   }
 
-  .hamburger {
-  width: 30px;
-  height: 70px;
-  font-size: 40px;
-  /* background-color: #333; */
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-/* Add pseudo-lines for the hamburger bars */
-.hamburger::before,
-.hamburger::after {
-  content: "";
-  position: absolute;
-  width: 30px;
-  height: 3px;
-  background-color: #333;
-  border-radius: 2px;
-  transition: all 0.3s ease;
-}
-
-.hamburger::before {
-  top: -10px;
-}
-
-.hamburger::after {
-  top: 10px;
-}
-
-/* Hover effect */
-.hamburger:hover {
-  transform: scale(1.1);
-  background-color: #75BE3A;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Active effect (like a click animation) */
-.hamburger:active {
-  transform: scale(0.95);
-  background-color: #5a9e2b;
-}
-
-  .dropdown-menu-mobile {
-    position: absolute;
-    top: 35px;
-    left: 0;
-    right: 0;
-    background-color: #e4fde2;
-    border-radius: 10px;
-    padding: 10px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  @media (max-width: 767px) {
-    .hamburger {
-      display: block;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .dropdown-menu-mobile {
-      display: none;
-    }
-
-    .hamburger {
-      display: none;
-    }
-  }
-  
-
   .header {
     background-color: #c3e6f2;
     padding: 30px 0;
@@ -263,21 +207,6 @@ watch(
     /* background: #90CF8E; */
     border-radius: 48px;
 }
-
-
-/* .nav-item:hover {
-  background: #75BE3A;
-  color: #fff;
-  transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nav-item.active {
-  background: #75BE3A;
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: inset 0 0 0 2px #5a9e2b;
-} */
 
 .nav-link:hover {
   background: #75BE3A;
@@ -349,6 +278,84 @@ watch(
   .button-get-started:active{
     background: #4a8b23;
 }
+
+/* Hamburger Button */
+.custom-toggler {
+  border: none;
+  background: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .custom-toggler {
+    display: none;
+  }
+  
+}
+
+/* Hamburger Icon Lines */
+.navbar-toggler-icon {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background-color: #333; /* black bar */
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Top and Bottom bars */
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Position top bar */
+.navbar-toggler-icon::before {
+  top: -8px;
+}
+
+/* Position bottom bar */
+.navbar-toggler-icon::after {
+  top: 8px;
+}
+
+/* Hover effect */
+.custom-toggler:hover .navbar-toggler-icon,
+.custom-toggler:hover .navbar-toggler-icon::before,
+.custom-toggler:hover .navbar-toggler-icon::after {
+  background-color: #75BE3A; /* light green on hover */
+}
+
+.dropdown-menu-mobile {
+    position: absolute;
+    top: 35px;
+    left: 0;
+    right: 0;
+    background-color: #e4fde2;
+    border-radius: 10px;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+@media screen and (min-width: 768px) {
+  .dropdown-menu-mobile {
+    display: none; /* Hide on larger screens */
+  }
+  
+  
+}
+
 
 </style>
   

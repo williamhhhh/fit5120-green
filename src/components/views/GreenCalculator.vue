@@ -61,7 +61,7 @@
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
                         <div class="image-container">
-                            <img src="https://i.imgur.com/WrlS3nn.png" alt="intro" class="intro-image" />
+                            <img src="https://media-hosting.imagekit.io/c54cfeccb1b84814/screenshot_1745935673599.png?Expires=1840543722&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=mP-V8LMeBN5F55vniWUfkhAqS38j7Cy6AJYy4GDn2vGY2lYqsbpXnwOsTrxy8vce8ZPJHdNnnY6HeNi-jbOkT5Mm4Id2ZKSyrrJpmXAyPxM9-d74J2EoWl-lqCErcZT7gviwAOHTHnJFYunv0P4UlYavo96mHBximQoAroHr0tjKEH9-Ql0lXRBq~M-0mhQdomx7N4t53S30zRPaS86BN-TvZj8mHEnuxjBIO7I6rZvN6n3V1RCXcK3S1XB50u0dVrmdy16Pm5R2ofEKExz7k1rA7zFYjWSSxqqxrsEYAJeXsQ89o-M4NjvBUWFhX3dbY~1jzIk3n~6sP4bu36K6DA__" alt="intro" class="intro-image" />
                         </div>
                     </div>
                     
@@ -198,12 +198,32 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="result-infor-container">
-                                <div class="result-infor-text">The average Australian household has an annual carbon footprint of approximately 15-20 tCO2e.</div>
-                                <div class="result-infor-text">According to the UN, to limit global warming to 1.5 degrees by 2050 we must limit our per-person emissions to 2 tCO2e per year.</div>
-                                <div class="result-infor-text">Now go through our user journey to lower the carbonFootprint</div>
+                        <div class="result-infor-container">
+                            <div class="result-infor-text">
+                                The average Australian household has an annual carbon footprint of approximately 
+                                <span class="highlight">15–20 tCO₂e</span>.
+                            </div>
+                            <div class="result-infor-text">
+                                According to the <span class="highlight">UN</span>, to limit global warming to 1.5 degrees by 2050 
+                                we must limit our per-person emissions to 
+                                <span class="highlight">2 tCO₂e per year</span>.
+                            </div>
+                            <div class="result-text-btn">
+                                <div class="result-infor-text">
+                                Now go through our <span class="highlight">user journey</span> to lower your carbon footprint (Click to activate!) ➡️
+                                </div>
+                                <button
+                                type="button"
+                                class="btn"
+                                style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;"
+                                    @click="clearForm"
+                                >
+                                    Raise Your Awareness
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="button-box">
@@ -215,17 +235,7 @@
                         >
                             Calculate Again
                         </button>
-                        <button
-                            type="button"
-                            class="btn"
-                            style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;"
-                            @click="clearForm"
-                        >
-                            Raise Your Awareness
-                        </button>
                     </div>
-
-
 
                 </div>
             </div>
@@ -795,16 +805,16 @@ input[type="text"]:focus {
 
 .result-result {
     font-family: 'Domaine Display Narrow';
-font-style: normal;
-font-weight: 600;
-font-size: 88px;
-line-height: 88px;
-/* identical to box height */
-display: flex;
-align-items: center;
-text-align: center;
-margin-bottom: 25px;
-color: #064612;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 88px;
+    line-height: 88px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #064612;
 }
 
 .result-result-desc{
@@ -915,24 +925,38 @@ color: #064612;
 .result-infor-container {
     display: flex;
     justify-content: flex-start;
-    /* align-items: center; */
+    align-items: center;
     flex-direction: column;
-    padding: 0px;
+    margin-top: 20px;
     gap: 20px;
-    width: 100%;
+    width: 80%;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border-width: 2px;
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    padding: 20px;
 }
 
 .result-infor-text {
-    font-family: 'DM Sans';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 21px;
-    /* identical to box height */
-    text-align: center;
-    letter-spacing: -0.02em;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    color: #064612; /* dark green for main text */
+    line-height: 1.5;
+    max-width: 800px;
+}
 
-    color: #064612;
+.highlight {
+    color: #75BE3A; /* bright green or whatever fits your brand */
+    font-weight: 700;
+}
+
+.result-text-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
 }
 
 /* 

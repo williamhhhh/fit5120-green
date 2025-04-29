@@ -38,7 +38,7 @@
                         <label for="gas" class="label-text">How much is your monthly gas bill?</label>
                         <input type="text" id="gas" name="gas" placeholder="$0.00" v-model="formDataOne.gas" />
                         <div v-if="errors.gas" class="text-danger"> {{ errors.gas }} </div>
-                        <label for="oil" class="label-text">How much is your monthly oil bill?</label>
+                        <label for="oil" class="label-text">How much is your monthly petrol bill?</label>
                         <input type="text" id="oil" name="oil" placeholder="$0.00" v-model="formDataOne.oil"/>
                         <div v-if="errors.oil" class="text-danger"> {{ errors.oil }} </div>
 
@@ -169,14 +169,14 @@
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
                                         <img class="result-card-icon" src="https://media-hosting.imagekit.io/7f97d99b5a1f4d87/screenshot_1745830257442.png?Expires=1840438260&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=O7~KSAUw~HpiQueArkD7Wo8YIdqKUrWK11JdL-2JxTOToSyZde7KvffKrj6yO3n8-ICp~kBwtX9x5JpDk~pS2bnrOzLVdND2QxUmKPOilUxnArkueQeyDN266h1wZQKS1WIgsucHtW7xTrAZmHjgY7x1l2Q2NIolTPU1WsyQoOwu2USpaR7nMecEeygIYh5uj8Uo9p4N6g-PcepYzzJD~QdfTRZcucvTjvP4L7RjB7HYQAhXDNHE36gaUG3tOu2osR1El5crAS8Ug6-7crv30INpZRPUoue3TtSX9zbQHA38e3Q00jU3zaFub27OqbYXgeqapJnL8wXTjOInE3pOVw__" />
-                                        <div class="result-card-data">40</div>
+                                        <div class="result-card-data">{{ carbonConversion.trees }}</div>
                                     </div>
                                     <div class="result-card-desc">trees needed to absorb this CO₂</div>
                                 </div>
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
                                         <img class="result-card-icon" src="https://media-hosting.imagekit.io/980222a1954b42dd/screenshot_1745847889913.png?Expires=1840455891&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=PkeA8oDRV5lGEg63Hy0W-a79Sdu5BWq8C5l0ujOL3nSYS2IQp6eFXwXXy9tZYRMOSX0wGLNVxIWp4DBl7YuoOoMXfqtP12EFtfGBuop5i7Aq~KMfvzBllSdL4fg5piNZ2tjLs4-YdFsYRL9VKiUq1q18TOzLPkz--Ko4A~3o7VyxXodEQLbO5A3HyBM4sbDtm3koKcXjnNajFunNQGAaag61uNtRbz7q8m7YQ59YS30fjIaal0woKKxq9aAipvW3zmrZMGoJRvhoZblwtjQcSRhGyKpnaHOjjS18gQXp2Vcy6Rzv0NQuP5Xs~adztwpfZfYrstGWHCKalaciX9g47A__" />
-                                        <div class="result-card-data">23</div>
+                                        <div class="result-card-data">{{ carbonConversion.flights }}</div>
                                     </div>
                                     <div class="result-card-desc">flights from Melbourne to Sydney</div>
                                 </div>
@@ -185,17 +185,21 @@
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
                                         <img class="result-card-icon" src="https://media-hosting.imagekit.io/0ff4a1d77ad04f57/screenshot_1745847988750.png?Expires=1840455990&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=gawox801oAutoUggpYX1H4qQQznnpe9jD23ZAAcxknGRUCkXfO1k1eUTol2sIJV-uM6cMogmeb0dU33kEzSwHDz-Kcem5YBjeHFr8uXWBCqAcq7SHtxSQaSMwI9jogiFJNBX6NvaLOhHZxCHCZpFLp~15BHm5zNeu5JSMcrUWQCRFepyMIHvn8cRfJvDV4ditle8Y8KgpuiKg4gAcy2KarHtQiF0IYIu5UI2pSGS-PB8t2XuqSp1oO7lxDOyY2YROg8HJOOZB6w-Mskm6t1OpbMVzVsv0FDDCwW0rYjTNrGQwUYJorq4n2SL8hwY4RiAfMRXWXZ4cm2bdT0ptScJxw__"/>
-                                        <div class="result-card-data">48</div>
+                                        <div class="result-card-data">{{ carbonConversion.ballons }}</div>
                                     </div>
                                     <div class="result-card-desc">hot air balloons full of carbon</div>
                                 </div>
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
                                         <img class="result-card-icon" src="https://media-hosting.imagekit.io/4493558231b5415c/screenshot_1745848014600.png?Expires=1840456016&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=p30Eg4uLm6gbHE4J2pZ7YA-g7qSZdXEycib0zSBsRAP50EIlZ6wa1GhgsWHONBUTj3AFEvYozQQ43gCQYSscfVjaaE9ZqtIa0yiYbABqCGbQowPeK1k6DqWGgilyG8C6JsdBbV9LQywP5QemC56n5XKh6hbldkvSfpvAOBHzvZTk~snHqAlwnIv2NIUmQY2v2~BFfJk2cQOaoh9V9IkbxlDCOCQt5383T2Cu9yJfBVirPNht428PLoVEQTRKHR-zjLlln49dZnokxxBQRzuslYn854~Z9oLnfOszIAy66npKp-VGAwF~DLHzARB-JwDyrBKgx4ZjxQCgY8Mpy-tVbw__"/>
-                                        <div class="result-card-data">13000</div>
+                                        <div class="result-card-data">{{ carbonConversion.kmDriven }}</div>
                                     </div>
                                     <div class="result-card-desc">km driven in a petrol car</div>
                                 </div>
+                            </div>
+
+                            <div class="result-infor-row">
+
                             </div>
                         </div>
                     </div>
@@ -226,6 +230,7 @@
 </template>
 
 <script setup>
+import { Tree } from 'primevue';
 import { ref } from 'vue';
 
 
@@ -239,6 +244,13 @@ const finalFormData = ref({
     recycleNewspaper: false,
     recycleAluminum: false
 });
+
+const carbonConversion = ref({
+    trees: 0,
+    flights: 0,
+    ballons: 0,
+    kmDriven: 0
+})
 
 const formDataOne = ref({
     electric: '',
@@ -305,9 +317,9 @@ const sumitFormThree = () => {
         console.log('Form Three is valid, submitting...');
         finalFormData.value.recycleNewspaper = formDataThree.value.recycleNewspaper;
         finalFormData.value.recycleAluminum = formDataThree.value.recycleAluminum;
-        calculateCarbonFootprint();
-        clearForm();
         nextStep();
+        convertCO2();
+        clearForm();
     } else {
         console.log('Form Three validation failed');
     }
@@ -446,8 +458,13 @@ const calculateCarbonFootprint = () => {
     return carbonFootprint;
 };
 
-const convertCO2 = async (tonnes) => {
-    await calculateCarbonFootprint()
+const convertCO2 = async () => {
+    const cb = await calculateCarbonFootprint()
+
+    carbonConversion.value.trees = Math.round(cb * 46);
+    carbonConversion.value.flights = Math.round(cb / 0.15);
+    carbonConversion.value.ballons = Math.round(cb / 0.0035);
+    carbonConversion.value.kmDriven = Math.round(cb / 0.0002);
 }
 
 
@@ -469,8 +486,6 @@ const errorsThree = ref({
     recycleNewspaper: null,
     recycleAluminum: null
 });
-
-
 
 const steps = ref([
     { id: 1, label: 'Step 1' },

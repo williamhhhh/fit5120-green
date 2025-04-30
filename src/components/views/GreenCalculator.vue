@@ -222,6 +222,9 @@
                                     Raise Your Awareness
                                 </button>
                             </div>
+                            <div class="result-infor-text">
+                                <h3>{{  }}</h3>
+                            </div>
                         </div>
 
                     </div>
@@ -248,6 +251,14 @@
 import { Tree } from 'primevue';
 import { ref } from 'vue';
 
+const carbonAdvice = ref({
+    electric: '',
+    gas: '',
+    oil: '',
+    mileage: '',
+    flight: '',
+    flights: ''
+})
 
 const finalFormData = ref({
     electric: '',
@@ -473,13 +484,48 @@ const calculateCarbonFootprint = () => {
     return carbonFootprint;
 };
 
+const calculatePercentage = () => {
+    const electric = Number(formDataOne.value.electric);
+    const gas = Number(formDataOne.value.gas);
+    const oil = Number(formDataOne.value.oil);
+    const mileage = Number(formDataTwo.value.mileage);
+    const flight = Number(formDataTwo.value.flight);
+    const flights = Number(formDataTwo.value.flights);
+
+    const total = electric + gas + oil + mileage + flight + flights;
+
+    return {
+        electric: (electric / total) * 100,
+        gas: (gas / total) * 100,
+        oil: (oil / total) * 100,
+        mileage: (mileage / total) * 100,
+        flight: (flight / total) * 100,
+        flights: (flights / total) * 100
+    };
+}
+
+const selectHighestPercentage = () => {
+    const percentages = calculatePercentage();
+    let highest = 0;
+    let highestKey = '';
+
+    for (const key in percentages) {
+        if (percentages[key] > highest) {
+            highest = percentages[key];
+            highestKey = key;
+        }
+    }
+
+    return highestKey, highest;
+}
+
 const convertCO2 = async () => {
     const cb = await calculateCarbonFootprint()
 
-    carbonConversion.value.trees = Math.round(cb * 46);
-    carbonConversion.value.flights = Math.round(cb / 0.15);
-    carbonConversion.value.ballons = Math.round(cb / 0.0035);
-    carbonConversion.value.kmDriven = Math.round(cb / 0.0002);
+    carbonConversion.value.trees = Math.round(cb * 38);
+    carbonConversion.value.flights = Math.round(cb / 0.1);
+    carbonConversion.value.ballons = Math.round(cb / 0.0039);
+    carbonConversion.value.kmDriven = Math.round(cb / 0.065231 * 100);
 }
 
 

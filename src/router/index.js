@@ -6,6 +6,7 @@ import GreenMap from '../components/views/GreenMap.vue'
 // import { name } from '@vue/eslint-config-prettier/skip-formatting'
 import ChatPage from '@/components/views/ChatPage.vue'
 import GreenCalculator from '@/components/views/GreenCalculator.vue'
+import StoryTelling from '@/components/views/StoryTelling.vue'
 
 
 const routes = [
@@ -33,6 +34,11 @@ const routes = [
       path: '/GreenCalculator',
       name: 'GreenCalculator',
       component: GreenCalculator,
+    },
+    {
+      path: '/StoryTelling',
+      name: 'StoryTelling',
+      component: StoryTelling,
     }
   ]
 

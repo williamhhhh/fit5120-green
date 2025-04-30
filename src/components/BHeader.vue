@@ -27,6 +27,9 @@
         <li class="nav-item">
           <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/StoryTelling" class="nav-link" active-class="active">Story</router-link>
+        </li>
       </header>
 
       <!-- <div v-if="isMenuOpen" class="dropdown-menu-mobile">

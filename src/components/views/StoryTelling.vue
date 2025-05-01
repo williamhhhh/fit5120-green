@@ -1,5 +1,11 @@
 <template>
   <div class="container">
+    <canvas
+      v-if="journeyStarted && currentStory >= stories.length"
+      ref="fireworks"
+      class="fireworks-canvas"
+    ></canvas>
+
     <transition name="title-fade">
       <h1 class="title" v-if="!journeyStarted">A Day in the Life of Daniel</h1>
     </transition>
@@ -60,74 +66,106 @@
       </transition>
     </div>
 
+    <!-- Story cards -->
     <transition name="card-fade">
-      <div v-if="journeyStarted" class="story-card-center new-style-card">
+      <div v-if="journeyStarted && currentStory < stories.length" class="story-card-center new-style-card">
+        <!-- progress bar -->
         <div class="progress-bar new-progress-bar">
-          <template v-for="(step, idx) in steps" :key="idx">
+          <template v-for="(story, idx) in stories" :key="'pb'+idx">
             <div
               class="step new-step"
-              :class="{active: currentStep === idx}"
+              :class="{active: currentStory === idx}"
             >{{ (idx+1).toString().padStart(2,'0') }}</div>
-            <div v-if="idx < steps.length-1" class="new-line"></div>
+            <div v-if="idx < stories.length-1" class="new-line"></div>
           </template>
         </div>
-        <div class="big-title">{{ steps[currentStep].title }}</div>
+        <!-- Story Title -->
+        <div class="big-title">{{ currentStoryObj.title }}</div>
 
-        <div v-if="currentStep === 3">
-          <div class="choice-card">
-            <div class="question-title">{{ steps[3].question }}</div>
-            <div class="question-desc">{{ steps[3].subdesc }}</div>
-            <div class="options">
-              <button
-                v-for="opt in steps[3].options"
-                :key="opt.value"
-                :class="{ selected: choice === opt.value }"
-                @click="choose(opt.value)"
-              >
-                {{ opt.text }}
-              </button>
-            </div>
-          </div>
-          <transition name="fade">
-            <div v-if="!choice" class="pro-tip-wrap">
-              <div class="pro-tip">
-                <span class="pro-tip-icon">💡</span>
-                <b>Pro tip</b>
+        <!-- Story content -->
+        <transition name="fade" mode="out-in">
+          <div :key="currentCard">
+            <!-- Common Plot Cards -->
+            <div v-if="!isChoiceCard">
+              <div v-if="currentCardObj.overlay" class="img-overlay-box">
+                <img class="card-img" :src="currentCardObj.img" alt="Step image" />
+                <div class="img-overlay">
+                  <div class="img-overlay-text" v-html="currentCardObj.overlay"></div>
+                </div>
               </div>
-              <div class="pro-tip-text">{{ steps[3].protip }}</div>
+              <div v-else>
+                <img v-if="currentCardObj.img" class="card-img" :src="currentCardObj.img" alt="Step image" />
+              </div>
+              <div class="card-desc" v-if="currentCardObj.desc">{{ currentCardObj.desc }}</div>
             </div>
-          </transition>
-          <transition name="fade">
-            <button
-              v-if="choice"
-              class="next-btn2"
-              @click="goNext"
-              style="float: right; margin-top: 44px; margin-right:24px;"
-            >
-              Next <span class="arrow">&#8594;</span>
-            </button>
-          </transition>
-        </div>
-
-        <template v-else>
-          <div v-if="steps[currentStep].overlay" class="img-overlay-box">
-            <img class="card-img" :src="steps[currentStep].img" alt="Step image" />
-            <div class="img-overlay">
-              <div class="img-overlay-text" v-html="steps[currentStep].overlay"></div>
+            <!-- choice card -->
+            <div v-else>
+              <div class="choice-card">
+                <div class="question-title">{{ currentCardObj.question }}</div>
+                <div class="question-desc">{{ currentCardObj.subdesc }}</div>
+                <div class="options">
+                  <button
+                    v-for="opt in currentCardObj.options"
+                    :key="opt.value"
+                    :class="{ selected: choice === opt.value }"
+                    @click="chooseAndNext(opt.value)"
+                  >
+                    {{ opt.text }}
+                  </button>
+                </div>
+              </div>
+              <transition name="fade">
+                <div v-if="!choice" class="pro-tip-wrap">
+                  <div class="pro-tip">
+                    <span class="pro-tip-icon">💡</span>
+                    <b>Pro tip</b>
+                  </div>
+                  <div class="pro-tip-text" v-html="currentCardObj.protip"></div>
+                </div>
+              </transition>
             </div>
           </div>
-          <img v-else class="card-img" :src="steps[currentStep].img" alt="Step image" />
-          <button
-            class="next-btn2"
-            :disabled="currentStep === steps.length - 1"
-            @click="goNext"
-          >
-            Next
-            <span class="arrow">&#8594;</span>
-          </button>
-        </template>
+        </transition>
       </div>
     </transition>
+<!-- results page -->
+<div v-if="journeyStarted && currentStory >= stories.length" class="story-card-center new-style-card final-result-panel">
+  <h2 class="big-title" style="font-size:2.6rem;margin-bottom:0.7em;">Congratulations!!</h2>
+  <div class="card-desc" style="font-size:1.23rem;font-weight:500;margin-bottom:2.1em;">
+    You helped Daniel make a positive impact on environment by:
+  </div>
+  <div class="result-grid">
+    <div class="result-item sun">
+      <div class="result-icon">☀️</div>
+      <div class="result-value">${{ result.energy }}</div>
+      <div class="result-label">Saved per year in energy usage.</div>
+    </div>
+    <div class="result-item temp">
+      <div class="result-icon">🌡️</div>
+      <div class="result-value">{{ result.temp }}</div>
+      <div class="result-label">Temperature reduced in house & city.</div>
+    </div>
+    <div class="result-item co2">
+      <div class="result-icon">🌍</div>
+      <div class="result-value">{{ result.co2 }} tons</div>
+      <div class="result-label">Carbon Emission Reduced</div>
+    </div>
+    <div class="result-item kg">
+      <div class="result-icon">💪</div>
+      <div class="result-value">{{ result.weight }}kg</div>
+      <div class="result-label">Weight loss and calories burned.</div>
+    </div>
+  </div>
+</div>
+<!-- Back button -->
+<button
+  v-if="journeyStarted && currentStory >= stories.length"
+  class="back-home-btn"
+  @click="backToHome"
+>
+  <span style="font-size: 1.25em; margin-right: 5px;">🏠</span>
+  Back to Story
+</button>
 
     <transition name="fade">
       <button
@@ -144,56 +182,214 @@
 <script>
 import light from '@/assets/images/light.png';
 import nightlight from '@/assets/images/nightlight.png';
+import coffee from '@/assets/images/coffee.png';
+import food from '@/assets/images/food.png';
+import paperbox from '@/assets/images/paperbox.png';
+import deliver from '@/assets/images/deliver.png';
+import traffic from '@/assets/images/traffic.png';
+
 export default {
   data() {
     return {
       characterHover: false,
       journeyStarted: false,
       choice: null,
+      choices: [],
       showCharacter: true,
-      currentStep: 0,
       bubbleStep: 0,
-      videoShouldJump: false, 
-      steps: [
+      videoShouldJump: false,
+      showTipPerson: true,
+      tipPersonEntered: false,
+      bubbleStep2: 0,
+      timer: null,
+      currentStory: 0,
+      currentCard: 0,
+      stories: [
+        // 1. Wake Up
         {
           title: "1- Wake Up",
-          desc: "Daniel wakes up at 7:00 AM and turns on the light.",
-          img: light
+          cards: [
+            {
+              desc: "Daniel wakes up at 7:00 AM and turns on the light.",
+              img: light,
+            },
+            {
+              desc: "It's still a Halogen Bulb — warming up fast, but wasting energy.",
+              img: nightlight,
+            },
+            {
+              overlay: "It uses <b>~100 Watts</b> of electricity and can<br>raise the temperature of the room by <b>2° - 4°</b>",
+              img: nightlight,
+            },
+            {
+              isChoice: true,
+              question: "What should Daniel do?",
+              subdesc: "Choose an option and help him make a sustainable choice",
+              options: [
+                { text: "Switch to LEDs", value: "led" },
+                { text: "Keep using Halogen", value: "halogen" }
+              ],
+              protip: "Switching 3 Halogen bulbs to LEDs saves $16/year + reduce temperature by 2° ~ 4°"
+            }
+          ]
         },
+        // 2. Coffee Time
         {
-          title: "1- Wake Up",
-          desc: "It's still a Halogen Bulb — warming up fast, but wasting energy.",
-          img: nightlight
+          title: "2- Coffee Time",
+          cards: [
+            {
+              desc: "He turns on the Coffee machine & opens his laptop to check for the emails.",
+              img: coffee
+            },
+            {
+              overlay: "Leaving the coffee machine on for too long can increase the temperature of the room by <b>2° – 4°</b>",
+              img: coffee
+            },
+            {
+              isChoice: true,
+              question: "What should Daniel do?",
+              subdesc: "Choose an option and help him make a sustainable choice",
+              options: [
+                { text: "Turn off the machine", value: "off" },
+                { text: "Keep the Machine on", value: "on" }
+              ],
+              protip: "Turning off the coffee machine can reduce the temperature by 4° – 5°"
+            }
+          ]
         },
+        // 3. Receives Parcel
         {
-          title: "1- Wake Up",
-          desc: "It's still a Halogen Bulb — warming up fast, but wasting energy.",
-          img: nightlight,
-          overlay: "It uses <b>~100 Watts</b> of electricity and can<br>rise the temperature of the room by <b>2° - 4°</b>"
+          title: "3- Receives Parcel",
+          cards: [
+            {
+              desc: "Daniels often ordered online packages, he received a new one today.",
+              img: deliver
+            },
+            {
+              desc: "Ordering frequently piles up the cardboards and papers in his bin.",
+              img: paperbox
+            },
+            {
+              overlay: "Most of it went to landfill, a missed opportunity, as paper and cardboard can be recycled up to 7 times.",
+              img: paperbox
+            },
+            {
+              isChoice: true,
+              question: "What should Daniel do?",
+              subdesc: "Choose an option and help him make a sustainable choice",
+              options: [
+                { text: "Recycle The Cardboards", value: "recycle" },
+                { text: "Leave them as they are", value: "leave" }
+              ],
+              protip: "Recycling <b>1 tonne</b> of paper saves <b>13 trees</b> and <b>4,000kWh</b> of energy."
+            }
+          ]
         },
+        // 4. Traveling
         {
-          title: "1- Wake Up",
-          question: "What should Daniel do?",
-          subdesc: "Choose a option and help him make a sustainable choice",
-          options: [
-            { text: "Switch to LEDs", value: "led" },
-            { text: "Keep using Halogen", value: "halogen" }
-          ],
-          protip: "Switching 3 Halogen bulbs to LEDs saves $16/year + reduce temperature by 2° ~ 4°"
+          title: "4- Traveling",
+          cards: [
+            {
+              desc: "Every morning, Daniel used to drive 25 minutes to work alone in his petrol car.",
+              img: traffic
+            },
+            {
+              overlay: "Over a year, this emitted over <b>2.5 tons of CO₂</b>, contributing to Melbourne’s urban air pollution and rising heat.",
+              img: traffic
+            },
+            {
+              isChoice: true,
+              question: "What should Daniel do?",
+              subdesc: "Choose an option and help him make a sustainable choice",
+              options: [
+                { text: "Use bike or tram", value: "bike" },
+                { text: "Keep using car", value: "car" }
+              ],
+              protip: "Using bike 3 times a week and tram for the rest can cut his travel emissions by more than <b>60%</b>."
+            }
+          ]
+        },
+        // 5. Eating Out
+        {
+          title: "5- Eating Out",
+          cards: [
+            {
+              desc: "Daniel loves to eat out at least 3 times a week.",
+              img: food
+            },
+            {
+              overlay: "But his favourite meals came with single-use plastic containers, cutlery, and bags, most of which aren't recyclable.",
+              img: food
+            },
+            {
+              isChoice: true,
+              question: "What should Daniel do?",
+              subdesc: "Choose an option and help him make a sustainable choice",
+              options: [
+                { text: "Choose eateries offering compostable packaging", value: "compostable" },
+                { text: "Keep eating out here", value: "keep" }
+              ],
+              protip: "Compostable materials typically produce <b>less CO₂</b> during production and disposal compared to plastic."
+            }
+          ]
         }
       ]
     };
   },
+  computed: {
+    currentStoryObj() {
+      return this.stories[this.currentStory];
+    },
+    currentCardObj() {
+      if (!this.currentStoryObj) return {};
+      return this.currentStoryObj.cards[this.currentCard];
+    },
+    isChoiceCard() {
+      return this.currentCardObj && this.currentCardObj.isChoice;
+    },
+    // Calculated data
+    result() {
+      const green = ['led','off','recycle','bike','compostable'];
+      let greenCount = this.choices.filter((c,i) => c === green[i]).length;
+      let energy = 4000, temp = '4°-5°', co2 = 4.0, weight = 8;
+      if(greenCount<=2) { energy=1200; temp='1°-2°'; co2=0.5; weight=2; }
+      else if(greenCount<=4){ energy=2500; temp='2°-3°'; co2=2.2; weight=4; }
+      return { energy, temp, co2, weight };
+    }
+  },
+  watch: {
+    // currentStory() {
+    //   this.currentCard = 0;
+    //   this.choice = this.choices[this.currentStory] || null;
+    //   this.startAutoPlay();
+    // },
+    journeyStarted(val) {
+      if (!val) this.stopFireworks();
+    },
+    currentStory(val) {
+      this.currentCard = 0;
+      this.choice = this.choices[this.currentStory] || null;
+      this.startAutoPlay();
+
+      // Show fireworks on last page
+      if (this.journeyStarted && val >= this.stories.length) {
+        this.$nextTick(() => this.launchFireworks());
+      } else {
+        this.stopFireworks();
+      }
+    }
+  },
   mounted() {
+    // Bubble animation
     this.bubbleStep = 0;
     setTimeout(() => this.bubbleStep = 1, 900);
     setTimeout(() => this.bubbleStep = 2, 1300);
     setTimeout(() => this.bubbleStep = 3, 1750);
-
+    // Video animation
     this.videoShouldJump = false;
     setTimeout(() => this.videoShouldJump = true, 1800);
     setTimeout(() => this.videoShouldJump = false, 3000);
-
+    // Tip character animation
     this.showTipPerson = true;
     this.tipPersonEntered = false;
     this.bubbleStep2 = 0;
@@ -203,26 +399,152 @@ export default {
       setTimeout(() => this.bubbleStep2 = 2, 600);
       setTimeout(() => this.bubbleStep2 = 3, 850);
     }, 300);
+    // Story autoplay
+    if(this.journeyStarted) this.startAutoPlay();
+  },
+  beforeUnmount() {
+    clearTimeout(this.timer);
   },
   methods: {
     startJourney() {
       this.journeyStarted = true;
-      this.currentStep = 0;
+      this.currentStory = 0;
+      this.currentCard = 0;
       this.choice = null;
+      this.choices = [];
       this.showTipPerson = false;
+      this.startAutoPlay();
     },
-    goNext() {
-      if(this.currentStep < this.steps.length - 1) {
-        this.currentStep += 1;
-        this.choice = null;
-      }
+
+    startAutoPlay() {
+      clearTimeout(this.timer);
+      // Auto-rotate to multiple choice
+      const cards = this.currentStoryObj?.cards || [];
+      const next = () => {
+        if (this.isChoiceCard || this.currentStory >= this.stories.length) return;
+        this.timer = setTimeout(() => {
+          if (this.currentCard < cards.length - 1) {
+            this.currentCard += 1;
+            next();
+          }
+        }, 3000);
+      };
+      next();
     },
-    choose(val) {
+    backToHome() {
+      this.journeyStarted = false;
+      this.currentStory = 0;
+      this.currentCard = 0;
+      this.choice = null;
+      this.choices = [];
+      this.stopFireworks();
+      this.showTipPerson = true;
+    },
+
+    chooseAndNext(val) {
       this.choice = val;
+      // Record Selection
+      this.choices[this.currentStory] = val;
+      setTimeout(() => {
+        this.currentStory += 1;
+        this.currentCard = 0;
+        this.choice = null;
+      }, 500);
     },
-    onVideoClick() {
-    this.showTipPerson = false;
-  },
+    fireworkAnimationStarted: false,
+fireworkRAF: null,
+
+launchFireworks() {
+  if (this.fireworkAnimationStarted) return;
+  this.fireworkAnimationStarted = true;
+  const canvas = this.$refs.fireworks;
+  if (!canvas) return;
+
+  // Setting up canvas fullscreen and hi-res adaptation
+  let dpr = window.devicePixelRatio || 1;
+  const resize = () => {
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+
+  window.addEventListener('resize', resize);
+
+  const ctx = canvas.getContext('2d');
+  const colors = ['#ffcc00','#ff6666','#66ccff','#66ff66','#ff99cc','#cc99ff','#fff','#ff5e00'];
+  let fireworks = [];
+  let frame = 0;
+
+  function randomFirework() {
+    let x = Math.random() * window.innerWidth * 0.7 + window.innerWidth * 0.15;
+    let y = Math.random() * window.innerHeight * 0.4 + window.innerHeight * 0.1;
+    let color = colors[Math.floor(Math.random()*colors.length)];
+    let count = 24 + Math.floor(Math.random() * 12);
+    let particles = [];
+    for(let i=0;i<count;i++){
+      let angle = (2*Math.PI*i)/count;
+      let speed = 2+Math.random()*2.5;
+      particles.push({
+        x, y,
+        dx: Math.cos(angle)*speed,
+        dy: Math.sin(angle)*speed,
+        alpha: 1,
+        color,
+        size: 2+Math.random()*2
+      });
+    }
+    fireworks.push({particles});
+  }
+
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if(frame%15===0) randomFirework();
+    fireworks.forEach(fw => {
+      fw.particles.forEach(p=>{
+        p.x+=p.dx;
+        p.y+=p.dy;
+        p.dy+=0.02;
+        p.alpha-=0.012;
+        ctx.globalAlpha = Math.max(0,p.alpha);
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.size,0,2*Math.PI);
+        ctx.fillStyle=p.color;
+        ctx.fill();
+      });
+      fw.particles = fw.particles.filter(p=>p.alpha>0);
+    });
+    fireworks = fireworks.filter(fw=>fw.particles.length>0);
+    ctx.globalAlpha=1;
+    frame++;
+    this.fireworkRAF = requestAnimationFrame(animate);
+  };
+  animate();
+
+  // Fireworks display time
+  if (this.fireworkTimeout) clearTimeout(this.fireworkTimeout);
+  this.fireworkTimeout = setTimeout(() => {
+    this.stopFireworks();
+    window.removeEventListener('resize', resize);
+  }, 4000);
+},
+
+stopFireworks() {
+  if (this.fireworkRAF) cancelAnimationFrame(this.fireworkRAF);
+  if (this.fireworkTimeout) clearTimeout(this.fireworkTimeout);
+  this.fireworkAnimationStarted = false;
+  const canvas = this.$refs.fireworks;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx && ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+},
+
+onVideoClick() {
+  this.showTipPerson = false;
+},
+
   }
 };
 </script>
@@ -246,8 +568,8 @@ export default {
 }
 
 .title {
-  font-size: 36px;
-  margin-bottom: 30px;
+  font-size: 50px;
+  margin-bottom: 0px;
   font-family: 'Georgia', serif;
   font-weight: 700;
   color: #333;
@@ -410,7 +732,7 @@ export default {
 .progress-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center !important;
   margin-bottom: 12px;
 }
 .step {
@@ -516,7 +838,7 @@ export default {
 }
 .video {
   position: absolute;
-  top: 0;
+  top: 70px;
   left: 0;
   width: 100%;
   height: 70%;
@@ -652,7 +974,7 @@ export default {
   display: flex;
   flex-direction: row; 
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center !important;
   width: 100%;
   margin-bottom: 38px;
   margin-top: 6px;
@@ -777,10 +1099,10 @@ export default {
   color: #664d00;
 }
 .pro-tip-icon {
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 .pro-tip-text {
-  margin-top: 12px;
+  margin-top: 8px;
   background: #ffeebc;
   border-radius: 18px;
   padding: 12px 18px;
@@ -941,4 +1263,61 @@ export default {
   line-height: 1.5;
 }
 
+.final-result-panel { min-height: 400px; }
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 30px;
+  margin-top: 8px;
+}
+.result-item {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 11px 0 rgba(0,0,0,0.09);
+  padding: 32px 8px 22px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.18rem;
+}
+.result-icon { font-size:2.1rem; margin-bottom:6px; }
+.result-value { font-size:2.2rem; font-weight:800; color:#165c22; margin-bottom:2px;}
+.result-label { font-size:1rem; color:#444; line-height:1.3; text-align:center;}
+@media (max-width:700px){
+  .result-grid { grid-template-columns: 1fr; gap:18px 0;}
+  .result-item { padding: 18px 2vw 12px 2vw;}
+}
+
+.fireworks-canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+.final-result-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.back-home-btn {
+  margin: -300px auto 0 auto;
+  display: block;
+  padding: 15px 38px;
+  font-size: 1.15rem;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  transition: background 0.2s, transform 0.2s;
+}
+.back-home-btn:hover {
+  background-color: #ffa726;
+  transform: scale(1.06);
+}
 </style>

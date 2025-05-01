@@ -217,13 +217,25 @@
                                 type="button"
                                 class="btn"
                                 style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;"
-                                    @click="clearForm"
+                                    @click="navigateToStory"
                                 >
                                     Raise Your Awareness
                                 </button>
                             </div>
-                            <div class="result-infor-text">
-                                <h3>{{  }}</h3>
+                            <div class="personalized-container">
+                                <div class="personalized-text-container">
+                                    <div class="result-infor-text">
+                                        <h4>Personalized Advice:</h4>
+                                        <div class = "result-infor-text">
+                                        Your <span class="highlight">highest carbon footprint</span> was in 
+                                        <span class="highlight">{{ displayLabel }}</span>. It made up almost 
+                                        <span class="highlight">{{ highestValue }}%</span> of your total carbon footprint.
+                                        </div>
+                                        <div class = "result-infor-text">
+                                        <span class="highlight">Advice:</span> {{ carbonAdvice[highest] }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -250,15 +262,43 @@
 <script setup>
 import { Tree } from 'primevue';
 import { ref } from 'vue';
+import { computed } from 'vue';
+
+
+const highest = ref('');
+const highestValue = ref(0);
+
+const showResult = () => {
+
+  const [key, value] = selectHighestPercentage();
+  highest.value = key;
+  highestValue.value = Math.round(value,2);
+};
+
+const displayLabel = computed(() => {
+  switch (highest.value) {
+    case 'mileage':
+      return 'driving';
+    default:
+      return highest.value; // fallback to original key
+  }
+});
+
+
 
 const carbonAdvice = ref({
-    electric: '',
-    gas: '',
-    oil: '',
-    mileage: '',
-    flight: '',
-    flights: ''
-})
+  electric: 'Your electricity usage contributes significantly to your carbon footprint. Consider upgrading to energy-efficient appliances with ENERGY STAR ratings, switching to LED lighting throughout your home, and unplugging electronics when they’re not in use. If possible, install smart thermostats and power strips to automatically reduce phantom energy usage. You might also explore switching to a green electricity provider that uses solar or wind energy.',
+
+  gas: 'High natural gas usage can mean excess emissions from heating and cooking. Try lowering your thermostat by just a few degrees in winter and dressing more warmly indoors. Seal gaps around windows and doors to retain heat. Installing programmable thermostats and insulating your water heater can also cut down gas consumption. If you cook with gas, use lids on pots and consider using energy-efficient cooking appliances like induction cooktops.',
+
+  oil: 'Heating oil is one of the most carbon-intensive fuel sources. If your home uses oil heating, consider transitioning to a more sustainable option like electric heat pumps or solar heating. Until then, perform regular maintenance on your system, insulate pipes and your water tank, and reduce heating demand by improving insulation and using heavy curtains during colder months.',
+
+  mileage: 'Frequent driving increases emissions, especially if using a gas-powered vehicle. Carpool with colleagues, use public transport when available, or explore biking and walking for shorter distances. Combine errands into one trip and drive efficiently—avoiding harsh acceleration and excessive idling. If feasible, consider switching to a hybrid or electric vehicle, and keep your tires inflated and your engine maintained to improve fuel efficiency.',
+
+  flight: 'Air travel has a disproportionately high carbon impact. Try to minimize short-haul flights by choosing trains or buses where available. For longer trips, fly nonstop when possible and opt for airlines that invest in carbon offsetting programs. Reduce business travel by leveraging video conferencing tools. When you do fly, purchase carbon offsets from credible programs like Gold Standard or Climate Action Reserve.',
+
+  flights: 'Frequent flying contributes heavily to your annual carbon output. Consider scheduling fewer but longer trips to reduce your flight frequency. For domestic or regional travel, explore trains or buses as lower-carbon alternatives. If travel is work-related, promote a remote-first policy with virtual meetings. Join airline programs that offer carbon offsetting, and support sustainable aviation initiatives when booking flights.'
+});
 
 const finalFormData = ref({
     electric: '',
@@ -345,10 +385,16 @@ const sumitFormThree = () => {
         finalFormData.value.recycleAluminum = formDataThree.value.recycleAluminum;
         nextStep();
         convertCO2();
+        showResult();
         clearForm();
     } else {
         console.log('Form Three validation failed');
     }
+}
+
+const navigateToStory = () => {
+    clearForm();
+    window.location.href = '/StoryTelling';
 }
 
 const reCalculate = () => {
@@ -481,16 +527,17 @@ const calculateCarbonFootprint = () => {
     carbonFootprint += finalFormData.value.recycleAluminum ? +166 : +0;
     carbonFootprint = Math.round(carbonFootprint * 100 * 0.000453592) / 100; 
     console.log('Carbon Footprint:', carbonFootprint);
+
     return carbonFootprint;
 };
 
 const calculatePercentage = () => {
-    const electric = Number(formDataOne.value.electric);
-    const gas = Number(formDataOne.value.gas);
-    const oil = Number(formDataOne.value.oil);
-    const mileage = Number(formDataTwo.value.mileage);
-    const flight = Number(formDataTwo.value.flight);
-    const flights = Number(formDataTwo.value.flights);
+    const electric = Number(formDataOne.value.electric) * 105;
+    const gas = Number(formDataOne.value.gas) * 105;
+    const oil = Number(formDataOne.value.oil) * 113;
+    const mileage = Number(formDataTwo.value.mileage) * 0.79;
+    const flight = Number(formDataTwo.value.flight) * 1100;
+    const flights = Number(formDataTwo.value.flights) * 4000;
 
     const total = electric + gas + oil + mileage + flight + flights;
 
@@ -516,7 +563,7 @@ const selectHighestPercentage = () => {
         }
     }
 
-    return highestKey, highest;
+    return [highestKey, highest];
 }
 
 const convertCO2 = async () => {
@@ -1005,6 +1052,24 @@ input[type="text"]:focus {
     width: 100%;
 }
 
+.personalized-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    background-color: #E4FDE2;
+    border-radius: 10px;
+    border-width: 2cap;
+    border: 1px  #5bff79; 
+    border-color: #021706;
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+.personalized-text-container{
+    margin: 20px;
+}
 /* 
 <div class="result-cards">
                             <div class="result-card-row">

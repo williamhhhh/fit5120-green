@@ -10,7 +10,7 @@
 
       <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
         <li class="nav-item">
-          <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+          <router-link to="/home" class="nav-link" active-class="active" aria-current="page">Home</router-link>
         </li>
         <!-- <li class="nav-item">
           <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
@@ -50,7 +50,7 @@
       </button>
 
       <div v-if="isMenuOpen" class="dropdown-menu-mobile">
-        <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+        <router-link to="/home" class="nav-link" active-class="active" aria-current="page">Home</router-link>
         <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
         <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
         <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>

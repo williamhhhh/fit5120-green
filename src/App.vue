@@ -1,12 +1,24 @@
 <script setup>
 import BHeader from './components/BHeader.vue'
+import { useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
 import BFooter from './components/BFooter.vue'
+
+const route = useRoute()
+const showHeader = ref(!route.meta.hideHeader)
+
+watch(
+  () => route.meta.hideHeader,
+  (newValue) => {
+    showHeader.value = !newValue
+  }
+)
 </script>
 
 
 <template>
   <div id="app">
-    <header>
+    <header v-if="showHeader">
       <BHeader />
     </header>
 

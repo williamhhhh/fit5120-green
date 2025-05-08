@@ -238,8 +238,9 @@ const handleLoadClick = () => {
     loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
   } else if (!userLocationBool.value && !selectedDistanceValue) {
     loadAllGreenSpaces(sizeSelect.value)
-  } else if (userLocationBool.value && !userInMelbourne.value) {
+  } else if (userLocationBool.value && !userInMelbourne.value && selectedDistanceValue != 'all') {
     alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
+    selectedDistance.value = "all"
     loadAllGreenSpaces(sizeSelect.value)
   } else if(!selectedDistanceValue && userInMelbourne.value){
     loadAllGreenSpaces(sizeSelect.value)

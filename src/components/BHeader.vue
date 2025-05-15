@@ -1,66 +1,67 @@
 <template>
-  <transition
-    name="nav-animation"
-    mode="out-in"
-  >
+  <transition name="nav-animation" mode="out-in">
     <div class="container-header" v-if="isNavVisible">
-      <div>
-        <div class="text">cool the city</div>
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-between">
+
+          <!-- Left Section: Logo + Nav -->
+          <div class="col-8 col-md-10 d-flex align-items-center header-left">
+            <div class="title-text me-3">cool the city</div>
+
+            <!-- Desktop Nav -->
+            <ul class="d-none d-md-flex list-unstyled mb-0">
+              <li class="nav-item">
+                <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/StoryTelling" class="nav-link" active-class="active">Story</router-link>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Right Section: Button + Hamburger -->
+          <div class="col-4 col-md-2 d-flex justify-content-end align-items-center">
+            <div class="header-right me-2 d-none d-md-flex">
+              <div class="button-text">Start!</div>
+            </div>
+
+            <!-- Mobile Toggler -->
+            <button
+              class="navbar-toggler custom-toggler d-md-none"
+              type="button"
+              @click="isMenuOpen = !isMenuOpen"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <header class="d-none d-md-flex justify-content-center py-3" style="gap: 5px;">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link" active-class="active" aria-current="page">Home</router-link>
-        </li>
-        <!-- <li class="nav-item">
-          <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
-        </li> -->
-        <li class="nav-item">
-          <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/StoryTelling" class="nav-link" active-class="active">Story</router-link>
-        </li>
-      </header>
-
-      <!-- <div v-if="isMenuOpen" class="dropdown-menu-mobile">
-        <router-link to="/" class="nav-link" active-class="active" aria-current="page">Home</router-link>
-        <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-      </div> -->
-
-    <!-- Correct toggler button -->
-      <button
-        class="navbar-toggler custom-toggler"
-        type="button"
-        @click="isMenuOpen = !isMenuOpen"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div v-if="isMenuOpen" class="dropdown-menu-mobile">
-        <router-link to="/home" class="nav-link" active-class="active" aria-current="page">Home</router-link>
+      <!-- Mobile Menu Dropdown -->
+      <div v-if="isMenuOpen" class="dropdown-menu-mobile d-md-none">
+        <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
         <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
         <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
         <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
         <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
         <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
       </div>
-
     </div>
   </transition>
 </template>
+
 
 <script setup>
 import { ref, watch } from "vue";
@@ -114,23 +115,17 @@ watch(
 
   @media (min-width: 768px){
   .container-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 10px 10px 10px 30px;
-    gap: 80px;
+    padding: 15px 59px;
+    gap: 10px;
+    width: 100%;
 
-    position: absolute;
-    width: 760px;
-    height: 72px;
-    left: calc(50% - 676px/2);
-    top: 24px;
-
-    background: #E4FDE2;
+    position: relative;
+    background: none;
     backdrop-filter: blur(17px);
     /* Note: backdrop-filter has minimal browser support */
-    border-radius: 70px;
     z-index: 100;
   }
   }
@@ -144,7 +139,7 @@ watch(
     padding: 10px 10px 10px 30px;
     gap: 100px;
 
-    position: absolute;
+    position: relative;
     width: 80%;
     height: 35px;
     left: 10%;
@@ -160,23 +155,59 @@ watch(
   }
 
   .header {
-    background-color: #c3e6f2;
-    padding: 30px 0;
-    border-bottom: 2px solid #ddd;
-  }
-  
-  .title-section {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  
-  .title {
-    font-size: 25px;
-    font-weight: bold;
-    color: rgb(8, 8, 109);
-    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: px;
+    gap: 30%;
+    width: 100%;
   }
 
+  .header-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 5px;
+    margin: 0 auto;
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 35px;
+    gap: 10px;
+
+    margin: 0 auto;
+    width: 133px;
+    height: 44px;
+
+    background: #90CF8E;
+    background: none;
+    /* Front Shadow */
+    box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+  }
+
+  .button-text {
+    width: 120px;
+    height: 24px;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height, or 150% */
+    text-align: center;
+    font-feature-settings: 'salt' on, 'liga' off;
+
+    color: #FFFFFF;
+
+  }
 
   .nav-item{
     display: flex;
@@ -189,54 +220,52 @@ watch(
     margin: 0 auto;
     width: 100px;
     height: 40px;
-
-    /* background: #90CF8E; */
-    border-radius: 48px;
-
   }
 
-.nav-link {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 14px 22px;
-    gap: 12px;
+  .nav-link {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 14px 22px;
+      gap: 12px;
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 21px;
+      /* identical to box height */
 
-    margin: 0 auto;
-    width: 100px;
-    height: 40px;
+      margin: 0 auto;
+      width: 100px;
+      height: 40px;
 
-    /* background: #90CF8E; */
-    border-radius: 48px;
-}
+      /* background: #90CF8E; */
+      border-radius: 48px;
+  }
 
 .nav-link:hover {
-  background: #75BE3A;
-  color: #fff;
+  color: #7abd4c;
   transform: scale(1.03);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Active state */
 .nav-link.active {
-  background: #75BE3A;
-  color: #ffffff;
   font-weight: 600;
-  box-shadow: inset 0 0 0 2px #5a9e2b;
+  color: #7abd4c;
+  transform: scale(1.03);
 }
   
-  .nav-pills .nav-link{
-    color: #9b9696;
-    font-size: 16px;
-    padding: 10px 15px;
-    border-radius: 0px;
-  }
-  
-  .nav-pills .nav-link.active {
-    background-color: white;
-    color: black;
-    border-bottom: 1px solid black;
+  .title-text{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 34px;
+    /* identical to box height, or 85% */
+
+    color: #FFFFFF;
+    /* border: 2px solid #90CF8E; */
   }
 
   .text{
@@ -255,32 +284,6 @@ watch(
 
     color: #000000;
   }
-
-  .button-get-started{
-    margin-top: 15px;
-    width: 120px;
-    height: 40px;
-    background: #75BE3A;
-    border-radius: 5px;
-    border: none;
-    color: white;
-    font-family: 'DM Sans';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .button-get-started:hover{
-    background: #5a9e2b;
-  }
-
-  .button-get-started:active{
-    background: #4a8b23;
-}
 
 /* Hamburger Button */
 .custom-toggler {
@@ -359,6 +362,4 @@ watch(
   
 }
 
-
 </style>
-  

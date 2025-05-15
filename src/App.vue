@@ -27,6 +27,10 @@ watch(
         <router-view></router-view>
       </transition>
     </main>
+
+    <footer>
+      <BFooter/>
+    </footer>
   </div>
 </template>
 
@@ -98,9 +102,14 @@ watch(
 }
 
 #app {
-  background: linear-gradient(to bottom right, #75be3a, #f0f0f0);
+  /* background: linear-gradient(to bottom right, #75be3a, #f0f0f0);
   min-height: 100vh;
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; */
+  background-image: url('@/assets/images/background.png');
+  background-size: cover;        /* Stretch to cover the whole screen */
+  background-repeat: no-repeat;  /* Prevent tiling */
+  background-position: center;   /* Center the image */
+  min-height: 100vh;
 }
 </style>

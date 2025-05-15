@@ -1,36 +1,76 @@
 <template>
-    <div class="container-footer">
-        <div class="footer">
-            <div class="footer-content">
-                <div class="logo-links">
-                    <div class="logo-text">
-                            <div class="logo-text-title">Sustainably Melb | Making Melbourne Cooler & Greener</div>
-                            <div class="logo-text-location">Melbourne, Australia</div>
-                            <div class="logo-text-support">Together, we can create a greener city!</div>
-                    </div>
-                    <div class="footer-links">
-                        <a href="#">About Us</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                    </div>
-                </div>
 
-                <div class="stay-connected">
-                    <div class="stay-connected-heading">
-                    </div>
-
-                    <div class="email-capture">
-                        <input type="email" placeholder="Enter your email" />
-                        <button>Subscribe</button>
-                    </div>    
-                </div>
-            </div>
-        </div>
-        <div class="contact-container">
-        </div>
+<div class="line-container">
+    <div class="line">
     </div>
-    
+</div>
+
+<div class="container-fluid">
+      <div class="row">
+
+        <!-- Website Description -->
+        <div class="col-12 col-md-3 mb-4 mb-md-0 website-desc-container">
+          <h1 class="website-desc">Cool the City</h1>
+          <p class="website-desc-text">
+            Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
+          </p>
+          <div class="icon-container">
+            <img src="" alt="" class="website-icon">
+            <img src="" alt="" class="website-icon">
+            <img src="" alt="" class="website-icon">
+          </div>
+        </div>
+
+        <!-- Platform Section -->
+        <div class="col-6 col-md-2 mb-4 mb-md-0 platform-container">
+        <div class="platform-title-container">
+            <h5 class="fw-bold">Platform</h5>
+        </div>
+          <ul class="list-unstyled">
+            <li><router-link to="/home" class="footer-link">Home</router-link></li>
+            <li><router-link to="/greenmap" class="footer-link">Map</router-link></li>
+            <li><router-link to="/chat" class="footer-link">Chat</router-link></li>
+            <li><router-link to="/calculator" class="footer-link">Calculator</router-link></li>
+          </ul>
+        </div>
+
+        <!-- Learn Section -->
+        <div class="col-6 col-md-2 mb-4 mb-md-0 learn-container">
+            <div class="learn-title-container">
+                <h5 class="fw-bold">Learn</h5>
+            </div>
+          <ul class="list-unstyled">
+            <li><router-link to="/greenadvice" class="footer-link">Green Advice</router-link></li>
+            <li><router-link to="/storytelling" class="footer-link">Stories</router-link></li>
+            <li><a href="https://example.com/blog" target="_blank" class="footer-link">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- About Section -->
+        <div class="col-6 col-md-2 mb-4 mb-md-0 about-container">
+          <div class="about-title-container">
+            <h5 class="fw-bold">About</h5>
+          </div>
+          <ul class="list-unstyled">
+            <li><router-link to="/about" class="footer-link">Our Mission</router-link></li>
+            <li><router-link to="/team" class="footer-link">Team</router-link></li>
+          </ul>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="col-6 col-md-3 contact-container">
+            <div class="contact-title-container">
+                <h5 class="fw-bold">Contact Us</h5>
+            </div>
+
+          <ul class="list-unstyled">
+            <li><a href="mailto:info@coolcity.org" class="footer-link">info@coolcity.org</a></li>
+            <li><a href="https://instagram.com/yourpage" class="footer-link" target="_blank">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <script setup>
@@ -39,399 +79,153 @@
 
 <style scoped>
 
-.container-footer {
-    /* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 64px 0px 48px;
-gap: 64px;
 
-position: relative;
-width: 100%;
-/* MAX-width: 1280px; */
-height: 472px;
-left: 0px;
-bottom: 0px;
-top: 30px;
-
-background: #90CF8E;
+.line-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
 }
 
-.footer {
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 48px;
-margin: 0 auto;
-width: 1280px;
-max-width: 1280px;
-height: 240px;
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
+.line{
+    border: 0.5px solid #B8B8B8;
+    transform: rotate(0.16deg);
+    width:95%;
+    justify-content: space-between;
 }
 
-@media (min-width: 768px) {
-    .footer-content {
-/* Auto layout */
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: flex-start;
-padding: 0px;
-gap: 50px;
-width: 100%;
-height: 240px;
+.container-fluid {
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    align-items: flex-start;
 
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
-}
 }
 
-
-@media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-        align-items: center;
-        gap: 32px;
-    }
-}
-
-    .logo-links {
-    /* Auto layout */
+.website-desc-container{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 32px;
-
-    margin: 0 auto;
-    width: 400px;
-    height: 240px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    }
-
-
-
-@media (min-width: 768px) {
-    .logo-text-title {
-    /* Auto layout */
-    width: 520px;
-    height: 106px;
-
-    font-family: 'Domaine Display Narrow';
-    font-style: italic;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 53px;
-    /* or 166% */
-    display: flex;
+    justify-content: center;
     align-items: center;
-
-    color: #000000;
-}
+    margin-bottom: 50px;
 }
 
-@media (max-width: 768px) {
-    .logo-text-title {
-    /* Auto layout */
-    width: 350px;
-    height: 130px;
-
-    font-family: 'Domaine Display Narrow';
-    font-style: italic;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 53px;
-    /* or 166% */
-    display: flex;
-    align-items: center;
-
-    color: #000000;
-}
-}
-
-
-.logo-text-location {
-    /* Supporting text */
-width: 520px;
-height: 24px;
-
-/* Text md/Regular */
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-
-color: #000000;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-align-self: stretch;
-flex-grow: 0;
-}
-
-.logo-text-support {
-    width: 520px;
-height: 24px;
-
-/* Text md/Regular */
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-
-color: #000000;
-
-
-/* Inside auto layout */
-flex: none;
-order: 2;
-align-self: stretch;
-flex-grow: 0;
-}
-
-
-
-@media (min-width: 768px) {
-    .footer-links {
-        /* Auto layout */
-        /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 32px;
-
-    width: 520px;
-    height: 24px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .footer-links {
-        /* Auto layout */
-        /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0px;
-    gap: 5px;
-
-    width: 520px;
-    height: 24px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-    }
-}
-
-
-.a {
-    /* Auto layout */
-display: flex;
-flex-direction: row;
-align-items: center;
-padding: 0px;
-gap: 8px;
-
-width: 46px;
-height: 24px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-flex-grow: 0;
-}
-
-@media (min-width: 768px) {
-.stay-connected {
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 16px;
-
-margin: 0 auto;
-width: 360px;
-height: 88px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-flex-grow: 0;
-}
-}
-
-@media (max-width: 768px) {
-.stay-connected {
-/* Auto layout */
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-padding: 0px;
-gap: 16px;
-
-margin: 0 auto;
-width: 360px;
-height: 88px;
-
-
-/* Inside auto layout */
-flex: none;
-order: 1;
-flex-grow: 0;
-}
-}
-
-.stay-connected-heading {
-    /* Auto layout */
-    width: 360px;
-height: 20px;
-
-/* Text sm/Medium */
-font-family: 'Inter';
-font-style: normal;
-font-weight: 500;
-font-size: 14px;
-line-height: 20px;
-/* identical to box height, or 143% */
-
-color: #000000;
-
-
-/* Inside auto layout */
-flex: none;
-order: 0;
-align-self: stretch;
-flex-grow: 0;
-}
-
-@media (min-width: 768px) {
-.email-capture {
-    /* Auto layout */
-    /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 16px;
-
-    width: 360px;
-    height: 52px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-}
-}
-
-@media (max-width: 768px) {
-.email-capture {
-    /* Auto layout */
-    /* Auto layout */
+.platform-container{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 16px;
 
-    width: 360px;
-    height: 52px;
-
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-}
 }
 
-.email-capture input {
-    box-sizing: border-box;
-
-    /* Auto layout */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px 14px;
-    gap: 8px;
-
-    width: 217px;
-    height: 52px;
-
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    /* Shadows/shadow-xs */
-    filter: drop-shadow(0px 1px 2px rgba(16, 24, 40, 0.05));
-    border-radius: 8px;
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-}
-
-.email-capture button {
-    /* Auto layout */
+.platform-title-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 14px 22px;
-    gap: 12px;
-
-    width: 127px;
-    height: 52px;
-
-    background: #0D9B27;
-    border-radius: 48px;
-
-    /* Inside auto layout */
-    flex: none;
-    order: 1;
-    flex-grow: 0;
 }
 
+.learn-container{
+    display: flex;
+    flex-direction: column;
 
+}
+
+.learn-title-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-container{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.about-title-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.contact-container{
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.contact-title-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.website-desc{
+    font-family: 'Cera Pro';
+font-style: normal;
+font-weight: 500;
+font-size: 36px;
+line-height: 45px;
+text-transform: uppercase;
+
+/* black */
+color: #202020;
+}
+
+.website-desc-text{
+    font-family: 'Rubik';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 25px;
+/* or 139% */
+
+/* text color */
+color: #615E5B;
+}
+
+fw-bold{
+    /* Title */
+
+font-family: 'Cera Pro';
+font-style: normal;
+font-weight: 500;
+font-size: 24px;
+line-height: 30px;
+
+/* black */
+color: #202020;
+
+
+}
+
+.icon-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-direction: row;
+    gap: 10px;
+}
+.list-unstyled {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-link {
+    font-family: 'Cera Pro';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 20px;
+
+/* text color */
+color: #615E5B;
+}
 
 </style>

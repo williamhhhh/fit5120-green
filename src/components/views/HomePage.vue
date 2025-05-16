@@ -26,11 +26,16 @@
   <div class="container-fluid graph-section">
     <div class="graph-section-title-container row">
         <div class="graph-section-title-text col-8 col-md-12">
-          <div>Melbourne Minimum Temperatures by Year (Gradient)</div>
+          <div>Melbourne had increased 6 degrees in recent years</div>
         </div>
     </div>
-    <div class="row graph-container">
-      <div class="col-12 col-md-4">
+
+    <div v-if="isTemp" class="row graph-container">
+      <div class="col-12 col-md-1 arrow-container">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+      </div>
+
+      <div class="col-12 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
         <div class="graph-description">
           <p>Melbourne's minimum temperatures have been rising over the years. This chart shows the trend of minimum temperatures from 2010 to 2020, with a gradient color scheme representing the years.</p>
@@ -41,94 +46,154 @@
           </button>
         </div>
       </div>
-      <div class="col-12 col-md-8">
-      <canvas ref="tempMinChart" id="tempChart" width="1000" height="500" position="relative"></canvas>
-      <div class="year-gradient-legend">
-        <span>{{ minYear }}</span>
-        <div class="year-gradient-bar"></div>
-        <span>{{ maxYear }}</span>
+
+      <div class="col-12 col-md-7 chart-container">
+        <canvas ref="tempChart" id="tempChart" width="80%" position="relative"></canvas>
+        <div class="year-gradient-legend">
+          <span>2024</span>
+          <div class="year-gradient-bar"></div>
+          <span>1944</span>
+        </div>
       </div>
+
+      <div class="col-12 col-md-1 arrow-container"  @click="transistCard()">
+        <img src="@/assets/images/right.png" alt="arrow" class="arrow">
       </div>
     </div>
+
+    <div v-if="!isTemp" class="row graph-container">
+      <div class="col-12 col-md-1 arrow-container">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+      </div>
+
+      <div class="col-12 col-md-3">
+        <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
+        <div class="graph-description">
+          <p>Melbourne's minimum temperatures have been rising over the years. This chart shows the trend of minimum temperatures from 2010 to 2020, with a gradient color scheme representing the years.</p>
+        </div>
+        <div class="button-cool-container">
+          <button class="button-cool">
+          <router-link to="/GreenMap" class="cool">Let's tackle it!</router-link>
+          </button>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-7 chart-container">
+        <canvas ref="greenChart" id="greenChart" width="80%" position="relative"></canvas>
+        <div class="year-gradient-legend">
+          <span>2024</span>
+          <div class="year-gradient-bar"></div>
+          <span>1944</span>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-1 arrow-container">
+        <img src="@/assets/images/right.png" alt="arrow" class="arrow" @click="transistCard()">
+      </div>
+    </div>
+
+
+
   </div>
     
 </template>
   
   <script setup>
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref, nextTick, onBeforeUnmount } from 'vue'
 import { Chart } from 'chart.js/auto'
+import { fetchMinData, fetchMaxData, transformToChartJsFormat } from '../utils/tempChart'
+import { renderGreenGasChart } from '../utils/greenGasChart' 
+import { watch } from 'vue'     
 // import cycle from '@/assets/images/cycle.png'
 
-const tempMinChart = ref(null) // this holds the <canvas> element
+const tempChart = ref(null)
+const greenChart = ref(null)
+let greenChartInstance = null
 let chartInstance = null
+let isShowingMin = true
+let intervalId = null
+const isTemp = ref(true)
+
+
+const transistCard = () => {
+  isTemp.value = !isTemp.value
+}
+
+const renderChart = async () => {
+  const canvas = tempChart.value
+  if (!canvas) return
+
+  const data = isShowingMin
+    ? await fetchMinData()
+    : await fetchMaxData()
+
+  const chartData = transformToChartJsFormat(data, isShowingMin)
+
+  if (chartInstance) {
+    chartInstance.data = chartData.data
+    chartInstance.options.plugins.title.text = chartData.title
+    // ✅ Make sure the Y scale updates
+    chartInstance.options.scales = {
+      ...chartInstance.options.scales,
+      y: chartData.options.scales.y
+    }
+    chartInstance.update()
+  } else {
+    chartInstance = new Chart(canvas, {
+      type: 'line',
+      data: chartData.data,
+      options: chartData.options,
+    })
+  }
+
+  isShowingMin = !isShowingMin
+}
+
 
 
 onMounted(async () => {
-  const res = await fetch('https://api.coolthecities.com/temp_min')
-  const data = await res.json()
+  await nextTick()
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-  const minYear = Math.min(...data.map(d => d.year))
-  const maxYear = Math.max(...data.map(d => d.year))
-
-  const startColor = [0, 100, 255]
-  const endColor = [255, 0, 0]
-
-  const interpolateColor = (start, end, factor) =>
-    `rgb(${start.map((s, i) => Math.round(s + factor * (end[i] - s))).join(',')})`
-
-  const datasets = data.map(row => {
-    const factor = (row.year - minYear) / (maxYear - minYear)
-    const color = interpolateColor(startColor, endColor, factor)
-    return {
-      label: row.year.toString(),
-      data: months.map(m => row[m.toLowerCase()]),
-      borderColor: color,
-      backgroundColor: color,
-      borderWidth: 1,
-      fill: false,
-      pointRadius: 0
-    }
-  })
-
-  await nextTick() // ensure canvas is rendered
-
-  if (tempMinChart.value) {
-    chartInstance = new Chart(tempMinChart.value, {
-      type: 'line',
-      data: {
-        labels: months,
-        datasets
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Melbourne Minimum Temperatures by Year (Gradient)'
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            min: 0,
-            max: 20,
-            title: {
-              display: true,
-              text: 'Temperature (°C)'
-            }
-          }
-        }
-      }
-    })
-  } else {
-    console.error('❌ tempChart canvas element not found.')
+  if (isTemp.value) {
+    await renderChart()
+    intervalId = setInterval(renderChart, 8000)
   }
 })
+
+
+watch(isTemp, async (newVal) => {
+  await nextTick()
+
+  if (newVal) {
+    // Switching back to temp chart
+    if (intervalId === null) {
+      intervalId = setInterval(renderChart, 8000)
+    }
+
+    await renderChart()
+  } else {
+    // Switching to green gas chart
+    if (intervalId) {
+      clearInterval(intervalId)
+      intervalId = null
+    }
+
+    if (!greenChartInstance && greenChart.value) {
+      greenChartInstance = await renderGreenGasChart(greenChart.value)
+    }
+  }
+})
+
+
+
+// onBeforeUnmount(() => {
+//   if (intervalId){
+//     clearInterval(intervalId)
+//   }
+//   if (chartInstance){
+//     chartInstance.destroy()
+//   }
+// })
 
 
 
@@ -288,21 +353,6 @@ onMounted(async () => {
     background: #4a7e23;
   }
 
-  .year-gradient-legend {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  gap: 10px;
-  font-size: 14px;
-}
-
-.year-gradient-bar {
-  flex-grow: 1;
-  height: 16px;
-  background: linear-gradient(to right, rgb(0, 100, 255), rgb(255, 0, 0));
-  border-radius: 8px;
-}
-
 .cycle-container {
   display: flex;
   justify-content: flex-start;
@@ -330,14 +380,14 @@ onMounted(async () => {
   margin-top: 40px;
   margin-bottom: 20px;
   font-family: 'DM Serif Display';
-font-style: bold;
-font-weight: 400;
-font-size: 48px;
-line-height: 150%;
-/* or 72px */
-text-align: center;
+  font-style: bold;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 150%;
+  /* or 72px */
+  text-align: center;
 
-color: #000000;
+  color: #000000;
 }
 
 .graph-container{
@@ -345,7 +395,8 @@ color: #000000;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
   border-radius: 40px;
   width: 90%;
-  padding: 10px;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .graph-title{
@@ -364,6 +415,9 @@ color: #000000;
 .graph-description{
   margin-top: 40px;
   margin-bottom: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+
   font-family: 'DM Sans';
   font-style: normal;
   font-weight: 600;
@@ -382,6 +436,7 @@ color: #000000;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   padding: 0px;
   gap: 10px;
 
@@ -389,30 +444,31 @@ color: #000000;
 
 .button-cool{
   display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-padding: 14px 22px;
-gap: 12px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 22px;
+  gap: 12px;
 
-width: 70%;
-height: 65px;
+  width: 70%;
+  height: 65px;
 
-background: #90CF8E;
-border-radius: 48px;
+  background: #90CF8E;
+  border-radius: 48px;
+  border: none;
 }
 
 .cool{
   font-family: 'DM Sans';
-font-style: normal;
-font-weight: 600;
-font-size: 16px;
-line-height: 24px;
-/* identical to box height, or 150% */
-display: flex;
-align-items: center;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  /* identical to box height, or 150% */
+  display: flex;
+  align-items: center;
 
-color: #000000;
+  color: #000000;
 }
 .container{
   display: flex;
@@ -430,5 +486,45 @@ color: #000000;
   width: 100%;
 }
 
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.year-gradient-legend {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.year-gradient-bar {
+  flex-grow: 1;
+  background: linear-gradient(to top, rgb(0, 100, 255), rgb(255, 0, 0));
+  border-radius: 8px;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  margin-right: 20px;
+}
+
+.arrow-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arrow {
+  width: 66px;
+  height: 61px;
+}
+
+.arrow:hover {
+  cursor: pointer;
+}
 
   </style>

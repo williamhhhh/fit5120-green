@@ -5,7 +5,7 @@
       <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
       <div class="title-container col-md-8 col-lg-8">
         <div class="cycle-container">
-          <img src="@/assets/images/cycle.png" alt="cycle" class="cycle">
+          <img src="@/assets/images/cycle.png" alt="cycle" class="cycle animate__animated animate__lightSpeedInLeft">
         </div>
         <div class="title-start">
           <h1 class="title">Melbourne is Getting Hotter - Let's Cool It Down Together</h1>
@@ -14,11 +14,11 @@
           <p class="title-description">
           Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
           </p>
-          <img src="@/assets/images/ballon.png" alt="ballon" class="ballon">
+          <img src="@/assets/images/ballon.png" alt="ballon" class="ballon animate__animated animate__bounceInUp">
         </div>
 
 
-        <button @click="navigateTo('/GreenMap')" class="button-get-started">Let's tackle it!</button>
+        <button @click="scrollToSection" class="button-get-started animate__animated animate__fadeIn">Let's tackle it!</button>
       </div>
     </div>
   </div>
@@ -30,9 +30,9 @@
         </div>
     </div>
 
-    <div v-if="isTemp" class="row graph-container">
+    <div v-if="isTemp" class="row graph-container animate__animated animate__fadeInRight">
       <div class="col-12 col-md-1 arrow-container">
-        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
       <div class="col-12 col-md-3">
@@ -61,9 +61,9 @@
       </div>
     </div>
 
-    <div v-if="!isTemp" class="row graph-container">
+    <div v-if="!isTemp" class="row graph-container animate__animated animate__fadeInRight">
       <div class="col-12 col-md-1 arrow-container">
-        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
       <div class="col-12 col-md-3">
@@ -73,18 +73,13 @@
         </div>
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/GreenMap" class="cool">Let's tackle it!</router-link>
+          <router-link to="/GreenMap" class="cool">Let's cool it!</router-link>
           </button>
         </div>
       </div>
 
       <div class="col-12 col-md-7 chart-container">
         <canvas ref="greenChart" id="greenChart" width="80%" position="relative"></canvas>
-        <div class="year-gradient-legend">
-          <span>2024</span>
-          <div class="year-gradient-bar"></div>
-          <span>1944</span>
-        </div>
       </div>
 
       <div class="col-12 col-md-1 arrow-container">
@@ -117,6 +112,12 @@ const isTemp = ref(true)
 
 const transistCard = () => {
   isTemp.value = !isTemp.value
+}
+const scrollToSection = () => {
+  const section = document.querySelector('.graph-section')
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' })
+  }
 }
 
 const renderChart = async () => {
@@ -165,35 +166,34 @@ watch(isTemp, async (newVal) => {
   await nextTick()
 
   if (newVal) {
-    // Switching back to temp chart
-    if (intervalId === null) {
+    // 🔁 Switching to temperature chart
+    if (tempChart.value) {
+      if (chartInstance) {
+        chartInstance.destroy()
+        chartInstance = null
+      }
+      if (intervalId === null) {
       intervalId = setInterval(renderChart, 8000)
+      }
+      await renderChart()
     }
 
-    await renderChart()
   } else {
-    // Switching to green gas chart
+    // 🌱 Switching to green gas chart
     if (intervalId) {
       clearInterval(intervalId)
       intervalId = null
     }
 
-    if (!greenChartInstance && greenChart.value) {
+    if (greenChart.value) {
+      if (greenChartInstance) {
+        greenChartInstance.destroy()
+      }
       greenChartInstance = await renderGreenGasChart(greenChart.value)
     }
   }
 })
 
-
-
-// onBeforeUnmount(() => {
-//   if (intervalId){
-//     clearInterval(intervalId)
-//   }
-//   if (chartInstance){
-//     chartInstance.destroy()
-//   }
-// })
 
 
 
@@ -341,16 +341,21 @@ watch(isTemp, async (newVal) => {
     border: none;
     cursor: pointer;
     z-index: 100;
-    animation: tracking-in-expand-fwd 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
-    animation-delay: 2s;
+    /* animation: tracking-in-expand-fwd 1s cubic-bezier(0.215, 0.61, 0.355, 1) both; */
+    animation-delay: 1s;
   }
   
   .button-get-started:hover {
-    background: #5a9e2b;
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: background 0.5s ease;
+    background: #bcff89;
+
+
   }
   
   .button-get-started:active {
-    background: #4a7e23;
+    background: #bcff89;
   }
 
 .cycle-container {
@@ -364,6 +369,7 @@ watch(isTemp, async (newVal) => {
   position: relative;
   width: 238px;
   height: 197px;
+  animation-delay: 0.3s;
 }
 
 .ballon {
@@ -374,7 +380,9 @@ watch(isTemp, async (newVal) => {
   bottom: -40px;      /* Adjust as needed */
   width: 182px;
   height: 185px;
+  animation-delay: 0.3s;
 }
+
 
 .graph-section-title-text{
   margin-top: 40px;
@@ -458,6 +466,17 @@ watch(isTemp, async (newVal) => {
   border: none;
 }
 
+.button-cool:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: background 0.5s ease;
+  background: #bcff89;
+}
+
+.button-cool:active {
+  background: #bcff89;
+}
+
 .cool{
   font-family: 'DM Sans';
   font-style: normal;
@@ -525,6 +544,9 @@ watch(isTemp, async (newVal) => {
 
 .arrow:hover {
   cursor: pointer;
+  transform: scale(1.2);
+  transition: background 0.5s ease;
 }
+
 
   </style>

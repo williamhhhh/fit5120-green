@@ -6,7 +6,7 @@
 
           <!-- Left Section: Logo + Nav -->
           <div class="col-8 col-md-10 d-flex align-items-center header-left">
-            <div class="title-text me-3">cool the city</div>
+            <div class="title-text me-3">Cool the City</div>
 
             <!-- Desktop Nav -->
             <ul class="d-none d-md-flex list-unstyled mb-0">
@@ -185,8 +185,8 @@ watch(
     width: 133px;
     height: 44px;
 
-    background: #90CF8E;
-    background: none;
+    background: #7abd4c;
+    /* background: none; */
     /* Front Shadow */
     box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
@@ -257,14 +257,16 @@ watch(
 }
   
   .title-text{
-    font-family: 'Poppins';
-    font-style: normal;
+    /* font-family: 'Poppins';
+    font-style: normal; */
+    font-family: 'Domaine Display Narrow';
+    font-style: italic;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 40px;
     line-height: 34px;
     /* identical to box height, or 85% */
 
-    color: #FFFFFF;
+    color: #7abd4c;
     /* border: 2px solid #90CF8E; */
   }
 

@@ -2,7 +2,7 @@
   
   <div class="container-fluid">
     <div class="desc-container col-md-12 col-lg-12">
-      <img src="https://i.imgur.com/jYx4z1b.jpeg" alt="green" class="green-city">
+      <img src="@/assets/images/green_city.jpeg" alt="green" class="green-city">
       <div class="title-container col-md-8 col-lg-8">
         <div class="cycle-container">
           <img src="@/assets/images/cycle.png" alt="cycle" class="cycle animate__animated animate__lightSpeedInLeft">

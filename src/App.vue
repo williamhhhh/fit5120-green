@@ -106,10 +106,11 @@ watch(
   min-height: 100vh;
   background-size: cover;
   background-attachment: fixed; */
-  background-image: url('@/assets/images/background.png');
+  background-image: url('@/assets/images/background_edited.png');
   background-size: cover;        /* Stretch to cover the whole screen */
   background-repeat: no-repeat;  /* Prevent tiling */
   background-position: center;   /* Center the image */
+  background-color: rgba(0, 0, 0, 0.5);
   min-height: 100vh;
 }
 </style>

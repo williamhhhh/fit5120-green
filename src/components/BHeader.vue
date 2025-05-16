@@ -7,7 +7,7 @@
           <!-- Left Section: Logo + Nav -->
           <div class="col-8 col-md-10 d-flex align-items-center header-left">
             <div class="title-text me-3">Cool the City</div>
-
+            <!-- <img src="../assets/logo.png" alt="Logo" class="logo" /> -->
             <!-- Desktop Nav -->
             <ul class="d-none d-md-flex list-unstyled mb-0">
               <li class="nav-item">
@@ -58,7 +58,13 @@
         <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
         <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
       </div>
+
+      <div class="line-container">
+        <div class="line">
+        </div>
+      </div>
     </div>
+
   </transition>
 </template>
 
@@ -119,6 +125,7 @@ watch(
     justify-content: center;
     align-items: center;
     padding: 15px 59px;
+    padding-bottom: 3px;
     gap: 10px;
     width: 100%;
 
@@ -362,6 +369,20 @@ watch(
   }
   
   
+}
+
+.line-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.line{
+    border: 0.5px solid #B8B8B8;
+    transform: rotate(0.16deg);
+    width:100%;
+    justify-content: space-between;
 }
 
 </style>

@@ -1,8 +1,9 @@
 <template>
+
+  
         <!-- User Guide  -->
-    <transition name="modal" appear>
-    <div class="modal" v-if="showUserGuide">
-        <div class="modal-content swing-in-top-fwd">
+    <div class="modal animate__animated animate__fade-in" v-if="showUserGuide">
+        <div class="modal-content">
           <h2>Welcome to GreenMap! 🌳</h2>
               <ul>
                 <li>Allow location access to see parks near your current position within Melbourne.</li>
@@ -10,10 +11,14 @@
                 <li>Click the "Load green Spaces" button to find nearby parks or view all parks in Greater Melbourne.</li>
                 <li>Tap on a green marker to view park details, then click “Navigate Here” to get directions from your location.</li>
               </ul>
-            <button @click="hideUserGuide">Got it!</button>
+            <button @click="hideUserGuide" class="guide-button">Got it!</button>
         </div>
     </div>
-    </transition>
+
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-text">Loading green spaces...</div>
+      <img src="@/assets/images/loading.png" alt="Loading" class="spinner" />
+    </div>
 
     <!-- Map Container -->
     <div class="container">
@@ -97,9 +102,13 @@ import * as turf from '@turf/turf'
 import osmtogeojson from 'osmtogeojson'
 import { IftaLabel } from 'primevue'
 
-// Set Mapbox Access Token
-mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
+const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN
 
+
+
+// Set Mapbox Access Token
+// mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
+mapboxgl.accessToken = mapboxToken
 // State Variables
 const searchQuery = ref('')
 const searchResult = ref(null)
@@ -110,6 +119,7 @@ const selectedDistance = ref(0.1)
 const locationError = ref('')
 const sizeSelect = ref('5000') // Default size filter
 const showUserGuide = ref(false) // Show user guide by default
+const isLoading = ref(false) // Loading state
 
 let map, directions, startMarker, endMarker
 let melbourneGeojson
@@ -232,25 +242,34 @@ const updateTransportMode = () => {
 
 
 
-const handleLoadClick = () => {
+  const handleLoadClick = async () => {
+  isLoading.value = true
+
   const selectedDistanceValue = parseFloat(selectedDistance.value)
-  if (selectedDistanceValue && userLocationBool.value && userInMelbourne.value) {
-    loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
-  } else if (!userLocationBool.value && !selectedDistanceValue) {
-    loadAllGreenSpaces(sizeSelect.value)
-  } else if (userLocationBool.value && !userInMelbourne.value && selectedDistanceValue != 'all') {
-    alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
-    selectedDistance.value = "all"
-    loadAllGreenSpaces(sizeSelect.value)
-  } else if(!selectedDistanceValue && userInMelbourne.value){
-    loadAllGreenSpaces(sizeSelect.value)
-  }
-  else {
-    alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
-    selectedDistance.value = "all"
-    locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
+
+  try {
+    if (selectedDistanceValue && userLocationBool.value && userInMelbourne.value) {
+      await loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
+    } else if (!userLocationBool.value && !selectedDistanceValue) {
+      await loadAllGreenSpaces(sizeSelect.value)
+    } else if (userLocationBool.value && !userInMelbourne.value && selectedDistanceValue != 'all') {
+      alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
+      selectedDistance.value = "all"
+      await loadAllGreenSpaces(sizeSelect.value)
+    } else if (!selectedDistanceValue && userInMelbourne.value) {
+      await loadAllGreenSpaces(sizeSelect.value)
+    } else {
+      alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
+      selectedDistance.value = "all"
+      locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
+    }
+  } catch (error) {
+    console.error('Error loading parks:', error)
+  } finally {
+    isLoading.value = false // ✅ will now happen after load finishes
   }
 }
+
 
 const loadMelbourneBoundary = async () => {
   const res = await fetch('/municipal-boundary.geojson')
@@ -273,7 +292,7 @@ const loadMelbourneBoundary = async () => {
 
 // Load nearby green spaces
 const loadAllGreenSpaces = async (parkSize) => {
-  
+
   const query = `
     [out:json][timeout:25];
     area["name"="City of Melbourne"]["admin_level"="6"]->.searchArea;
@@ -339,6 +358,7 @@ const loadAllGreenSpaces = async (parkSize) => {
         'fill-color': '#00FF00',
         'fill-opacity': 0.5
       }
+      
     })
 
     // Remove previous markers if they exist
@@ -390,7 +410,7 @@ const loadAllGreenSpaces = async (parkSize) => {
 
   } catch (err) {
     console.error('Failed to load Overpass data:', err)
-  }
+  } 
 }
 
 // get nearby parks quety
@@ -525,6 +545,7 @@ const loadNearbyGreenSpaces = async (coords, distance, parkSize) => {
   map.setCenter([lon, lat])
   map.setZoom(14)
 }
+
 </script>
 
 
@@ -755,4 +776,67 @@ p{
 h5{
   font-family: Garamond, serif;
 }
+
+.guide-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 52px;
+
+    background: #90CF8E;
+    border-radius: 48px;
+    border: none;
+    cursor: pointer;
+}
+
+.guide-button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: background 0.5s ease;
+    background: #bcff89;
+}
+
+.guide-button:active {
+    transform: scale(0.95);
+    transition: background 0.5s ease;
+    background: #90CF8E;
+}
+
+.loading-overlay {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  /* border: 6px solid #ffffff;
+  border-top: 6px solid transparent;
+  border-radius: 50%; */
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  color: #ffffff;
+  font-size: 20px;
+  margin-top: 10px;
+  font-family: Garamond, serif;
+}
+
+/* Animation Keyframes */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 </style>

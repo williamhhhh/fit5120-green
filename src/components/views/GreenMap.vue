@@ -23,7 +23,7 @@
 <!-- Map Container -->
 <div class="container">
 <!-- First Row -->
-<div class="row justify-content-center mb-4 top-custom" style="padding-top: 40px;">
+<div class="row justify-content-center mb-4" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
     <h1>Find nearby green spaces!</h1>
     <p>Find green spaces by <span class="highlight-desc">size</span> or <span class="highlight-desc">distance</span>!
@@ -61,13 +61,13 @@
         <div class="col-6"><h5>Select a park size</h5></div>
         <div class="col-6">
       <select id="sizeSelect" v-model="sizeSelect" class="form-select mb-3">
-        <option value="20000">large</option>
-        <option value="10000">medium</option>
-        <option value="5000">small</option>
+        <option value="20000">large(space larger that 5000 square meter)</option>
+        <option value="10000">medium(space between 1000 and 5000 square meter)</option>
+        <option value="5000">small(space smaller than 1000 square meter)</option>
       </select></div>
       </div>
 
-      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif; width: 240px;">
+      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif; width: 300px;">
         Load Green Spaces
       </button>
 
@@ -110,8 +110,8 @@ const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN
 
 
 // Set Mapbox Access Token
-// mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
-mapboxgl.accessToken = mapboxToken
+mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
+// mapboxgl.accessToken = mapboxToken
 // State Variables
 const searchQuery = ref('')
 const searchResult = ref(null)
@@ -327,9 +327,9 @@ const geojson = osmtogeojson(osmData)
 const filteredFeatures = geojson.features.filter((feature) => {
 const area = turf.area(feature)
 
-if (parkSize === '5000') return area < 5000
-if (parkSize === '10000') return area >= 5000 && area <= 20000
-if (parkSize === '20000') return area > 20000
+if (parkSize === '5000') return area < 1000
+if (parkSize === '10000') return area >= 1000 && area <= 5000
+if (parkSize === '20000') return area > 5000
 return true // If no parkSize filter, show all
 
 })
@@ -369,7 +369,7 @@ greenSpaceMarkers.forEach(currentMarker => currentMarker.remove())
 greenSpaceMarkers = [] // Clear the array
 
 filteredFeatures.forEach((feature) => {
-const name = feature.properties.name || 'Unnamed Green Space'
+const name = feature.properties.name || 'Green Space'
 const center = turf.centroid(feature).geometry.coordinates
 
 const currentMarker = new mapboxgl.Marker({ color: 'green' })
@@ -496,7 +496,7 @@ greenSpaceMarkers = [] // Clear the array
 
 // 💡 Add markers with popups (e.g., park name)
 filteredFeatures.forEach((feature) => {
-const name = feature.properties.name || 'Unnamed Green Space'
+const name = feature.properties.name || 'Green Space'
 const center = turf.centroid(feature).geometry.coordinates
 
 const currentMarker = new mapboxgl.Marker({ color: 'green' })
@@ -845,7 +845,7 @@ font-family: Garamond, serif;
 .highlight-desc {
   color: #75BE3A;  /* Green color */
   font-weight: bold;
-  background-color: #e0f5d1;  /* Light green background */
+  font-size: 1.2em;
   padding: 2px 4px;
   border-radius: 4px;
 }

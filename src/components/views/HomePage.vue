@@ -38,7 +38,7 @@
       <div class="col-12 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
         <div class="graph-description">
-          <p>Melbourne's minimum temperatures have been rising over the years. This chart shows the trend of minimum temperatures from 2010 to 2020, with a gradient color scheme representing the years.</p>
+          <p>The overall gradient trends show how temperature had been going up in melbourne in recent years</p>
         </div>
         <div class="button-cool-container">
           <button class="button-cool">
@@ -67,13 +67,13 @@
       </div>
 
       <div class="col-12 col-md-3">
-        <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
+        <div class="graph-title">We are still a long way to greenhouse gas natural</div>
         <div class="graph-description">
-          <p>Melbourne's minimum temperatures have been rising over the years. This chart shows the trend of minimum temperatures from 2010 to 2020, with a gradient color scheme representing the years.</p>
+          <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon natural</p>
         </div>
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/GreenMap" class="cool">Let's cool it!</router-link>
+          <router-link to="/GreenMap" class="cool">Calculate your carbon footprint</router-link>
           </button>
         </div>
       </div>
@@ -410,7 +410,7 @@ watch(isTemp, async (newVal) => {
 .graph-title{
   font-family: 'DM Serif Display';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 32px;
   line-height: 150%;
   /* or 48px */
@@ -428,7 +428,7 @@ watch(isTemp, async (newVal) => {
 
   font-family: 'DM Sans';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   /* or 150% */

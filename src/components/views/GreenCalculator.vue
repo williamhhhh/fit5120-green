@@ -27,7 +27,7 @@
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
                         <div class="image-container">
-                            <img src="https://i.imgur.com/WrlS3nn.png" alt="intro" class="intro-image" />
+                            <img src="@/assets/images/energy.png" alt="intro" class="intro-image" />
                         </div>
                     </div>
                     
@@ -38,7 +38,7 @@
                         <label for="gas" class="label-text">How much is your monthly gas bill?</label>
                         <input type="text" id="gas" name="gas" placeholder="$0.00" v-model="formDataOne.gas" />
                         <div v-if="errors.gas" class="text-danger"> {{ errors.gas }} </div>
-                        <label for="oil" class="label-text">How much is your monthly petrol bill?</label>
+                        <label for="oil" class="label-text">How much is your monthly oil bill?</label>
                         <input type="text" id="oil" name="oil" placeholder="$0.00" v-model="formDataOne.oil"/>
                         <div v-if="errors.oil" class="text-danger"> {{ errors.oil }} </div>
 
@@ -61,7 +61,7 @@
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
                         <div class="image-container">
-                            <img src="https://media-hosting.imagekit.io/c54cfeccb1b84814/screenshot_1745935673599.png?Expires=1840543722&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=mP-V8LMeBN5F55vniWUfkhAqS38j7Cy6AJYy4GDn2vGY2lYqsbpXnwOsTrxy8vce8ZPJHdNnnY6HeNi-jbOkT5Mm4Id2ZKSyrrJpmXAyPxM9-d74J2EoWl-lqCErcZT7gviwAOHTHnJFYunv0P4UlYavo96mHBximQoAroHr0tjKEH9-Ql0lXRBq~M-0mhQdomx7N4t53S30zRPaS86BN-TvZj8mHEnuxjBIO7I6rZvN6n3V1RCXcK3S1XB50u0dVrmdy16Pm5R2ofEKExz7k1rA7zFYjWSSxqqxrsEYAJeXsQ89o-M4NjvBUWFhX3dbY~1jzIk3n~6sP4bu36K6DA__" alt="intro" class="intro-image" />
+                            <img src="@/assets/images/travel.png" alt="intro" class="intro-image" />
                         </div>
                     </div>
                     
@@ -102,7 +102,7 @@
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
                         <div class="image-container">
-                            <img src="https://i.imgur.com/aQwVZnw.png" alt="intro" class="intro-image" />
+                            <img src="@/assets/images/waste.png" alt="intro" class="intro-image" />
                         </div>
                     </div>
                     
@@ -153,7 +153,7 @@
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
                         <div class="image-container">
-                            <img src="https://media-hosting.imagekit.io/ec66124c433b4ad6/screenshot_1745827794110.png?Expires=1840435796&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=x3jq5W0AxBvH2hJhaqZnzcWjLXRrafHprP7g8bLu2~GquLCRbAjCctitQtn1ZJgaSohd12mtaEWK3gAzHxFq06CGhASxpUsV-7nUnG5IBojWo4raJHeefcECcq9Sb1aq1qc34hi-rodYeELxsJ6rEVqMR5kSLeGafxEONUt1NOXL-KSfnVyGIyyfdFBdVTh~-SUnUFLgKFEtNsV~vZfvrJFyYKofk-IED5nuHxbke5jBwHwkKzJ4OO4UEGvhlNU1SXWtHjhYggfo7NSgUgZy6boaA0obReIVPQEvGCzAyLn8Yh-scFO7a5AKUSpBKyMne9qAQ4ujuqZl1dMPXd9HWA__" alt="intro" class="intro-image" />
+                            <img src="@/assets/images/cal_earth.png" alt="intro" class="intro-image" />
                         </div>
                     </div>
 
@@ -163,38 +163,69 @@
                             <div class="result-result">{{ calculateCarbonFootprint() }} tonnes</div>
                             <div class="result-result-desc">of carbon dioxide equivalent (tCO2e.)</div>
                         </div>
+<!-- 
+                        <div class="slider-adjust-container" style="margin-top: 40px;">
+                            <h3>Adjust your values to see how much CO₂ you can save:</h3>
+
+                            <div class="mb-4" v-for="(label, key) in {
+                                electric: 'Electric Bill ($/month)',
+                                gas: 'Gas Bill ($/month)',
+                                oil: 'Oil Bill ($/month)',
+                                mileage: 'Yearly Mileage (km)',
+                                flight: 'Short Flights (≤ 4hrs/year)',
+                                flights: 'Long Flights (≥ 4hrs/year)'
+                            }" :key="key">
+                                <label :for="key">{{ label }}</label>
+                                <input 
+                                type="range" 
+                                :id="key"
+                                :min="0" 
+                                :max="Number(finalFormData.value?.[key]) || 100" 
+                                step="1" 
+                                v-model.number="adjustedValues[key]"
+                                style="width: 100%;"
+                                />
+                                <div>{{ adjustedValues[key] }}</div>
+                            </div>
+
+                            <div class="result-adjusted" style="margin-top: 20px;">
+                                <div><strong>New Estimated Carbon Footprint:</strong> {{ adjustedFootprint }} tCO₂e</div>
+                                <div><strong>CO₂ You Could Save:</strong> <span class="highlight">{{ carbonSaved }} tCO₂e</span></div>
+                            </div>
+                        </div> -->
+
 
                         <div class="result-cards">
                             <div class="result-cards-row">
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
-                                        <img class="result-card-icon" src="https://media-hosting.imagekit.io/7f97d99b5a1f4d87/screenshot_1745830257442.png?Expires=1840438260&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=O7~KSAUw~HpiQueArkD7Wo8YIdqKUrWK11JdL-2JxTOToSyZde7KvffKrj6yO3n8-ICp~kBwtX9x5JpDk~pS2bnrOzLVdND2QxUmKPOilUxnArkueQeyDN266h1wZQKS1WIgsucHtW7xTrAZmHjgY7x1l2Q2NIolTPU1WsyQoOwu2USpaR7nMecEeygIYh5uj8Uo9p4N6g-PcepYzzJD~QdfTRZcucvTjvP4L7RjB7HYQAhXDNHE36gaUG3tOu2osR1El5crAS8Ug6-7crv30INpZRPUoue3TtSX9zbQHA38e3Q00jU3zaFub27OqbYXgeqapJnL8wXTjOInE3pOVw__" />
+                                        <img class="result-card-icon" src="@/assets/images/cal_tree.png" />
                                         <div class="result-card-data">{{ carbonConversion.trees }}</div>
                                     </div>
-                                    <div class="result-card-desc">trees needed to absorb this CO₂</div>
+                                    <div class="result-card-desc">trees needed to absorb this CO₂ in a year</div>
                                 </div>
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
-                                        <img class="result-card-icon" src="https://media-hosting.imagekit.io/980222a1954b42dd/screenshot_1745847889913.png?Expires=1840455891&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=PkeA8oDRV5lGEg63Hy0W-a79Sdu5BWq8C5l0ujOL3nSYS2IQp6eFXwXXy9tZYRMOSX0wGLNVxIWp4DBl7YuoOoMXfqtP12EFtfGBuop5i7Aq~KMfvzBllSdL4fg5piNZ2tjLs4-YdFsYRL9VKiUq1q18TOzLPkz--Ko4A~3o7VyxXodEQLbO5A3HyBM4sbDtm3koKcXjnNajFunNQGAaag61uNtRbz7q8m7YQ59YS30fjIaal0woKKxq9aAipvW3zmrZMGoJRvhoZblwtjQcSRhGyKpnaHOjjS18gQXp2Vcy6Rzv0NQuP5Xs~adztwpfZfYrstGWHCKalaciX9g47A__" />
+                                        <img class="result-card-icon" src="@/assets/images/cal_plane.png" />
                                         <div class="result-card-data">{{ carbonConversion.flights }}</div>
                                     </div>
-                                    <div class="result-card-desc">flights from Melbourne to Sydney</div>
+                                    <div class="result-card-desc">flights(CO₂ generated) from Melbourne to Sydney</div>
                                 </div>
                             </div>
                             <div class="result-cards-row">
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
-                                        <img class="result-card-icon" src="https://media-hosting.imagekit.io/0ff4a1d77ad04f57/screenshot_1745847988750.png?Expires=1840455990&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=gawox801oAutoUggpYX1H4qQQznnpe9jD23ZAAcxknGRUCkXfO1k1eUTol2sIJV-uM6cMogmeb0dU33kEzSwHDz-Kcem5YBjeHFr8uXWBCqAcq7SHtxSQaSMwI9jogiFJNBX6NvaLOhHZxCHCZpFLp~15BHm5zNeu5JSMcrUWQCRFepyMIHvn8cRfJvDV4ditle8Y8KgpuiKg4gAcy2KarHtQiF0IYIu5UI2pSGS-PB8t2XuqSp1oO7lxDOyY2YROg8HJOOZB6w-Mskm6t1OpbMVzVsv0FDDCwW0rYjTNrGQwUYJorq4n2SL8hwY4RiAfMRXWXZ4cm2bdT0ptScJxw__"/>
+                                        <img class="result-card-icon" src="@/assets/images/cal_ballon.png"/>
                                         <div class="result-card-data">{{ carbonConversion.ballons }}</div>
                                     </div>
-                                    <div class="result-card-desc">hot air balloons full of carbon</div>
+                                    <div class="result-card-desc">hot air balloons full of CO₂</div>
                                 </div>
                                 <div class="result-card">
                                     <div class="result-card-icon-row">
-                                        <img class="result-card-icon" src="https://media-hosting.imagekit.io/4493558231b5415c/screenshot_1745848014600.png?Expires=1840456016&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=p30Eg4uLm6gbHE4J2pZ7YA-g7qSZdXEycib0zSBsRAP50EIlZ6wa1GhgsWHONBUTj3AFEvYozQQ43gCQYSscfVjaaE9ZqtIa0yiYbABqCGbQowPeK1k6DqWGgilyG8C6JsdBbV9LQywP5QemC56n5XKh6hbldkvSfpvAOBHzvZTk~snHqAlwnIv2NIUmQY2v2~BFfJk2cQOaoh9V9IkbxlDCOCQt5383T2Cu9yJfBVirPNht428PLoVEQTRKHR-zjLlln49dZnokxxBQRzuslYn854~Z9oLnfOszIAy66npKp-VGAwF~DLHzARB-JwDyrBKgx4ZjxQCgY8Mpy-tVbw__"/>
+                                        <img class="result-card-icon" src="@/assets/images/cal_car.png"/>
                                         <div class="result-card-data">{{ carbonConversion.kmDriven }}</div>
                                     </div>
-                                    <div class="result-card-desc">km driven in a petrol car</div>
+                                    <div class="result-card-desc">km driven in a petrol car(CO₂ generated)</div>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +269,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="button-box">
@@ -255,8 +285,8 @@
                 </div>
             </div>
         </div>
-
     </div>
+
 </template>
 
 <script setup>
@@ -283,7 +313,6 @@ const displayLabel = computed(() => {
       return highest.value; // fallback to original key
   }
 });
-
 
 
 const carbonAdvice = ref({
@@ -333,6 +362,43 @@ const formDataTwo = ref({
 const formDataThree = ref({
     recycleNewspaper: false,
     recycleAluminum: false
+});
+
+const adjustedValues = ref({
+  electric: 0,
+  gas: 0,
+  oil: 0,
+  mileage: 0,
+  flight: 0,
+  flights: 0
+});
+
+adjustedValues.value = {
+  electric: Number(finalFormData.value.electric || 0),
+  gas: Number(finalFormData.value.gas || 0),
+  oil: Number(finalFormData.value.oil || 0),
+  mileage: Number(finalFormData.value.mileage || 0),
+  flight: Number(finalFormData.value.flight || 0),
+  flights: Number(finalFormData.value.flights || 0)
+};
+
+
+
+const adjustedFootprint = computed(() => {
+  let total = 0;
+  total += adjustedValues.value.electric * 105;
+  total += adjustedValues.value.gas * 105;
+  total += adjustedValues.value.oil * 113;
+  total += adjustedValues.value.mileage * 0.79;
+  total += adjustedValues.value.flight * 1100;
+  total += adjustedValues.value.flights * 4000;
+  total += finalFormData.value.recycleNewspaper ? 184 : 0;
+  total += finalFormData.value.recycleAluminum ? 166 : 0;
+  return Math.round(total * 100 * 0.000453592) / 100;
+});
+
+const carbonSaved = computed(() => {
+  return Math.max(0, calculateCarbonFootprint() - adjustedFootprint.value);
 });
 
 const submittedCards = ref([]);
@@ -634,9 +700,6 @@ function handleBoolYes2() {
 function handleBoolNo2() {
     formDataThree.value.recycleAluminum = false;
 }
-
-
-
 
 </script>
 
@@ -1070,23 +1133,19 @@ input[type="text"]:focus {
 .personalized-text-container{
     margin: 20px;
 }
-/* 
-<div class="result-cards">
-                            <div class="result-card-row">
-                                <div class="result-card">
-                                    <div class="result-card-icon-row">
-                                        <div class="result-card-icon"></div>
-                                        <div class="result-card-data"></div>
-                                    </div>
-                                    <div class="result-card-desc"></div>
-                                </div>
-                                <div class="result-card">
-                                    <div class="result-card-icon-row">
-                                        <div class="result-card-icon"></div>
-                                        <div class="result-card-data"></div>
-                                    </div>
-                                    <div class="result-card-desc"></div>
-                                </div>
-                            </div> */
+
+/* .slider-adjust-container {
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  padding: 30px;
+  margin-top: 40px;
+}
+.slider-adjust-container h3 {
+  margin-bottom: 20px;
+}
+.slider-adjust-container label {
+  font-weight: 600;
+} */
+
 
 </style>

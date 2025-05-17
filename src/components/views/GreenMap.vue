@@ -25,8 +25,8 @@
 <!-- First Row -->
 <div class="row justify-content-center mb-4 top-custom" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
-    <h1>Let's discover parks and gardens in melbourne city!</h1>
-    <p> (✅Hint) Click on the marker and press navigate to navigate to the park!</p>
+    <h1>Find nearby green spaces!</h1>
+    <p>Find green spaces by size or distance!</p>
   </div>
 </div>
 

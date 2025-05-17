@@ -26,7 +26,9 @@
 <div class="row justify-content-center mb-4 top-custom" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
     <h1>Find nearby green spaces!</h1>
-    <p>Find green spaces by size or distance!</p>
+    <p>Find green spaces by <span class="highlight-desc">size</span> or <span class="highlight-desc">distance</span>!
+</p>
+
   </div>
 </div>
 
@@ -837,6 +839,15 @@ font-family: Garamond, serif;
 @keyframes spin {
 0% { transform: rotate(0deg); }
 100% { transform: rotate(360deg); }
+}
+
+
+.highlight-desc {
+  color: #75BE3A;  /* Green color */
+  font-weight: bold;
+  background-color: #e0f5d1;  /* Light green background */
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
 

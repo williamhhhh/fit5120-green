@@ -23,7 +23,7 @@
 <!-- Map Container -->
 <div class="container">
 <!-- First Row -->
-<div class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
+<div class="row justify-content-center mb-4 top-custom" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
     <h1>Let's discover parks and gardens in melbourne city!</h1>
     <p> (✅Hint) Click on the marker and press navigate to navigate to the park!</p>
@@ -64,10 +64,20 @@
         <option value="5000">small</option>
       </select></div>
       </div>
-      
-      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif;">
+
+      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif; width: 240px;">
         Load Green Spaces
       </button>
+
+      <div class="row justify-content-center" style="margin-top: 30px;">
+        <div class="col-6 text-center">
+          <h3 style="margin-top: 30px; font-family: Garamond, serif;">Get some personal plant advice➡️</h3>
+        </div>
+        <div class="col-6 text-center">
+          <button @click="navigateToChat" class="btn-load" style="margin-top: 40px; font-family: Garamond, serif; ">Chat with Green specialist</button>
+        </div>  
+      </div>
+    
     </div>
 
     <div class="col-12 col-md-8 col-lg-6">
@@ -75,15 +85,6 @@
         <div id="map" class="map-container"></div>
       </div>
     </div>
-  </div>
-
-  <div class="row justify-content-center" style="margin-top: 30px;">
-    <div class="col-6 col-md-8 col-lg-6 text-center">
-      <h3 style="margin-top: 30px; font-family: Garamond, serif;">Want to grow plants for yourself? Click to to find out how!➡️</h3>
-    </div>
-    <div class="col-6 col-md-6 col-lg-6 text-center">
-      <button @click="navigateToChat" class="btn-load" style="margin-top: 20px; font-family: Garamond, serif; ">Chat with Green specialist</button>
-    </div>  
   </div>
 
 </div>
@@ -626,7 +627,7 @@ color: #fff;
 border: none;
 border-radius: 20px;
 height: 60px;
-width: 250px;
+width: 200px;
 transform: scale(1);
 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 transition: transform 0.3s ease, background-color 0.3s ease;

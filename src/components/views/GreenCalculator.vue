@@ -1,7 +1,7 @@
 <template>
     <div class="container">
     <!-- First Row -->
-        <div v-if="currentStep != 4" class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
+        <div v-if="currentStep != 4" class="row justify-content-center mb-4 top-custom" style="padding-top: 40px;">
             <div class="col-12 col-md-10 col-lg-10 text-center">
                 <h1 class="title">Calculate Your Carbon Footprint</h1>
             </div>

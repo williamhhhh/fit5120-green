@@ -2,7 +2,7 @@
     <div class="plant-app">
       <header class="fade-in">
         <h1>🌞 Plant Assistant 💦</h1>
-        <p>Select your plant conditions to get care advice!</p>
+        <p>Customize your personalized plant!</p>
       </header>
   
       <!-- Condition selection area -->
@@ -11,8 +11,8 @@
           <label>🌞 Sunlight</label>
           <select v-model="sunlight">
             <option value="">Please select</option>
-            <option>Full sun</option>
-            <option>Partial sun</option>
+            <option>Full sun(8 hours per day)</option>
+            <option>Partial sun(4 hours per day)</option>
             <option>Bright indirect</option>
             <option>Shade tolerant</option>
           </select>
@@ -46,6 +46,17 @@
           <div class="markdown-box" v-html="parseMarkdown(card)"></div>
         </div>
       </section>
+      <div v-if="gptCards.length" class="carbon-footprint-nav-area">
+        <div class="fun-tips">
+          🌍 There's more to green living than keeping plants!  
+          <span class="fun-highlight">Click the button below to see how amazing your carbon footprint is!</span>
+          <br>
+          🚴‍♂️ How much more CO₂ can be reduced? Go ahead and explore!
+        </div>
+        <router-link to="/GreenCalculator" class="carbon-nav-btn">
+          🚀 Understanding my carbon footprint
+        </router-link>
+      </div>
   
       <!-- Plant info cards (shown only if not queried yet) -->
       <section class="plant-cards slide-in-left" v-if="!gptCards.length">
@@ -86,7 +97,7 @@
     loading.value = true
     gptCards.value = []
     const prompt = `
-  According to the following plant growing conditions, please tell me in the form of a card about the recommended plants for indoor growing and their characteristics, and give me advice on their care with point-by-point descriptions, and please be informative and use markdown formatting. And important just give me the content of the card, not the summary information and General Care Tips and all general summary provideby you and Important Note, Only content include Characteristics and Care!!!!!!Answers are formatted in the same font as the previous entry.
+  According to the following plant growing conditions, please tell me in the form of a card about the recommended plants for indoor growing and their characteristics, and give me advice on their care with point-by-point descriptions, and please be informative and use markdown formatting. And only give four options. And important just give me the content of the card, not the summary information and General Care Tips and all general summary provideby you and Important Note, Only content include Characteristics and Care!!!!!!Answers are formatted in the same font as the previous entry.
   - Sunlight: ${sunlight.value}
   - Watering frequency: ${watering.value}
   - Soil type: ${soil.value}
@@ -166,7 +177,7 @@ function parseMarkdown(md) {
     margin: auto;
     position: relative;
     min-height: 100vh;
-    padding-top: 100px;
+    padding-top: 20px;
   }
   header {
     text-align: center;
@@ -349,5 +360,60 @@ function parseMarkdown(md) {
 .not-bold {
   font-weight: normal !important;
   color: #2c5040;
+}
+.carbon-footprint-nav-area {
+  margin: 35px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.fun-tips {
+  background: #fffde7;
+  border: 1.5px dashed #7abd4c;
+  border-radius: 10px;
+  color: #347d3d;
+  font-size: 1.07rem;
+  padding: 18px 22px 12px 22px;
+  margin-bottom: 19px;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 2px 8px #e4fde2a0;
+  animation: fun-tips-pop 1s ease;
+}
+
+@keyframes fun-tips-pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  80% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.fun-highlight {
+  color: #f58d39;
+  font-weight: 600;
+  font-size: 1.12em;
+  margin-left: 2px;
+}
+
+.carbon-nav-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #90cf8e 0%, #7abd4c 100%);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 30px;
+  padding: 14px 38px;
+  box-shadow: 0 2px 14px #a5d6a740;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.18s;
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+.carbon-nav-btn:hover {
+  background: linear-gradient(90deg, #7abd4c 0%, #90cf8e 100%);
+  transform: scale(1.05) rotate(-2deg);
+  color: #fff;
+  text-decoration: none;
 }
   </style>

@@ -15,6 +15,9 @@
                 <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
               </li>
               <li class="nav-item">
+                <router-link to="/info" class="nav-link" active-class="active">What is Greening?</router-link>
+              </li>
+              <li class="nav-item">
                 <router-link to="/GreenMap" class="nav-link" active-class="active">Discover Green Space</router-link>
               </li>
               <li class="nav-item">

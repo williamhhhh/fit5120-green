@@ -7,6 +7,7 @@ import GreenCalculator from '@/components/views/GreenCalculator.vue'
 import StoryTelling from '@/components/views/StoryTelling.vue'
 import LoginPage from '../components/views/LoginPage.vue'
 import { getAuth } from 'firebase/auth'
+import InfoPage from '@/components/views/InfoPage.vue'
 
 const routes = [
   {
@@ -14,6 +15,12 @@ const routes = [
     name: 'Login',
     component: LoginPage,
     meta: { hideHeader: true }
+  },
+  {
+    path: '/info',
+    name: 'InfoPage',
+    component: InfoPage,
+    meta: { hideHeader: false }
   },
   {
     path: '/home',

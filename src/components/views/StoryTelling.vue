@@ -559,11 +559,12 @@ onVideoClick() {
   max-width: 100%;
   min-height: 100vh;
   background: linear-gradient(to bottom right, #75be3a, #f0f0f0);
+  background: none;
   min-height: 100vh;
   background-size: cover;
   background-attachment: fixed;
   box-sizing: border-box;
-  padding-top: 100px;
+  padding-top: 20px;
   padding-bottom: 20px;
 }
 

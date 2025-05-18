@@ -5,25 +5,25 @@
         <div class="row align-items-center justify-content-between">
 
           <!-- Left Section: Logo + Nav -->
-          <div class="col-8 col-md-10 d-flex align-items-center header-left">
-            <div class="title-text me-3">Cool the City</div>
+          <div class="col-8 col-md-10 d-flex align-items-center header-left" style="position:relative;">
+            <img src="@/assets/images/logonv.png" alt="Logo" class="logo-absolute" />
             <!-- <img src="../assets/logo.png" alt="Logo" class="logo" /> -->
             <!-- Desktop Nav -->
-            <ul class="d-none d-md-flex list-unstyled mb-0">
+            <ul class="d-none d-md-flex flex-row list-unstyled mb-0">
               <li class="nav-item">
                 <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
+                <router-link to="/GreenMap" class="nav-link" active-class="active">Discover Green Space</router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
+                <router-link to="/Chat" class="nav-link" active-class="active">Make your own Green Space</router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
+                <router-link to="/GreenCalculator" class="nav-link" active-class="active">Know Your Carbon Footprint</router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/StoryTelling" class="nav-link" active-class="active">Story</router-link>
+                <router-link to="/StoryTelling" class="nav-link" active-class="active">Daniel's Life</router-link>
               </li>
             </ul>
           </div>
@@ -216,18 +216,22 @@ watch(
 
   }
 
-  .nav-item{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 14px 22px;
-    gap: 12px;
+ul.d-md-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  margin-left: 90px;
+  margin-right: 0;
+  padding: 0;
+}
 
-    margin: 0 auto;
-    width: 100px;
-    height: 40px;
-  }
+.nav-item {
+  flex: 1 1 0; 
+  text-align: center;
+}
 
   .nav-link {
       display: flex;
@@ -244,7 +248,6 @@ watch(
       /* identical to box height */
 
       margin: 0 auto;
-      width: 100px;
       height: 40px;
 
       /* background: #90CF8E; */
@@ -383,6 +386,24 @@ watch(
     transform: rotate(0.16deg);
     width:100%;
     justify-content: space-between;
+}
+
+.logo {
+  height: 700px;
+  width: auto;
+  margin-right: 32px;
+  flex-shrink: 0;
+  position: relative;
+  top: 5px;
+}
+.logo-absolute {
+  position: absolute;
+  left: -63px;
+  top: -78px;
+  height: 200px;
+  width: auto;
+  z-index: 1000;
+  pointer-events: none;
 }
 
 </style>

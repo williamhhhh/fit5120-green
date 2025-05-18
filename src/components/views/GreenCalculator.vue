@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div v-if="currentStep == 1" class="row justify-content-center mb-4 top-custom" style="padding-top: 120px;">
+        <div v-if="currentStep == 1" class="row justify-content-center mb-4 top-custom" style="padding-top: 50px;">
             <div class="col-8 col-md-10 col-lg-10">
                 <div class="selector-wrapper zoom-in">
                     <div id="selector" class="selector-container">
@@ -734,8 +734,8 @@ function handleBoolNo2() {
     padding: 0px;
     gap: 8px;
 
-    width: 72px;
-    height: 72px;
+    width: 50px;
+    height: 50px;
 
     background: #f4f4f4;
     border-radius: 100px;

@@ -1,7 +1,7 @@
 <template>
   
   <div class="container-fluid">
-    <div class="desc-container col-md-12 col-lg-12">
+    <div class="desc-container col-12 col-md-12 col-lg-12">
       <img src="@/assets/images/green_city.jpeg" alt="green" class="green-city">
       <div class="title-container col-md-8 col-lg-8">
         <div class="cycle-container">
@@ -26,7 +26,7 @@
   <div class="container-fluid graph-section">
     <div class="graph-section-title-container row">
         <div class="graph-section-title-text col-8 col-md-12">
-          <div>Melbourne had increased 6 degrees in recent years</div>
+          <div class >Melbourne had increased <span class="heat-highlight">6 degrees</span> in recent years</div>
         </div>
     </div>
 
@@ -37,9 +37,9 @@
 
       <div class="col-12 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
-        <div class="graph-description">
-          <p>The overall gradient trends show how temperature had been going up in melbourne in recent years</p>
-        </div>
+        <!-- <div class="graph-description">
+          <p>The overall gradient trends of melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each months show how temperature had been going up in melbourne in recent years</p>
+        </div> -->
         <div class="button-cool-container">
           <button class="button-cool">
           <router-link to="/GreenMap" class="cool">Let's tackle it!</router-link>
@@ -48,7 +48,7 @@
       </div>
 
       <div class="col-12 col-md-7 chart-container">
-        <canvas ref="tempChart" id="tempChart" width="80%" position="relative"></canvas>
+        <canvas ref="tempChart" id="tempChart" position="relative"></canvas>
         <div class="year-gradient-legend">
           <span>2024</span>
           <div class="year-gradient-bar"></div>
@@ -67,28 +67,25 @@
       </div>
 
       <div class="col-12 col-md-3">
-        <div class="graph-title">We are still a long way to greenhouse gas natural</div>
-        <div class="graph-description">
-          <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon natural</p>
-        </div>
+        <div class="graph-title">Do you know that we are still a long way to greenhouse gas neutral?</div>
+        <!-- <div class="graph-description">
+          <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon neutral</p>
+        </div> -->
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/GreenMap" class="cool">Calculate your carbon footprint</router-link>
+          <router-link to="/GreenCalculator" class="cool">Let's tackle it!</router-link>
           </button>
         </div>
       </div>
 
       <div class="col-12 col-md-7 chart-container">
-        <canvas ref="greenChart" id="greenChart" width="80%" position="relative"></canvas>
+        <canvas ref="greenChart" id="greenChart" position="relative"></canvas>
       </div>
 
       <div class="col-12 col-md-1 arrow-container">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
     </div>
-
-
-
   </div>
     
 </template>
@@ -263,23 +260,16 @@ watch(isTemp, async (newVal) => {
     filter: brightness(50%);
   }
 
-  .title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-self: center;
-    width: 600px;
-    padding: 0px;
-    gap: 16px;
-    z-index: 100;
-    position: absolute;
-    margin-bottom: 150px;
-    /* width: 724px;
-    height: 265px;
-    left: 442px;
-    top: 326px; */
 
-  }
+  .title-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+  z-index: 100;
+}
+
 
   .tittle-start {
     display: flex;
@@ -384,6 +374,13 @@ watch(isTemp, async (newVal) => {
 }
 
 
+.graph-section-title-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .graph-section-title-text{
   margin-top: 40px;
   margin-bottom: 20px;
@@ -447,6 +444,7 @@ watch(isTemp, async (newVal) => {
   justify-content: center;
   padding: 0px;
   gap: 10px;
+  margin-top: 60px;
 
 }
 
@@ -547,6 +545,68 @@ watch(isTemp, async (newVal) => {
   transform: scale(1.2);
   transition: background 0.5s ease;
 }
+
+.highlight-desc {
+  color: #75BE3A;  /* Green color */
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+
+@media (max-width: 768px) {
+  .cycle {
+    display: none;
+  }
+
+  .ballon {
+    display: none;
+  }
+  .title {
+    font-size: 36px;
+    text-align: center;
+    line-height: 1.2;
+    width: 100%;
+  }
+
+  .title-description {
+    font-size: 16px;
+    line-height: 1.4;
+    width: 100%;
+    text-align: center;
+  }
+
+  .button-get-started {
+    width: 90%;
+  }
+
+  .graph-section-title-text{
+    font-size: 32px;
+  }
+
+  .year-gradient-legend{
+    display: none;
+  }
+
+  .desc-container {
+    min-height: auto;
+  }
+}
+
+.heat-highlight {
+  color: #ff2e39;  /* Green color */
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+canvas#greenChart {
+  width: 100% !important;
+  height: 400px !important;
+}
+
 
 
   </style>

@@ -223,7 +223,7 @@ ul.d-md-flex {
   align-items: center;
   flex: 1;
   min-width: 0;
-  margin-left: 90px;
+  margin-left: 120px;
   margin-right: 0;
   padding: 0;
 }

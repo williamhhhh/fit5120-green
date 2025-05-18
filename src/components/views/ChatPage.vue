@@ -1,7 +1,7 @@
 <template>
     <div class="plant-app">
       <header class="fade-in">
-        <h1>🌞 Plant Assistant 💦</h1>
+        <h1>🌞 Recommended plants for me to grow indoors? 💦</h1>
         <p>Customize your personalized plant!</p>
       </header>
   

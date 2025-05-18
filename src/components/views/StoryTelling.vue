@@ -9,7 +9,21 @@
     <transition name="title-fade">
       <h1 class="title" v-if="!journeyStarted">A Day in the Life of Daniel</h1>
     </transition>
-    <div class="content">
+    <div class="content video-flex-row" v-if="!journeyStarted">
+      <div class="video-area">
+        <div class="video-container">
+          <iframe
+            class="video"
+            src="https://www.youtube.com/embed/mwzAht335zA"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="video-copyright">
+          © Video from <a href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+        </div>
+      </div>
       <transition name="character-move">
         <div
           v-if="showCharacter"
@@ -22,7 +36,7 @@
             src="https://images.squarespace-cdn.com/content/v1/55947ac3e4b0fa882882cd65/1487641787332-9F8W4SAPWAFBHXSM46V4/NS_0148.png?format=750w"
             alt="Cartoon Character"
           />
-          <div v-if="!journeyStarted" class="bubble-link">
+          <div class="bubble-link">
             <div class="bubble small" v-show="bubbleStep >= 1"></div>
             <div class="bubble medium" v-show="bubbleStep >= 2"></div>
             <div class="bubble large" v-show="bubbleStep >= 3">
@@ -31,37 +45,6 @@
               </span>
             </div>
           </div>
-        </div>
-      </transition>
-      <transition name="fade">
-        <div class="video-container" v-if="!journeyStarted" :class="{ 'video-jump': videoShouldJump }" @click="onVideoClick">
-          <iframe
-            class="video"
-            src="https://www.youtube.com/embed/mwzAht335zA"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-          <transition name="tip-person-fade">
-            <div
-              v-if="showTipPerson"
-              class="tip-person-on-video"
-              :class="{ 'tip-person-animate': tipPersonEntered }"
-            >
-              <img
-                class="tip-person-img"
-                src="https://images.squarespace-cdn.com/content/v1/55947ac3e4b0fa882882cd65/1487641701189-HLMRBK62ZRZATDBHME9O/NS_0098.png?format=500w"
-                alt="tip person"
-              />
-              <div class="tip-bubble-link tip-bubble-diag">
-                <div class="bubble small" v-show="bubbleStep2 >= 1"></div>
-                <div class="bubble medium" v-show="bubbleStep2 >= 2"></div>
-                <div class="bubble large" v-show="bubbleStep2 >= 3">
-                  <span class="bubble-text2">Watch video to know what sustainable is!</span>
-                </div>
-              </div>
-            </div>
-          </transition>
         </div>
       </transition>
     </div>
@@ -829,20 +812,44 @@ onVideoClick() {
 }
 
 .video-container {
-  width: 40%;
-  padding-top: 40%;
+  width: 800px;
+  height: 450px;
+  max-width: 100vw;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px #0002;
+  margin-bottom: 8px;
   position: relative;
-  min-width: 200px;
-  min-height: 180px;
-  position: relative;
-  z-index: 2;
+  display: block;
 }
 .video {
-  position: absolute;
-  top: 70px;
-  left: 0;
   width: 100%;
-  height: 70%;
+  height: 100%;
+  border-radius: 0;
+  min-height: 180px;
+}
+.video-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end; 
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+@media (max-width: 900px) {
+  .video-container {
+    width: 98vw;
+    height: calc(98vw * 0.5625); /* 16:9 比例 */
+    min-width: 0;
+    min-height: 120px;
+  }
+  .video-flex-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
 }
 
 .start-button {
@@ -1321,4 +1328,6 @@ onVideoClick() {
   background-color: #ffa726;
   transform: scale(1.06);
 }
+
+
 </style>

@@ -31,11 +31,16 @@
     </div>
 
     <div v-if="isTemp" class="row graph-container animate__animated animate__fadeInRight">
-      <div class="col-12 col-md-1 arrow-container">
+
+      <div class="col-1 col-md-1 arrow-container-left"  @click="transistCard()">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+      </div>
+
+      <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
-      <div class="col-12 col-md-3">
+      <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
         <!-- <div class="graph-description">
           <p>The overall gradient trends of melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each months show how temperature had been going up in melbourne in recent years</p>
@@ -47,6 +52,10 @@
         </div>
       </div>
 
+      <div class="col-1 col-md-1 arrow-container-right"  @click="transistCard()">
+        <img src="@/assets/images/right.png" alt="arrow" class="arrow">
+      </div>
+
       <div class="col-12 col-md-7 chart-container">
         <canvas ref="tempChart" id="tempChart" position="relative"></canvas>
         <div class="year-gradient-legend">
@@ -56,17 +65,22 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-1 arrow-container"  @click="transistCard()">
+      <div class="col-1 col-md-1 arrow-container"  @click="transistCard()">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow">
       </div>
     </div>
 
     <div v-if="!isTemp" class="row graph-container animate__animated animate__fadeInRight">
-      <div class="col-12 col-md-1 arrow-container">
+
+      <div class="col-1 col-md-1 arrow-container-left"  @click="transistCard()">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow">
+      </div>
+
+      <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
-      <div class="col-12 col-md-3">
+      <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that we are still a long way to greenhouse gas neutral?</div>
         <!-- <div class="graph-description">
           <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon neutral</p>
@@ -78,11 +92,16 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-7 chart-container">
+      <div class="col-1 col-md-1 arrow-container-right"  @click="transistCard()">
+        <img src="@/assets/images/right.png" alt="arrow" class="arrow">
+      </div>
+
+
+      <div class="col-10 col-md-7 chart-container">
         <canvas ref="greenChart" id="greenChart" position="relative"></canvas>
       </div>
 
-      <div class="col-12 col-md-1 arrow-container">
+      <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
     </div>
@@ -110,6 +129,7 @@ const isTemp = ref(true)
 const transistCard = () => {
   isTemp.value = !isTemp.value
 }
+
 const scrollToSection = () => {
   const section = document.querySelector('.graph-section')
   if (section) {
@@ -540,6 +560,22 @@ watch(isTemp, async (newVal) => {
   height: 61px;
 }
 
+.arrow-container-right {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: none;
+}
+
+.arrow-container-left {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: none;
+}
+
 .arrow:hover {
   cursor: pointer;
   transform: scale(1.2);
@@ -555,7 +591,66 @@ watch(isTemp, async (newVal) => {
 }
 
 
+
+/* <div class="container-fluid graph-section">
+    <div class="graph-section-title-container row">
+        <div class="graph-section-title-text col-8 col-md-12">
+          <div class >Melbourne had increased <span class="heat-highlight">6 degrees</span> in recent years</div>
+        </div>
+    </div>
+
+    <div v-if="isTemp" class="row graph-container animate__animated animate__fadeInRight">
+      <div class="col-12 col-md-1 arrow-container">
+        <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
+      </div>
+
+      <div class="col-12 col-md-3">
+        <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
+        <!-- <div class="graph-description">
+          <p>The overall gradient trends of melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each months show how temperature had been going up in melbourne in recent years</p>
+        </div> -->
+        <div class="button-cool-container">
+          <button class="button-cool">
+          <router-link to="/GreenMap" class="cool">Let's tackle it!</router-link>
+          </button>
+        </div>
+      </div> */
+
 @media (max-width: 768px) {
+
+  .graph-title {
+    font-size: 15px;
+    line-height: 1.2;
+    width: 100%;
+  }
+
+  .graph-section-title-text {
+    font-size: 15px;
+    line-height: 1.2;
+    width: 100%;
+  }
+  .arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .arrow-container{
+    display: none;
+  }
+
+  .arrow-container-left{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .arrow-container-right{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
   .cycle {
     display: none;
   }

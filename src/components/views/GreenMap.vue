@@ -26,7 +26,7 @@
 <div class="row justify-content-center mb-4" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
     <h1 style="white-space:nowrap;">Find nearby green spaces!</h1>
-    <p>Find green spaces by <span class="highlight-desc">size</span> or <span class="highlight-desc">distance</span>!
+    <p>Find green spaces by <span class="highlight-desc">size</span> and <span class="highlight-desc">distance</span>!
 </p>
 
   </div>

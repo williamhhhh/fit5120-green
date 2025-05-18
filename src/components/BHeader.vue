@@ -1,5 +1,6 @@
 <template>
-  <transition name="nav-animation" mode="out-in">
+  <!-- <transition name="nav-animation" mode="out-in"> -->
+    
     <div class="container-header" v-if="isNavVisible">
       <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
@@ -49,23 +50,38 @@
         </div>
       </div>
 
-      <!-- Mobile Menu Dropdown -->
-      <div v-if="isMenuOpen" class="dropdown-menu-mobile d-md-none">
-        <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
-        <router-link to="/reminder" class="nav-link" active-class="active">Reminder</router-link>
-        <router-link to="/GreenAdvice" class="nav-link" active-class="active">Advice</router-link>
-        <router-link to="/GreenMap" class="nav-link" active-class="active">Map</router-link>
-        <router-link to="/Chat" class="nav-link" active-class="active">Chat</router-link>
-        <router-link to="/GreenCalculator" class="nav-link" active-class="active">Calculator</router-link>
-      </div>
-
       <div class="line-container">
         <div class="line">
         </div>
       </div>
     </div>
 
-  </transition>
+    <!-- Mobile Header -->
+    <div class="container-header-mobile">
+        <!-- mobile layout here -->
+        <div class="mobile-header-top">
+          <img src="@/assets/images/logonv.png" alt="Logo" class="mobile-logo" />
+          <button
+            class="mobile-menu-toggle"
+            @click="isMenuOpen = !isMenuOpen"
+            aria-label="Toggle navigation"
+          >
+            <span v-if="!isMenuOpen" class="hamburger">☰</span>
+            <span v-else>✕</span>
+          </button>
+        </div>
+
+        <div class="mobile-menu" v-if="isMenuOpen">
+          <router-link to="/home" class="nav-link" @click="isMenuOpen = false">Home</router-link>
+          <router-link to="/GreenMap" class="nav-link" @click="isMenuOpen = false">Discover Green Space</router-link>
+          <router-link to="/Chat" class="nav-link" @click="isMenuOpen = false">Make Green Space</router-link>
+          <router-link to="/GreenCalculator" class="nav-link" @click="isMenuOpen = false">Know Your Carbon Footprint</router-link>
+          <router-link to="/StoryTelling" class="nav-link" @click="isMenuOpen = false">Daniel's Life</router-link>
+        </div>
+        
+      </div>
+
+  <!-- </transition> -->
 </template>
 
 
@@ -119,7 +135,7 @@ watch(
 }
 
 
-  @media (min-width: 768px){
+
   .container-header {
     flex-direction: column;
     justify-content: center;
@@ -135,7 +151,7 @@ watch(
     /* Note: backdrop-filter has minimal browser support */
     z-index: 100;
   }
-  }
+
 
   @media (max-width: 767px){
   .container-header {
@@ -161,15 +177,6 @@ watch(
   }
   }
 
-  .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: px;
-    gap: 30%;
-    width: 100%;
-  }
 
   .header-left {
     display: flex;
@@ -404,5 +411,81 @@ ul.d-md-flex {
   z-index: 1000;
   pointer-events: none;
 }
+
+
+
+
+
+
+/* Default: show desktop, hide mobile */
+.container-header {
+  display: flex;
+}
+
+.container-header-mobile {
+  display: none;
+}
+
+/* Mobile-only styles */
+@media (max-width: 768px) {
+  .container-header {
+    display: none;
+  }
+
+  .container-header-mobile {
+    display: block;
+    background: #E4FDE2;
+    padding: 5px;
+    position: relative;
+  }
+
+  .mobile-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mobile-logo {
+    width: 100px;
+  }
+
+  .mobile-menu-toggle {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #2c7f4b;
+  }
+
+  .hamburger {
+    font-size: 60px;
+  }
+
+  .hamburger:hover {
+    color: #75BE3A;
+    transform: scale(1.5);
+  }
+
+
+  .mobile-menu {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mobile-menu .nav-link {
+    font-size: 18px;
+    font-weight: 600;
+    color: #064612;
+    text-decoration: none;
+  }
+
+  .mobile-menu .nav-link:hover {
+    color: #75BE3A;
+  }
+}
+
+
 
 </style>

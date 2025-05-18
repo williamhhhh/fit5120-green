@@ -111,44 +111,41 @@
         </transition>
       </div>
     </transition>
-<!-- results page -->
-<div v-if="journeyStarted && currentStory >= stories.length" class="story-card-center new-style-card final-result-panel">
-  <h2 class="big-title" style="font-size:2.6rem;margin-bottom:0.7em;">Congratulations!!</h2>
-  <div class="card-desc" style="font-size:1.23rem;font-weight:500;margin-bottom:2.1em;">
-    You helped Daniel make a positive impact on environment by:
+<!-- Results Page -->
+<div v-if="journeyStarted && currentStory >= stories.length" class="result-center-panel">
+  <div class="story-card-center new-style-card final-result-panel">
+    <h2 class="big-title" style="font-size:2.6rem;margin-bottom:0.7em;">Congratulations!!</h2>
+    <div class="card-desc" style="font-size:1.23rem;font-weight:500;margin-bottom:2.1em;">
+      You helped Daniel make a positive impact on environment by:
+    </div>
+    <div class="result-grid">
+      <div class="result-item sun">
+        <div class="result-icon">☀️</div>
+        <div class="result-value">${{ result.energy }}</div>
+        <div class="result-label">Saved per year in energy usage.</div>
+      </div>
+      <div class="result-item temp">
+        <div class="result-icon">🌡️</div>
+        <div class="result-value">{{ result.temp }}</div>
+        <div class="result-label">Temperature reduced in house & city.</div>
+      </div>
+      <div class="result-item co2">
+        <div class="result-icon">🌍</div>
+        <div class="result-value">{{ result.co2 }} tons</div>
+        <div class="result-label">Carbon Emission Reduced</div>
+      </div>
+      <div class="result-item kg">
+        <div class="result-icon">💪</div>
+        <div class="result-value">{{ result.weight }}kg</div>
+        <div class="result-label">Weight loss and calories burned.</div>
+      </div>
+    </div>
   </div>
-  <div class="result-grid">
-    <div class="result-item sun">
-      <div class="result-icon">☀️</div>
-      <div class="result-value">${{ result.energy }}</div>
-      <div class="result-label">Saved per year in energy usage.</div>
-    </div>
-    <div class="result-item temp">
-      <div class="result-icon">🌡️</div>
-      <div class="result-value">{{ result.temp }}</div>
-      <div class="result-label">Temperature reduced in house & city.</div>
-    </div>
-    <div class="result-item co2">
-      <div class="result-icon">🌍</div>
-      <div class="result-value">{{ result.co2 }} tons</div>
-      <div class="result-label">Carbon Emission Reduced</div>
-    </div>
-    <div class="result-item kg">
-      <div class="result-icon">💪</div>
-      <div class="result-value">{{ result.weight }}kg</div>
-      <div class="result-label">Weight loss and calories burned.</div>
-    </div>
-  </div>
+  <button class="back-home-btn" @click="backToHome">
+    <span style="font-size: 1.25em; margin-right: 5px;">🏠</span>
+    Back to Story
+  </button>
 </div>
-<!-- Back button -->
-<button
-  v-if="journeyStarted && currentStory >= stories.length"
-  class="back-home-btn"
-  @click="backToHome"
->
-  <span style="font-size: 1.25em; margin-right: 5px;">🏠</span>
-  Back to Story
-</button>
 
     <transition name="fade">
       <button
@@ -1342,8 +1339,25 @@ h1, h2, h3, h4, h5, h6,
   overflow: hidden;
 }
 
+.result-center-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px; 
+  min-height: 70vh;   
+  padding-bottom: 40px;
+}
+
+.story-card-center.final-result-panel {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  margin-bottom: 32px; 
+}
+
 .back-home-btn {
-  margin: -300px auto 0 auto;
+  margin: 0 auto;
   display: block;
   padding: 15px 38px;
   font-size: 1.15rem;
@@ -1360,6 +1374,4 @@ h1, h2, h3, h4, h5, h6,
   background-color: #ffa726;
   transform: scale(1.06);
 }
-
-
 </style>

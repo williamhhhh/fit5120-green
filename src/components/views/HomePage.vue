@@ -47,7 +47,7 @@
         </div> -->
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/GreenMap" class="cool">Let's tackle it!</router-link>
+          <router-link to="/info" class="cool">Let's tackle it!</router-link>
           </button>
         </div>
       </div>

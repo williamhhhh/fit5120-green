@@ -1,6 +1,6 @@
 <template>
   <!-- <transition name="nav-animation" mode="out-in"> -->
-    
+  <transition name="nav-animation" mode="out-in">
     <div class="container-header" v-if="isNavVisible">
       <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
@@ -54,11 +54,10 @@
       </div>
 
       <div class="line-container">
-        <div class="line">
-        </div>
+        <div class="line"></div>
       </div>
     </div>
-
+    </transition>
     <!-- Mobile Header -->
     <div class="container-header-mobile">
         <!-- mobile layout here -->
@@ -383,18 +382,18 @@ ul.d-md-flex {
   
 }
 
-.line-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+.line-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px; 
 }
 
-.line{
-    border: 0.5px solid #B8B8B8;
-    transform: rotate(0.16deg);
-    width:100%;
-    justify-content: space-between;
+.line {
+  width: 95vw;
+  height: 1px;
+  border-bottom: 1px solid #B8B8B8;
+  background: #B8B8B8;
 }
 
 .logo {

@@ -705,10 +705,10 @@ function handleBoolNo2() {
 
 <style scoped>
 .title{
-    font-family: 'Domaine Display Narrow';
+    font-family: 'DM Serif Display', serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 80px;
+    font-size: 50px;
 }
 
 .container{
@@ -960,7 +960,7 @@ input[type="text"]:focus {
 }
 
 .result-result {
-    font-family: 'Domaine Display Narrow';
+    font-family: 'DM Serif Display', serif;
     font-style: normal;
     font-weight: 600;
     font-size: 88px;
@@ -974,7 +974,7 @@ input[type="text"]:focus {
 }
 
 .result-result-desc{
-    font-family: 'Domaine Display Narrow';
+    font-family: 'DM Serif Display', serif;
     font-style: normal;
     font-weight: 300;
     font-size: 24px;

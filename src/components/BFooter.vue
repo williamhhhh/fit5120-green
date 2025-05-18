@@ -164,12 +164,12 @@
 }
 
 .website-desc{
-    font-family: 'Cera Pro';
-font-style: normal;
-font-weight: 500;
-font-size: 36px;
-line-height: 45px;
-text-transform: uppercase;
+  font-family: 'Cera Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 45px;
+  text-transform: uppercase;
 
 /* black */
 color: #202020;

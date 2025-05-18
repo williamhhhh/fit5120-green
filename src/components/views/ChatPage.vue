@@ -416,4 +416,17 @@ function parseMarkdown(md) {
   color: #fff;
   text-decoration: none;
 }
+
+body, .plant-app {
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+header h1,
+.big-title,
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
   </style>

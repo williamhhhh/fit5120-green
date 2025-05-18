@@ -223,7 +223,7 @@ ul.d-md-flex {
   align-items: center;
   flex: 1;
   min-width: 0;
-  margin-left: 120px;
+  margin-left: 150px;
   margin-right: 0;
   padding: 0;
 }
@@ -240,12 +240,11 @@ ul.d-md-flex {
       align-items: center;
       padding: 14px 22px;
       gap: 12px;
-      font-family: 'Poppins';
+      font-family: 'DM Serif Display', serif;
       font-style: normal;
-      font-weight: 400;
-      font-size: 18px;
+      font-weight: 600;
+      font-size: 20px;
       line-height: 21px;
-      /* identical to box height */
 
       margin: 0 auto;
       height: 40px;

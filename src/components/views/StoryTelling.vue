@@ -533,6 +533,42 @@ onVideoClick() {
 </script>
 
 <style scoped>
+.container, body {
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.title,
+.big-title,
+.question-title {
+  font-family: 'DM Serif Display', serif !important;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.card-desc,
+.card-content,
+.card-options button,
+.options button,
+.pro-tip,
+.pro-tip-text,
+.start-button,
+.back-home-btn,
+.result-label,
+.result-value,
+.result-icon,
+.result-infor-text {
+  font-family: 'DM Sans', Arial, sans-serif !important;
+}
+
+.result-value,
+.progress-bar,
+.step,
+.new-step,
+.next-btn,
+.next-btn2 {
+  font-family: 'DM Serif Display', serif !important;
+}
 
 .container {
   text-align: center;
@@ -554,8 +590,7 @@ onVideoClick() {
 .title {
   font-size: 50px;
   margin-bottom: 0px;
-  font-family: 'Georgia', serif;
-  font-weight: 700;
+  font-weight: 600;
   color: #333;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -924,7 +959,6 @@ onVideoClick() {
 
 .big-title {
   font-size: 42px;
-  font-family: 'Georgia', serif;
   color: #165c22;
   margin-bottom: 16px;
   font-weight: bold;
@@ -934,7 +968,6 @@ onVideoClick() {
 
 .card-desc {
   font-size: 20px;
-  font-family: 'Arial', sans-serif;
   color: #222;
   margin-bottom: 32px;
   font-weight: bold;
@@ -1058,7 +1091,6 @@ onVideoClick() {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 12px;
-  font-family: 'Georgia', serif;
   color: #165c22;
 }
 .question-desc {

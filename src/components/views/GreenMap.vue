@@ -25,7 +25,7 @@
 <!-- First Row -->
 <div class="row justify-content-center mb-4" style="padding-top: 40px;">
   <div class="col-12 col-md-10 col-lg-4 text-center">
-    <h1>Find nearby green spaces!</h1>
+    <h1 style="white-space:nowrap;">Find nearby green spaces!</h1>
     <p>Find green spaces by <span class="highlight-desc">size</span> or <span class="highlight-desc">distance</span>!
 </p>
 
@@ -67,13 +67,13 @@
       </select></div>
       </div>
 
-      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: Garamond, serif; width: 300px;">
+      <button  @click="handleLoadClick" class="btn-load fade-in" style="margin-top: 50px; font-family: 'DM Serif Display', serif; width: 300px;">
         Load Green Spaces
       </button>
 
       <div class="row justify-content-center" style="margin-top: 30px;">
         <div class="col-6 text-center">
-          <h3 style="margin-top: 30px; font-family: Garamond, serif;">Get some personal plant advice➡️</h3>
+          <h3 style="margin-top: 30px; font-family: 'DM Serif Display', serif;">Get some personal plant advice➡️</h3>
         </div>
         <div class="col-6 text-center">
           <button @click="navigateToChat" class="btn-load" style="margin-top: 40px; font-family: Garamond, serif; ">Chat with Green specialist</button>
@@ -555,6 +555,21 @@ map.setZoom(14)
 <style scoped>
 @import 'https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css';
 
+.container, body {
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.modal-content h2 {
+  font-family: 'DM Serif Display', serif !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+p, ul, ol, li, button, .btn-load, .guide-button, select, .loading-text, .highlight-desc {
+  font-family: 'DM Sans', Arial, sans-serif !important;
+}
+
 .map-container {
 width: 100%;
 height: 460px;
@@ -584,9 +599,6 @@ box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.2);
 padding: 20px;
 }
 
-h1 {
-font-family: Garamond, serif;
-}
 
 .btn-navigator {
 background: #75BE3A;
@@ -688,7 +700,7 @@ font-size: 16px;
 }
 .vibrate {
 display: inline-block;
-font-family: Garamond, serif;
+font-family: 'DM Serif Display', serif;
 font-size: 2rem;
 font-weight: bold;
 animation: vibrate 0.7s linear infinite;
@@ -702,31 +714,6 @@ animation: swing-in-top-fwd 4.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
 animation: swing-out-top-fwd 1s cubic-bezier(0.600, -0.280, 0.735, 0.045) both;
 }
 
-/* @keyframes swing-in-top-fwd {
-0% {
-  transform: rotateX(-100deg);
-  transform-origin: top;
-  opacity: 0;
-}
-100% {
-  transform: rotateX(0deg);
-  transform-origin: top;
-  opacity: 1;
-}
-}
-
-@keyframes swing-out-top-fwd {
-0% {
-  transform: rotateX(0deg);
-  transform-origin: top;
-  opacity: 1;
-}
-100% {
-  transform: rotateX(-100deg);
-  transform-origin: top;
-  opacity: 0;
-}
-} */
 
 .modal {
 position: fixed;
@@ -772,13 +759,6 @@ padding: 8px 15px;
 cursor: pointer;
 }
 
-p{
-font-family: Garamond, serif;
-}
-
-h5{
-font-family: Garamond, serif;
-}
 
 .guide-button {
 display: flex;
@@ -832,7 +812,7 @@ animation: spin 1s linear infinite;
 color: #ffffff;
 font-size: 20px;
 margin-top: 10px;
-font-family: Garamond, serif;
+font-family: 'DM Serif Display', serif;
 }
 
 /* Animation Keyframes */

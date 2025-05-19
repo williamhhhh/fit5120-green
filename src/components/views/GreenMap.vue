@@ -107,8 +107,6 @@ import { IftaLabel } from 'primevue'
 
 const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN
 
-
-
 // Set Mapbox Access Token
 
 mapboxgl.accessToken = mapboxToken

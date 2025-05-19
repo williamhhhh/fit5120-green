@@ -1,15 +1,12 @@
 <template>
-  <!-- Main app container -->
   <div class="plant-app">
-    <!-- Header with title and description -->
     <header class="fade-in">
       <h1>🌞 Recommended plants for me to grow indoors? 💦</h1>
       <p>Customize your personalized plant!</p>
     </header>
 
-    <!-- Form to select plant growing conditions -->
+    <!-- Condition selection area -->
     <section class="condition-form slide-in-bottom">
-      <!-- Dropdown for sunlight preference -->
       <div class="dropdown-group">
         <label>🌞 Sunlight</label>
         <select v-model="sunlight">
@@ -20,8 +17,6 @@
           <option>Shade tolerant</option>
         </select>
       </div>
-
-      <!-- Dropdown for watering frequency -->
       <div class="dropdown-group">
         <label>💧 Watering frequency</label>
         <select v-model="watering">
@@ -32,8 +27,6 @@
           <option>Rarely</option>
         </select>
       </div>
-
-      <!-- Dropdown for soil type -->
       <div class="dropdown-group">
         <label>🌱 Soil type</label>
         <select v-model="soil">
@@ -44,22 +37,18 @@
           <option>General garden soil</option>
         </select>
       </div>
-
-      <!-- Submit button to get plant advice -->
       <button @click="getAdvice" :disabled="loading || !isComplete">Get advice</button>
     </section>
 
-    <!-- Display GPT-generated plant advice cards if any -->
+    <!-- GPT advice cards -->
     <section class="advice-card-area" v-if="gptCards.length">
       <div class="plant-advice-card" v-for="(card, idx) in gptCards" :key="idx">
         <div class="markdown-box" v-html="parseMarkdown(card)"></div>
       </div>
     </section>
-
-    <!-- Navigation to carbon footprint calculator -->
     <div v-if="gptCards.length" class="carbon-footprint-nav-area">
       <div class="fun-tips">
-        🌍 There's more to green living than keeping plants!
+        🌍 There's more to green living than keeping plants!  
         <span class="fun-highlight">Click the button below to see how amazing your carbon footprint is!</span>
         <br>
         🚴‍♂️ How much more CO₂ can be reduced? Go ahead and explore!
@@ -69,7 +58,7 @@
       </router-link>
     </div>
 
-    <!-- Default plant suggestions before GPT query -->
+    <!-- Plant info cards (shown only if not queried yet) -->
     <section class="plant-cards slide-in-left" v-if="!gptCards.length">
       <div v-for="plant in plants" :key="plant.id" class="plant-card">
         <img :src="plant.image" :alt="plant.name" />
@@ -78,55 +67,44 @@
         <a href="#" @click.prevent="getPlantDetail(plant)">Learn More</a>
       </div>
     </section>
-
-    <!-- Loading spinner overlay -->
-    <div v-if="loading" class="loading-overlay">
-      <div class="spinner"></div>
-      <div class="loading-text">🌱It is coming~~~~🌱</div>
-    </div>
+      <div v-if="loading" class="loading-overlay">
+          <div class="spinner"></div>
+          <div class="loading-text">🌱It is coming~~~~🌱</div>
+      </div>
   </div>
 </template>
 
 <script setup>
-// Import Vue reactivity and axios for API calls
 import { ref, computed } from 'vue'
 import axios from 'axios'
 
-// Reactive variables for user inputs and UI states
 const sunlight = ref('')
 const watering = ref('')
 const soil = ref('')
 const loading = ref(false)
 const gptCards = ref([])
 
-// Predefined list of suggested plants
 const plants = [
-    { id: 1, name: 'Dracaena trifasciata', image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSFVeGcFNwNPOV9HvhJDGWbDFbD5uFzy7TcwZZKkdOfVegXcz1KFcRLgkMh6yz9P9S5IUvH7FTFpD_gy1HF_-FSyw', brief: 'Dracaena trifasciata like bright and ventilated environment, not hardy, pay attention to shade in summer.' },
-    { id: 2, name: 'Monstera deliciosa', image: 'https://p2.itc.cn/images01/20220716/656eb023b18044e9972384b3fe839fed.png', brief: 'Monstera deliciosa are more shade-tolerant, the ornaments should be loose and airy, and watering should be moderate.' },
-    { id: 3, name: 'Cactus', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SYOl3WIUcbEBXMwi8mNYmXBtoGh19qwWMQ&s', brief: 'Cactus are extremely drought tolerant and can survive without water for months.' },
-  ]
+  { id: 1, name: 'Dracaena trifasciata', image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSFVeGcFNwNPOV9HvhJDGWbDFbD5uFzy7TcwZZKkdOfVegXcz1KFcRLgkMh6yz9P9S5IUvH7FTFpD_gy1HF_-FSyw', brief: 'Dracaena trifasciata like bright and ventilated environment, not hardy, pay attention to shade in summer.' },
+  { id: 2, name: 'Monstera deliciosa', image: 'https://p2.itc.cn/images01/20220716/656eb023b18044e9972384b3fe839fed.png', brief: 'Monstera deliciosa are more shade-tolerant, the ornaments should be loose and airy, and watering should be moderate.' },
+  { id: 3, name: 'Cactus', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SYOl3WIUcbEBXMwi8mNYmXBtoGh19qwWMQ&s', brief: 'Cactus are extremely drought tolerant and can survive without water for months.' },
+]
 
-// Check if all selections are made
 const isComplete = computed(() => sunlight.value && watering.value && soil.value)
 
-// Request GPT-based plant suggestions
 async function getAdvice() {
   if (!isComplete.value) return
   loading.value = true
   gptCards.value = []
-
-  // Construct prompt string from user selections
-  const prompt = `
-According to the following plant growing conditions...
+  const prompt = 
+According to the following plant growing conditions, please tell me in the form of a card about the recommended plants for indoor growing and their characteristics, and give me advice on their care with point-by-point descriptions, and please be informative and use markdown formatting. And only give four options. And important just give me the content of the card, not the summary information and General Care Tips and all general summary provideby you and Important Note, Only content include Characteristics and Care!!!!!!Answers are formatted in the same font as the previous entry.
 - Sunlight: ${sunlight.value}
 - Watering frequency: ${watering.value}
 - Soil type: ${soil.value}
-  `.trim()
-
+  .trim()
   try {
-    // Send prompt to backend API
     const { data } = await axios.post('https://api.coolthecities.com/chat', { prompt })
-    gptCards.value = splitIntoCards(data.message)  // Parse and split response into cards
+    gptCards.value = splitIntoCards(data.message)
   } catch (e) {
     gptCards.value = ['<span style="color:red">Failed to get advice, please try again later.</span>']
   } finally {
@@ -134,55 +112,53 @@ According to the following plant growing conditions...
   }
 }
 
-// Split markdown content into individual cards
 function splitIntoCards(md) {
-  md = md.replace(/^#.*\n?/, '').replace(/^---+$/gm, '')
-  const matches = Array.from(md.matchAll(/(\d+\.\s+)/g))
-  if (matches.length === 0) return [md.trim()]
-  const indices = matches.map(m => m.index)
-  const cards = []
+// Remove first line title and separators
+md = md.replace(/^#.*\n?/, '').replace(/^---+$/gm, '');
 
-  for (let i = 0; i < indices.length; i++) {
-    const start = indices[i]
-    const end = indices[i + 1] !== undefined ? indices[i + 1] : md.length
-    let card = md.slice(start, end).trim()
+// Find all digit-dot-space numbered cards
+const matches = Array.from(md.matchAll(/(\d+\.\s+)/g));
+if (matches.length === 0) return [md.trim()];
 
-    // Remove extra summary or general tips from last card
-    if (i === indices.length - 1) {
-      card = card.replace(/(\n+General (Indoor )?Plant Care Tips:.*)$/is, '')
-      card = card.replace(/(\n+Conclusion.*)$/is, '')
-      card = card.replace(/(\n+General Care Advice for All Plants.*)$/is, '')
-    }
+const indices = matches.map(m => m.index);
+const cards = [];
 
-    cards.push(card)
+for (let i = 0; i < indices.length; i++) {
+  const start = indices[i];
+  const end = indices[i + 1] !== undefined ? indices[i + 1] : md.length;
+  let card = md.slice(start, end).trim();
+
+  if (i === indices.length - 1) {
+    card = card.replace(/(\n+General (Indoor )?Plant Care Tips:.*)$/is, '');
+    card = card.replace(/(\n+Conclusion.*)$/is, '');
+    card = card.replace(/(\n+General Care Advice for All Plants.*)$/is, '');
   }
 
-  // Filter out summary cards
-  return cards.filter(card => !/^summary|^#* *summary/i.test(card))
+  cards.push(card);
+}
+// Filter out summary cards
+return cards.filter(card => !/^summary|^#* *summary/i.test(card));
 }
 
-// Parse markdown to styled HTML for display
 function parseMarkdown(md) {
-  md = md.replace(/^#{1,6}\s*/gm, '')
-  md = md.replace(/^(\d+\.\s*)([^\n]+)$/gm, (match, num, title) => {
-    if (!/Characteristics|Care/i.test(title)) {
-      return `${num}<span class="plant-name">${title.trim()}</span>`
-    }
-    return match
-  })
+md = md.replace(/^#{1,6}\s*/gm, '');
+md = md.replace(/^(\d+\.\s*)([^\n]+)$/gm, (match, num, title) => {
+  if (!/Characteristics|Care/i.test(title)) {
+    return ${num}<span class="plant-name">${title.trim()}</span>;
+  }
+  return match;
+});
 
-  // Replace key markers with HTML for style
-  md = md.replace(/Characteristics:/g, '<span class="section-title">Characteristics:</span>')
-  md = md.replace(/Care:/g, '<span class="section-title">Care:</span>')
-  md = md.replace(/\*\*Light Needs:\*\*/g, '<span class="not-bold">Light Needs:</span>')
-  md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-  md = md.replace(/\*(.*?)\*/g, '<em>$1</em>')
-  md = md.replace(/^- (.*?)$/gm, '<li>$1</li>')
-  md = md.replace(/\n/g, '<br>')
-  return md
+md = md.replace(/Characteristics:/g, '<span class="section-title">Characteristics:</span>');
+md = md.replace(/Care:/g, '<span class="section-title">Care:</span>');
+md = md.replace(/\*\*Light Needs:\*\*/g, '<span class="not-bold">Light Needs:</span>');
+md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+md = md.replace(/\*(.*?)\*/g, '<em>$1</em>');
+md = md.replace(/^- (.*?)$/gm, '<li>$1</li>');
+md = md.replace(/\n/g, '<br>');
+return md;
 }
 
-// Open external URL for detailed plant info
 function getPlantDetail(plant) {
   let url = ''
   switch (plant.id) {

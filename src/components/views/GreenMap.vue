@@ -135,11 +135,11 @@ onMounted(() => {
 
 showUserGuide.value = true // Show user guide when the component is mounted
 map = new mapboxgl.Map({
-container: 'map', // Container ID
-style: 'mapbox://styles/mapbox/streets-v11', // Map style
-center: [144.9631, -37.8136],
-zoom: 12,
-minZoom: 9
+  container: 'map', // Container ID
+  style: 'mapbox://styles/mapbox/streets-v11', // Map style
+  center: [144.9631, -37.8136],
+  zoom: 12,
+  minZoom: 9
 })
 
 map.setMaxBounds([
@@ -192,19 +192,19 @@ fetch('/municipal-boundary.geojson')
 })
 
 map.addSource('melbourne', {
-type: 'geojson',
-data: '/municipal-boundary.geojson'
-})
+  type: 'geojson',
+  data: '/municipal-boundary.geojson'
+  })
 
-map.addLayer({
-id: 'melbourne-outline',
-type: 'line',
-source: 'melbourne',
-paint: {
-  'line-color': '#00aa00',
-  'line-width': 2
-}
-})
+  map.addLayer({
+  id: 'melbourne-outline',
+  type: 'line',
+  source: 'melbourne',
+  paint: {
+    'line-color': '#00aa00',
+    'line-width': 2
+  }
+  })
 })
 
 loadMelbourneBoundary()
@@ -212,63 +212,63 @@ loadMelbourneBoundary()
 })
 
 const navigateToChat = () => {
-window.location.href = '/chat'
+  window.location.href = '/chat'
 }
 
 const hideUserGuide = () => {
-showUserGuide.value = false
+  showUserGuide.value = false
 }
 
 const updateTransportMode = () => {
 
 if (directions) {
-map.removeControl(directions) // Remove old one
+  map.removeControl(directions) // Remove old one
 }
 
-directions = new MapboxDirections({
-accessToken: mapboxgl.accessToken,
-unit: 'metric',
-profile: transportMode.value,
-controls: {
-inputs: false,
-instructions: true
+  directions = new MapboxDirections({
+  accessToken: mapboxgl.accessToken,
+  unit: 'metric',
+  profile: transportMode.value,
+  controls: {
+  inputs: false,
+  instructions: true
 }
 })
 
-map.addControl(directions, 'top-left')
-// Optional: turn off map click-to-set
-map.off('click', directions._onMapClick)
+  map.addControl(directions, 'top-left')
+  // Optional: turn off map click-to-set
+  map.off('click', directions._onMapClick)
 
 }
 
 
 
 const handleLoadClick = async () => {
-isLoading.value = true
+  isLoading.value = true
 
-const selectedDistanceValue = parseFloat(selectedDistance.value)
+  const selectedDistanceValue = parseFloat(selectedDistance.value)
 
-try {
-if (selectedDistanceValue && userLocationBool.value && userInMelbourne.value) {
-await loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
-} else if (!userLocationBool.value && !selectedDistanceValue) {
-await loadAllGreenSpaces(sizeSelect.value)
-} else if (userLocationBool.value && !userInMelbourne.value && selectedDistanceValue != 'all') {
-alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
-selectedDistance.value = "all"
-await loadAllGreenSpaces(sizeSelect.value)
-} else if (!selectedDistanceValue && userInMelbourne.value) {
-await loadAllGreenSpaces(sizeSelect.value)
-} else {
-alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
-selectedDistance.value = "all"
-locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
-}
-} catch (error) {
-console.error('Error loading parks:', error)
-} finally {
-isLoading.value = false // ✅ will now happen after load finishes
-}
+  try {
+  if (selectedDistanceValue && userLocationBool.value && userInMelbourne.value) {
+  await loadNearbyGreenSpaces(userCoords, selectedDistanceValue, sizeSelect.value)
+  } else if (!userLocationBool.value && !selectedDistanceValue) {
+  await loadAllGreenSpaces(sizeSelect.value)
+  } else if (userLocationBool.value && !userInMelbourne.value && selectedDistanceValue != 'all') {
+  // alert("You are outside Melbourne. You can only view parks in Melbourne with green space size filter.")
+  selectedDistance.value = "all"
+  await loadAllGreenSpaces(sizeSelect.value)
+  } else if (!selectedDistanceValue && userInMelbourne.value) {
+  await loadAllGreenSpaces(sizeSelect.value)
+  } else {
+  alert("Please allow location access to use nearby search. Or you can only search for parks in Melbourne.")
+  selectedDistance.value = "all"
+  locationError.value = '⚠️ Location access denied. Please allow access to use nearby search.'
+  }
+  } catch (error) {
+  console.error('Error loading parks:', error)
+  } finally {
+  isLoading.value = false // ✅ will now happen after load finishes
+  }
 }
 
 
@@ -295,41 +295,40 @@ melbPolygon = turf.polygon(melbGeometry.coordinates)
 const loadAllGreenSpaces = async (parkSize) => {
 
 const query = `
-[out:json][timeout:25];
-area["name"="City of Melbourne"]["admin_level"="6"]->.searchArea;
-(
-way["leisure"="park"](area.searchArea);
-way["leisure"="garden"](area.searchArea);
-way["leisure"="nature_reserve"](area.searchArea);
-);
-out body;
->;
-out skel qt;
-`
+  [out:json][timeout:25];
+  area["name"="City of Melbourne"]["admin_level"="6"]->.searchArea;
+  (
+  way["leisure"="park"](area.searchArea);
+  way["leisure"="garden"](area.searchArea);
+  way["leisure"="nature_reserve"](area.searchArea);
+  );
+  out body;
+  >;
+  out skel qt;
+  `
 
 try {
-const response = await fetch(
-'https://overpass-api.de/api/interpreter',
-{
-  method: 'POST',
-  body: query
-}
-)
+  const response = await fetch(
+  'https://overpass-api.de/api/interpreter',
+  {
+    method: 'POST',
+    body: query
+  }
+  )
 
-console.log('Response:', response)
+  console.log('Response:', response)
 
-const osmData = await response.json()
-const geojson = osmtogeojson(osmData)
+  const osmData = await response.json()
+  const geojson = osmtogeojson(osmData)
 
 
-const filteredFeatures = geojson.features.filter((feature) => {
-const area = turf.area(feature)
+  const filteredFeatures = geojson.features.filter((feature) => {
+  const area = turf.area(feature)
 
-if (parkSize === '5000') return area < 1000
-if (parkSize === '10000') return area >= 1000 && area <= 5000
-if (parkSize === '20000') return area > 5000
-return true // If no parkSize filter, show all
-
+  if (parkSize === '5000') return area < 1000
+  if (parkSize === '10000') return area >= 1000 && area <= 5000
+  if (parkSize === '20000') return area > 5000
+  return true // If no parkSize filter, show all
 })
 
 // Remove previous layer and source if they exist 
@@ -419,16 +418,16 @@ const getNearbyParks = (lat, lon, distance) => {
 const distanceMeters = distance * 1000
 
 return `
-[out:json][timeout:25];
-(
-way["leisure"="park"](around:${distanceMeters},${lat},${lon});
-way["leisure"="garden"](around:${distanceMeters},${lat},${lon});
-way["leisure"="nature_reserve"](around:${distanceMeters},${lat},${lon});
-);
-out body;
->;
-out skel qt;
-`
+  [out:json][timeout:25];
+  (
+  way["leisure"="park"](around:${distanceMeters},${lat},${lon});
+  way["leisure"="garden"](around:${distanceMeters},${lat},${lon});
+  way["leisure"="nature_reserve"](around:${distanceMeters},${lat},${lon});
+  );
+  out body;
+  >;
+  out skel qt;
+  `
 }
 
 // Load all parks in Melbourne
@@ -439,12 +438,12 @@ const lon = coords[0]
 const query = getNearbyParks(lat, lon, distance)
 
 const response = await fetch('https://overpass-api.de/api/interpreter', {
-method: 'POST',
-headers: {
-'Content-Type': 'text/plain'
-},
-body: query
-})
+    method: 'POST',
+    headers: {
+    'Content-Type': 'text/plain'
+    },
+    body: query
+  })
 
 const osmJson = await response.json()
 const geojson = osmtogeojson(osmJson)
@@ -467,25 +466,25 @@ features: filteredFeatures
 
 // Remove previous layer and source if they exist
 if (map.getLayer('green-spaces-layer')) {
-map.removeLayer('green-spaces-layer')
+  map.removeLayer('green-spaces-layer')
 }
 if (map.getSource('green-spaces')) {
-map.removeSource('green-spaces')
+  map.removeSource('green-spaces')
 }
 
 map.addSource('green-spaces', {
-type: 'geojson',
-data: filteredGeoJSON
-})
+  type: 'geojson',
+  data: filteredGeoJSON
+  })
 
-map.addLayer({
-id: 'green-spaces-layer',
-type: 'fill',
-source: 'green-spaces',
-paint: {
-'fill-color': '#00FF00',
-'fill-opacity': 0.5
-}
+  map.addLayer({
+  id: 'green-spaces-layer',
+  type: 'fill',
+  source: 'green-spaces',
+  paint: {
+  'fill-color': '#00FF00',
+  'fill-opacity': 0.5
+  }
 })
 
 // Remove previous markers if they exist
@@ -538,9 +537,7 @@ setTimeout(() => {
 
 if(filteredFeatures.length <= 0) {
 alert('No parks found in the selected range.')
-
 }
-
 
 // Center the map on user's location
 map.setCenter([lon, lat])

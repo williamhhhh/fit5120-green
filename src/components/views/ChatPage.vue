@@ -101,10 +101,10 @@ const gptCards = ref([])
 
 // Predefined list of suggested plants
 const plants = [
-  { id: 1, name: 'Dracaena trifasciata', image: '...', brief: '...' },
-  { id: 2, name: 'Monstera deliciosa', image: '...', brief: '...' },
-  { id: 3, name: 'Cactus', image: '...', brief: '...' },
-]
+    { id: 1, name: 'Dracaena trifasciata', image: 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSFVeGcFNwNPOV9HvhJDGWbDFbD5uFzy7TcwZZKkdOfVegXcz1KFcRLgkMh6yz9P9S5IUvH7FTFpD_gy1HF_-FSyw', brief: 'Dracaena trifasciata like bright and ventilated environment, not hardy, pay attention to shade in summer.' },
+    { id: 2, name: 'Monstera deliciosa', image: 'https://p2.itc.cn/images01/20220716/656eb023b18044e9972384b3fe839fed.png', brief: 'Monstera deliciosa are more shade-tolerant, the ornaments should be loose and airy, and watering should be moderate.' },
+    { id: 3, name: 'Cactus', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6SYOl3WIUcbEBXMwi8mNYmXBtoGh19qwWMQ&s', brief: 'Cactus are extremely drought tolerant and can survive without water for months.' },
+  ]
 
 // Check if all selections are made
 const isComplete = computed(() => sunlight.value && watering.value && soil.value)

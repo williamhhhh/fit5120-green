@@ -34,9 +34,11 @@
 
           <!-- Right Section: Button + Hamburger -->
           <div class="col-4 col-md-2 d-flex justify-content-end align-items-center">
-            <div class="header-right me-2 d-none d-md-flex">
-              <div class="button-text">Start!</div>
-            </div>
+            <!-- <div class="header-right me-2 d-none d-md-flex"> -->
+              <router-link  class="header-right me-2 d-none d-md-flex" style="text-decoration: none;" to="/info">
+                <div class="button-text" >Start!</div>
+              </router-link>
+            <!-- </div> -->
 
             <!-- Mobile Toggler -->
             <button
@@ -206,6 +208,13 @@ watch(
     /* Front Shadow */
     box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
+  }
+
+  .header-right:hover {
+    background: #90CF8E;
+    transform: scale(1.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
   }
 
   .button-text {

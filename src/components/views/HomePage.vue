@@ -42,9 +42,9 @@
 
       <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
-        <!-- <div class="graph-description">
+        <div class="graph-description">
           <p>The overall gradient trends of melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each months show how temperature had been going up in melbourne in recent years</p>
-        </div> -->
+        </div>
         <div class="button-cool-container">
           <button class="button-cool">
           <router-link to="/info" class="cool">Let's tackle it!</router-link>
@@ -82,9 +82,9 @@
 
       <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that we are still a long way to greenhouse gas neutral?</div>
-        <!-- <div class="graph-description">
+        <div class="graph-description">
           <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon neutral</p>
-        </div> -->
+        </div>
         <div class="button-cool-container">
           <button class="button-cool">
           <router-link to="/GreenCalculator" class="cool">Let's tackle it!</router-link>

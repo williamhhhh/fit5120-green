@@ -102,7 +102,6 @@ According to the following plant growing conditions, please tell me in the form 
 - Watering frequency: ${watering.value}
 - Soil type: ${soil.value}
 `.trim()
-
   try {
     const { data } = await axios.post('https://api.coolthecities.com/chat', { prompt })
     gptCards.value = splitIntoCards(data.message)
@@ -142,23 +141,37 @@ return cards.filter(card => !/^summary|^#* *summary/i.test(card));
 }
 
 function parseMarkdown(md) {
-md = md.replace(/^#{1,6}\s*/gm, '');
-md = md.replace(/^(\d+\.\s*)([^\n]+)$/gm, (match, num, title) => {
-  if (!/Characteristics|Care/i.test(title)) {
-    return ${num}<span class="plant-name">${title.trim()}</span>;
-  }
-  return match;
-});
+  // Remove all markdown-style headers (e.g., # Title, ## Subtitle)
+  md = md.replace(/^#{1,6}\s*/gm, '');
 
-md = md.replace(/Characteristics:/g, '<span class="section-title">Characteristics:</span>');
-md = md.replace(/Care:/g, '<span class="section-title">Care:</span>');
-md = md.replace(/\*\*Light Needs:\*\*/g, '<span class="not-bold">Light Needs:</span>');
-md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-md = md.replace(/\*(.*?)\*/g, '<em>$1</em>');
-md = md.replace(/^- (.*?)$/gm, '<li>$1</li>');
-md = md.replace(/\n/g, '<br>');
-return md;
+  // Replace numbered titles with a span unless they're "Characteristics" or "Care"
+  md = md.replace(/^(\d+\.\s*)([^\n]+)$/gm, (match, num, title) => {
+    if (!/Characteristics|Care/i.test(title)) {
+      return `${num}<span class="plant-name">${title.trim()}</span>`;
+    }
+    return match;
+  });
+
+  // Emphasize specific sections with custom class spans
+  md = md.replace(/Characteristics:/g, '<span class="section-title">Characteristics:</span>');
+  md = md.replace(/Care:/g, '<span class="section-title">Care:</span>');
+
+  // Replace bolded "Light Needs:" with a styled span
+  md = md.replace(/\*\*Light Needs:\*\*/g, '<span class="not-bold">Light Needs:</span>');
+
+  // Convert general markdown bold and italics to HTML
+  md = md.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  md = md.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Convert bullet points to HTML list items
+  md = md.replace(/^- (.*?)$/gm, '<li>$1</li>');
+
+  // Replace newlines with <br> for line breaks in HTML
+  md = md.replace(/\n/g, '<br>');
+
+  return md;
 }
+
 
 function getPlantDetail(plant) {
   let url = ''

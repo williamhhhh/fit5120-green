@@ -83,9 +83,9 @@
                 <div class="info-section-desc" style="margin-top:1.1em;">
                   <b>How Greening Helps</b>
                   <ul class="info-list">
-                    <li>Trees <b>shade surfaces</b>, lowering temperatures</li>
-                    <li>Plants release <b>moisture</b> (evapotranspiration) for natural cooling</li>
-                    <li>Green walls, rooftop gardens and parks help reduce surrounding heat</li>
+                    <li>· Trees <b>shade surfaces,</b> lowering temperatures</li>
+                    <li>· Plants release<b>moisture</b>for natural cooling</li>
+                    <li>· Green walls, rooftop gardens and parks help reduce surrounding heat</li>
                   </ul>
                 </div>
                 <div class="info-section-desc" style="margin-top:1.1em;">
@@ -95,7 +95,7 @@
               </div>
               <div class="info-section-col info-section-img">
                 <!-- bar chart -->
-                <img src="@/assets/images/nightlight.png" alt="UHI Bar Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
+                <img src="@/assets/images/g1.jpg" alt="UHI Bar Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@
               </div>
               <div class="info-section-col info-section-img">
                 <!-- line chart -->
-                <img src="@/assets/images/nightlight.png" alt="Energy Line Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
+                <img src="@/assets/images/g2.jpg" alt="Energy Line Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
               </div>
             </div>
           </div>

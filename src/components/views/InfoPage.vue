@@ -112,11 +112,11 @@
                   Urban vegetation is one of the simplest and most effective sustainability strategies for a growing city like Melbourne. It offers real benefits for both people and the planet.
                 </div>
                 <ul class="info-list info-list-green">
-                  <li>✔️ Reduces household energy usage</li>
-                  <li>✔️ Lowers carbon emissions</li>
-                  <li>✔️ Filters air pollutants</li>
-                  <li>✔️ Improves mental health and physical wellbeing</li>
-                  <li>✔️ Helps manage stormwater and flooding</li>
+                  <li> Reduces household energy usage</li>
+                  <li> Lowers carbon emissions</li>
+                  <li> Filters air pollutants</li>
+                  <li> Improves mental health and physical wellbeing</li>
+                  <li> Helps manage stormwater and flooding</li>
                 </ul>
               </div>
               <div class="info-section-col info-section-img">

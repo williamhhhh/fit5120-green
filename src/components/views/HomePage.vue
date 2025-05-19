@@ -1,61 +1,69 @@
 <template>
-  
+  <!-- Intro section with background image and animated title -->
   <div class="container-fluid">
     <div class="desc-container col-12 col-md-12 col-lg-12">
       <img src="@/assets/images/green_city.jpeg" alt="green" class="green-city">
       <div class="title-container col-md-8 col-lg-8">
+        <!-- Animated cyclist image -->
         <div class="cycle-container">
           <img src="@/assets/images/cycle.png" alt="cycle" class="cycle animate__animated animate__lightSpeedInLeft">
         </div>
+        <!-- Main campaign title -->
         <div class="title-start">
           <h1 class="title">Melbourne is Getting Hotter - Let's Cool It Down Together</h1>
         </div>
+        <!-- Subtitle and animated balloon image -->
         <div class="title-description-start">
           <p class="title-description">
-          Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
+            Join us in tackling urban heat and reducing CO2 emissions through small, everyday actions.
           </p>
           <img src="@/assets/images/ballon.png" alt="ballon" class="ballon animate__animated animate__bounceInUp">
         </div>
-
-
+        <!-- CTA button scrolls to chart section -->
         <button @click="scrollToSection" class="button-get-started animate__animated animate__fadeIn">Let's tackle it!</button>
       </div>
     </div>
   </div>
 
+  <!-- Graph section with two toggleable cards -->
   <div class="container-fluid graph-section">
+    <!-- Section title -->
     <div class="graph-section-title-container row">
-        <div class="graph-section-title-text col-8 col-md-12">
-          <div class >Melbourne had increased <span class="heat-highlight">6 degrees</span> in recent years</div>
-        </div>
+      <div class="graph-section-title-text col-8 col-md-12">
+        <div>Melbourne had increased <span class="heat-highlight">6 degrees</span> in recent years</div>
+      </div>
     </div>
 
+    <!-- Temperature chart card -->
     <div v-if="isTemp" class="row graph-container animate__animated animate__fadeInRight">
-
-      <div class="col-1 col-md-1 arrow-container-left"  @click="transistCard()">
+      <!-- Arrows for toggling cards -->
+      <div class="col-1 col-md-1 arrow-container-left" @click="transistCard()">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow">
       </div>
-
       <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
+      <!-- Description column -->
       <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that Melbourne had heated up 6 degrees in recent years?</div>
         <div class="graph-description">
-          <p>The overall gradient trends of melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each months show how temperature had been going up in melbourne in recent years</p>
+          <p>The overall gradient trends of Melbourne's <span class="highlight-desc">minimal</span> and <span class="highlight-desc">maximal</span> temperature in each month show how temperature has been rising in recent years.</p>
         </div>
+        <!-- CTA button to learn more -->
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/info" class="cool">Let's tackle it!</router-link>
+            <router-link to="/info" class="cool">Let's tackle it!</router-link>
           </button>
         </div>
       </div>
 
-      <div class="col-1 col-md-1 arrow-container-right"  @click="transistCard()">
+      <!-- Right arrows for toggling -->
+      <div class="col-1 col-md-1 arrow-container-right" @click="transistCard()">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow">
       </div>
 
+      <!-- Chart canvas and legend -->
       <div class="col-12 col-md-7 chart-container">
         <canvas ref="tempChart" id="tempChart" position="relative"></canvas>
         <div class="year-gradient-legend">
@@ -65,71 +73,86 @@
         </div>
       </div>
 
-      <div class="col-1 col-md-1 arrow-container"  @click="transistCard()">
+      <!-- Extra right arrow for small screen support -->
+      <div class="col-1 col-md-1 arrow-container" @click="transistCard()">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow">
       </div>
     </div>
 
+    <!-- Greenhouse gas chart card -->
     <div v-if="!isTemp" class="row graph-container animate__animated animate__fadeInRight">
-
-      <div class="col-1 col-md-1 arrow-container-left"  @click="transistCard()">
+      <!-- Arrows for toggling -->
+      <div class="col-1 col-md-1 arrow-container-left" @click="transistCard()">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow">
       </div>
-
       <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/left.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
 
+      <!-- Description column -->
       <div class="col-10 col-md-3">
         <div class="graph-title">Do you know that we are still a long way to greenhouse gas neutral?</div>
         <div class="graph-description">
-          <p>Since 2010 the greenhouse gas emission had started to decline. However, we are still approximately 80 Mts away from carbon neutral</p>
+          <p>Since 2010, greenhouse gas emissions have started to decline. However, we are still approximately 80 Mts away from carbon neutral.</p>
         </div>
+        <!-- CTA button to go to calculator -->
         <div class="button-cool-container">
           <button class="button-cool">
-          <router-link to="/GreenCalculator" class="cool">Let's tackle it!</router-link>
+            <router-link to="/GreenCalculator" class="cool">Let's tackle it!</router-link>
           </button>
         </div>
       </div>
 
-      <div class="col-1 col-md-1 arrow-container-right"  @click="transistCard()">
+      <!-- Right arrow -->
+      <div class="col-1 col-md-1 arrow-container-right" @click="transistCard()">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow">
       </div>
 
-
+      <!-- Chart canvas -->
       <div class="col-10 col-md-7 chart-container">
         <canvas ref="greenChart" id="greenChart" position="relative"></canvas>
       </div>
 
+      <!-- Extra arrow for small screens -->
       <div class="col-1 col-md-1 arrow-container">
         <img src="@/assets/images/right.png" alt="arrow" class="arrow" @click="transistCard()">
       </div>
     </div>
   </div>
-    
 </template>
-  
-  <script setup>
-import { onMounted, ref, nextTick, onBeforeUnmount } from 'vue'
-import { Chart } from 'chart.js/auto'
-import { fetchMinData, fetchMaxData, transformToChartJsFormat } from '../utils/tempChart'
-import { renderGreenGasChart } from '../utils/greenGasChart' 
-import { watch } from 'vue'     
-// import cycle from '@/assets/images/cycle.png'
 
+<script setup>
+// Import Vue Composition API tools and lifecycle hooks
+import { onMounted, ref, nextTick, onBeforeUnmount, watch } from 'vue'
+// Import Chart.js
+import { Chart } from 'chart.js/auto'
+// Import data fetching and transformation utilities
+import { fetchMinData, fetchMaxData, transformToChartJsFormat } from '../utils/tempChart'
+import { renderGreenGasChart } from '../utils/greenGasChart'
+
+// Refs for chart canvas elements
 const tempChart = ref(null)
 const greenChart = ref(null)
-let greenChartInstance = null
+
+// Chart instances
 let chartInstance = null
+let greenChartInstance = null
+
+// Controls which temperature data is shown (min or max)
 let isShowingMin = true
+
+// Interval ID for automatic chart cycling
 let intervalId = null
+
+// Toggles between temp and greenhouse gas cards
 const isTemp = ref(true)
 
-
+// Toggle card type
 const transistCard = () => {
   isTemp.value = !isTemp.value
 }
 
+// Scrolls to graph section smoothly
 const scrollToSection = () => {
   const section = document.querySelector('.graph-section')
   if (section) {
@@ -137,26 +160,25 @@ const scrollToSection = () => {
   }
 }
 
+// Render temperature line chart
 const renderChart = async () => {
   const canvas = tempChart.value
   if (!canvas) return
 
-  const data = isShowingMin
-    ? await fetchMinData()
-    : await fetchMaxData()
-
+  const data = isShowingMin ? await fetchMinData() : await fetchMaxData()
   const chartData = transformToChartJsFormat(data, isShowingMin)
 
   if (chartInstance) {
+    // Update existing chart with new data and title
     chartInstance.data = chartData.data
     chartInstance.options.plugins.title.text = chartData.title
-    // ✅ Make sure the Y scale updates
     chartInstance.options.scales = {
       ...chartInstance.options.scales,
       y: chartData.options.scales.y
     }
     chartInstance.update()
   } else {
+    // Create a new chart instance
     chartInstance = new Chart(canvas, {
       type: 'line',
       data: chartData.data,
@@ -164,11 +186,11 @@ const renderChart = async () => {
     })
   }
 
+  // Alternate between min and max data every cycle
   isShowingMin = !isShowingMin
 }
 
-
-
+// Render appropriate chart on mount
 onMounted(async () => {
   await nextTick()
 
@@ -178,30 +200,28 @@ onMounted(async () => {
   }
 })
 
-
+// Watch for card toggle changes
 watch(isTemp, async (newVal) => {
   await nextTick()
 
   if (newVal) {
-    // 🔁 Switching to temperature chart
+    // Show temperature chart
     if (tempChart.value) {
       if (chartInstance) {
         chartInstance.destroy()
         chartInstance = null
       }
       if (intervalId === null) {
-      intervalId = setInterval(renderChart, 8000)
+        intervalId = setInterval(renderChart, 8000)
       }
       await renderChart()
     }
-
   } else {
-    // 🌱 Switching to green gas chart
+    // Show greenhouse gas chart
     if (intervalId) {
       clearInterval(intervalId)
       intervalId = null
     }
-
     if (greenChart.value) {
       if (greenChartInstance) {
         greenChartInstance.destroy()
@@ -210,12 +230,8 @@ watch(isTemp, async (newVal) => {
     }
   }
 })
+</script>
 
-
-
-
-
-  </script>
   
   <style scoped>
   @keyframes tracking-in-expand-fwd {

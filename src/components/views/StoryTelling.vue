@@ -1,15 +1,21 @@
 <template>
+  <!-- Main container for the experience -->
   <div class="container">
+
+    <!-- Fireworks Canvas shown after all story cards are complete -->
     <canvas
       v-if="journeyStarted && currentStory >= stories.length"
       ref="fireworks"
       class="fireworks-canvas"
     ></canvas>
 
+    <!-- Initial title and video area before the journey starts -->
     <transition name="title-fade">
       <h1 class="title" v-if="!journeyStarted">A Day in the Life of Daniel</h1>
     </transition>
+
     <div class="content video-flex-row" v-if="!journeyStarted">
+      <!-- YouTube Video Embed -->
       <div class="video-area">
         <div class="video-container">
           <iframe
@@ -24,6 +30,8 @@
           © Video from <a href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
         </div>
       </div>
+
+      <!--  Daniel character image with speech bubbles -->
       <transition name="character-move">
         <div
           v-if="showCharacter"
@@ -33,9 +41,10 @@
           @mouseleave="characterHover = false"
         >
           <img
-            src="https://images.squarespace-cdn.com/content/v1/55947ac3e4b0fa882882cd65/1487641787332-9F8W4SAPWAFBHXSM46V4/NS_0148.png?format=750w"
+            src="https://images.squarespace-cdn.com/.../NS_0148.png"
             alt="Cartoon Character"
           />
+          <!-- Speech bubbles appearing step by step -->
           <div class="bubble-link">
             <div class="bubble small" v-show="bubbleStep >= 1"></div>
             <div class="bubble medium" v-show="bubbleStep >= 2"></div>
@@ -49,10 +58,11 @@
       </transition>
     </div>
 
-    <!-- Story cards -->
+    <!-- Interactive Story Cards -->
     <transition name="card-fade">
       <div v-if="journeyStarted && currentStory < stories.length" class="story-card-center new-style-card">
-        <!-- progress bar -->
+        
+        <!-- Progress Bar -->
         <div class="progress-bar new-progress-bar">
           <template v-for="(story, idx) in stories" :key="'pb'+idx">
             <div
@@ -62,13 +72,15 @@
             <div v-if="idx < stories.length-1" class="new-line"></div>
           </template>
         </div>
+
         <!-- Story Title -->
         <div class="big-title">{{ currentStoryObj.title }}</div>
 
-        <!-- Story content -->
+        <!-- Card Content or Question -->
         <transition name="fade" mode="out-in">
           <div :key="currentCard">
-            <!-- Common Plot Cards -->
+            
+            <!-- Info Card with Description or Overlay -->
             <div v-if="!isChoiceCard">
               <div v-if="currentCardObj.overlay" class="img-overlay-box">
                 <img class="card-img" :src="currentCardObj.img" alt="Step image" />
@@ -81,12 +93,14 @@
               </div>
               <div class="card-desc" v-if="currentCardObj.desc">{{ currentCardObj.desc }}</div>
             </div>
-            <!-- choice card -->
+
+            <!-- Choice Card -->
             <div v-else>
               <div class="choice-card">
                 <div class="question-title">{{ currentCardObj.question }}</div>
                 <div class="question-desc">{{ currentCardObj.subdesc }}</div>
                 <div class="options">
+                  <!-- User selects a sustainable option -->
                   <button
                     v-for="opt in currentCardObj.options"
                     :key="opt.value"
@@ -97,6 +111,8 @@
                   </button>
                 </div>
               </div>
+
+              <!-- Pro Tip shown before selection -->
               <transition name="fade">
                 <div v-if="!choice" class="pro-tip-wrap">
                   <div class="pro-tip">
@@ -111,42 +127,48 @@
         </transition>
       </div>
     </transition>
-<!-- Results Page -->
-<div v-if="journeyStarted && currentStory >= stories.length" class="result-center-panel">
-  <div class="story-card-center new-style-card final-result-panel">
-    <h2 class="big-title" style="font-size:2.6rem;margin-bottom:0.7em;">Congratulations!!</h2>
-    <div class="card-desc" style="font-size:1.23rem;font-weight:500;margin-bottom:2.1em;">
-      You helped Daniel make a positive impact on environment by:
-    </div>
-    <div class="result-grid">
-      <div class="result-item sun">
-        <div class="result-icon">☀️</div>
-        <div class="result-value">${{ result.energy }}</div>
-        <div class="result-label">Saved per year in energy usage.</div>
-      </div>
-      <div class="result-item temp">
-        <div class="result-icon">🌡️</div>
-        <div class="result-value">{{ result.temp }}</div>
-        <div class="result-label">Temperature reduced in house & city.</div>
-      </div>
-      <div class="result-item co2">
-        <div class="result-icon">🌍</div>
-        <div class="result-value">{{ result.co2 }} tons</div>
-        <div class="result-label">Carbon Emission Reduced</div>
-      </div>
-      <div class="result-item kg">
-        <div class="result-icon">💪</div>
-        <div class="result-value">{{ result.weight }}kg</div>
-        <div class="result-label">Weight loss and calories burned.</div>
-      </div>
-    </div>
-  </div>
-  <button class="back-home-btn" @click="backToHome">
-    <span style="font-size: 1.25em; margin-right: 5px;">🏠</span>
-    Back to Story
-  </button>
-</div>
 
+    <!-- Final Result Summary -->
+    <div v-if="journeyStarted && currentStory >= stories.length" class="result-center-panel">
+      <div class="story-card-center new-style-card final-result-panel">
+        <h2 class="big-title" style="font-size:2.6rem;margin-bottom:0.7em;">Congratulations!!</h2>
+        <div class="card-desc" style="font-size:1.23rem;font-weight:500;margin-bottom:2.1em;">
+          You helped Daniel make a positive impact on environment by:
+        </div>
+
+        <!-- Results in grid layout -->
+        <div class="result-grid">
+          <div class="result-item sun">
+            <div class="result-icon">☀️</div>
+            <div class="result-value">${{ result.energy }}</div>
+            <div class="result-label">Saved per year in energy usage.</div>
+          </div>
+          <div class="result-item temp">
+            <div class="result-icon">🌡️</div>
+            <div class="result-value">{{ result.temp }}</div>
+            <div class="result-label">Temperature reduced in house & city.</div>
+          </div>
+          <div class="result-item co2">
+            <div class="result-icon">🌍</div>
+            <div class="result-value">{{ result.co2 }} tons</div>
+            <div class="result-label">Carbon Emission Reduced</div>
+          </div>
+          <div class="result-item kg">
+            <div class="result-icon">💪</div>
+            <div class="result-value">{{ result.weight }}kg</div>
+            <div class="result-label">Weight loss and calories burned.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to beginning button -->
+      <button class="back-home-btn" @click="backToHome">
+        <span style="font-size: 1.25em; margin-right: 5px;">🏠</span>
+        Back to Story
+      </button>
+    </div>
+
+    <!-- Start Journey Button -->
     <transition name="fade">
       <button
         class="start-button"
@@ -158,6 +180,7 @@
     </transition>
   </div>
 </template>
+
 
 <script>
 import light from '@/assets/images/light.png';

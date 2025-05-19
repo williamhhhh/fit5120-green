@@ -110,8 +110,8 @@ const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN
 
 
 // Set Mapbox Access Token
-mapboxgl.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWpibiIsImEiOiJjbTF5dGM0MWUwMXNtMnFxM2l5MTZnbXl4In0.3NVGhIBNxF53iKLxT6MmeQ'
-// mapboxgl.accessToken = mapboxToken
+
+mapboxgl.accessToken = mapboxToken
 // State Variables
 const searchQuery = ref('')
 const searchResult = ref(null)

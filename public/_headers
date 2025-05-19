@@ -1,11 +1,15 @@
 /*
-  X-Frame-Options: SAMEORIGIN
+
   X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: no-referrer-when-downgrade
-  Content-Security-Policy: 
-    default-src 'self';
-    style-src 'self' https://api.mapbox.com https://cdnjs.cloudflare.com;
-    script-src 'self' https://api.mapbox.com;
-    img-src 'self' data:;
-  
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; 
+                          script-src 'self' https://apis.google.com https://cdn.jsdelivr.net 'unsafe-inline'; 
+                          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
+                          font-src 'self' https://fonts.gstatic.com; 
+                          img-src 'self' data: https://coolthecities.com https://maps.googleapis.com;
+                          connect-src 'self' https://api.coolthecities.com https://overpass-api.de/api/interpreter;  
+                          object-src 'none';
+                          frame-ancestors 'self';

@@ -96,12 +96,13 @@ async function getAdvice() {
   if (!isComplete.value) return
   loading.value = true
   gptCards.value = []
-  const prompt = 
+  const prompt = `
 According to the following plant growing conditions, please tell me in the form of a card about the recommended plants for indoor growing and their characteristics, and give me advice on their care with point-by-point descriptions, and please be informative and use markdown formatting. And only give four options. And important just give me the content of the card, not the summary information and General Care Tips and all general summary provideby you and Important Note, Only content include Characteristics and Care!!!!!!Answers are formatted in the same font as the previous entry.
 - Sunlight: ${sunlight.value}
 - Watering frequency: ${watering.value}
 - Soil type: ${soil.value}
-  .trim()
+`.trim()
+
   try {
     const { data } = await axios.post('https://api.coolthecities.com/chat', { prompt })
     gptCards.value = splitIntoCards(data.message)

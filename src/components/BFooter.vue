@@ -28,7 +28,7 @@
         </div>
           <ul class="list-unstyled">
             <li><router-link to="/home" class="footer-link">Home</router-link></li>
-            <li><router-link to="/greenmap" class="footer-link">Map</router-link></li>
+            <li><router-link to="/Greenmap" class="footer-link">Map</router-link></li>
             <li><router-link to="/chat" class="footer-link">Chat</router-link></li>
             <li><router-link to="/calculator" class="footer-link">Calculator</router-link></li>
           </ul>
@@ -40,7 +40,7 @@
                 <h5 class="fw-bold">Learn</h5>
             </div>
           <ul class="list-unstyled">
-            <li><router-link to="/greenadvice" class="footer-link">Green Advice</router-link></li>
+            <li><router-link to="/infor" class="footer-link">Green information</router-link></li>
             <li><router-link to="/storytelling" class="footer-link">Stories</router-link></li>
             <li><a href="https://example.com/blog" target="_blank" class="footer-link">Blog</a></li>
           </ul>
@@ -52,8 +52,8 @@
             <h5 class="fw-bold">About</h5>
           </div>
           <ul class="list-unstyled">
-            <li><router-link to="/about" class="footer-link">Our Mission</router-link></li>
-            <li><router-link to="/team" class="footer-link">Team</router-link></li>
+            <li><router-link to="/home" class="footer-link">Our Mission</router-link></li>
+            <li><router-link to="/home" class="footer-link">Team</router-link></li>
           </ul>
         </div>
 

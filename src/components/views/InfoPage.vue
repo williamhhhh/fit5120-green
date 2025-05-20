@@ -400,7 +400,8 @@ const currentTab = ref(0)
   justify-content: center;
   align-items: center;
   gap: 22px;
-  margin: 70px auto 40px auto;
+  margin: 0px auto 40px auto;
+
   padding: 20px 5vw;
   max-width: 900px;
   border-radius: 28px;
@@ -408,24 +409,25 @@ const currentTab = ref(0)
 }
 
 .discover-btn {
-  background: linear-gradient(90deg, #5fe273 0%, #1d9b4f 100%);
-  color: #fff;
+
   font-size: 1.25rem;
   font-family: 'DM Sans', Arial, sans-serif;
   font-weight: 700;
   padding: 17px 32px;
+  background: #75BE3A;
+  color: #fff;
   border: none;
-  border-radius: 32px;
-  box-shadow: 0 2px 12px 0 rgba(60,180,100,0.08);
-  cursor: pointer;
-  transition: background 0.2s, transform 0.18s;
-  display: flex;
+  border-radius: 20px;
+  transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   align-items: center;
   gap: 0.6em;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 .discover-btn:hover {
-  background: linear-gradient(90deg, #1d9b4f 0%, #5fe273 100%);
-  transform: scale(1.05);
+  cursor: pointer;
+    background: #70ce23;
+    transform: scale(1.1);
 }
 .discover-btn .emoji {
   font-size: 1.45em;

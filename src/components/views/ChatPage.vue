@@ -46,6 +46,8 @@
         <div class="markdown-box" v-html="parseMarkdown(card)"></div>
       </div>
     </section>
+
+
     <div v-if="gptCards.length" class="carbon-footprint-nav-area">
       <div class="fun-tips">
         🌍 There's more to green living than keeping plants!  
@@ -59,14 +61,14 @@
     </div>
 
     <!-- Plant info cards (shown only if not queried yet) -->
-    <section class="plant-cards slide-in-left" v-if="!gptCards.length">
+    <!-- <section class="plant-cards slide-in-left" v-if="!gptCards.length">
       <div v-for="plant in plants" :key="plant.id" class="plant-card">
         <img :src="plant.image" :alt="plant.name" />
         <h3>{{ plant.name }}</h3>
         <p>{{ plant.brief }}</p>
         <a href="#" @click.prevent="getPlantDetail(plant)">Learn More</a>
       </div>
-    </section>
+    </section> -->
       <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
           <div class="loading-text">🌱It is coming~~~~🌱</div>
@@ -187,6 +189,10 @@ function getPlantDetail(plant) {
 
   
   <style scoped>
+
+  header {
+    margin-top: 150px;
+  }
   .plant-app {
     max-width: 1100px;
     margin: auto;
@@ -413,23 +419,25 @@ function getPlantDetail(plant) {
 
 .carbon-nav-btn {
   display: inline-block;
-  background: linear-gradient(90deg, #90cf8e 0%, #7abd4c 100%);
-  color: #fff;
+
   font-size: 1.25rem;
   font-weight: bold;
-  border-radius: 30px;
+
   padding: 14px 38px;
-  box-shadow: 0 2px 14px #a5d6a740;
-  text-decoration: none;
-  transition: background 0.2s, transform 0.18s;
+background: #75BE3A;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
   margin-top: 6px;
   letter-spacing: 1px;
 }
 .carbon-nav-btn:hover {
-  background: linear-gradient(90deg, #7abd4c 0%, #90cf8e 100%);
   transform: scale(1.05) rotate(-2deg);
-  color: #fff;
-  text-decoration: none;
+  cursor: pointer;
+    background: #70ce23;
 }
 
 body, .plant-app {

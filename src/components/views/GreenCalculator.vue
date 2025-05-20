@@ -44,7 +44,7 @@
 
                       <div class="button-container">
 
-                          <button class="btn"  style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;">
+                          <button class="btn"  style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; color: #fff; border-radius: 8px; border: none; justify-content: center; transition: transform 0.3s ease, background-color 0.3s ease;">
                               next
                           </button>
 
@@ -87,7 +87,7 @@
                           back
                           </button>
 
-                          <button class="btn"  style="margin-top: 20px; width: 40%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;">
+                          <button class="btn"  style="margin-top: 20px; width: 40%; height: 50px; background-color: #75BE3A; color: #fff; border-radius: 8px; border: none; justify-content: center;transition: transform 0.3s ease, background-color 0.3s ease;" >
                               next
                           </button>
                       </div>
@@ -137,7 +137,7 @@
                           back
                           </button>
 
-                          <button class="btn"  style="margin-top: 20px; width: 40%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;">
+                          <button class="btn"  style="margin-top: 20px; width: 40%; height: 50px; background-color: #75BE3A; color: #fff; border-radius: 8px; border: none; justify-content: center; transition: transform 0.3s ease, background-color 0.3s ease;">
                               next
                           </button>
                       </div>
@@ -247,7 +247,7 @@
                               <button
                               type="button"
                               class="btn"
-                              style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;"
+                              style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; color: #fff; border-radius: 8px; border: none; justify-content: center; transition: transform 0.3s ease, background-color 0.3s ease;"
                                   @click="navigateToStory"
                               >
                                   Raise Your Awareness
@@ -275,7 +275,7 @@
                       <button
                           type="button"
                           class="btn"
-                          style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; border-radius: 8px; border: none; justify-content: center;"
+                          style="margin-top: 20px; width: 60%; height: 50px; background-color: #75BE3A; color: #fff; border-radius: 8px; border: none; justify-content: center; transition: transform 0.3s ease, background-color 0.3s ease;" 
                           @click="reCalculate"
                       >
                           Calculate Again
@@ -1061,11 +1061,9 @@ input[type="text"]:focus {
 }
 
 .btn:hover {
-    background: #90CF8E;
-    color: #fff;
-    transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+  cursor: pointer;
+    background: #70ce23;
+    transform: scale(1.1);
 }
 
 .button-box {

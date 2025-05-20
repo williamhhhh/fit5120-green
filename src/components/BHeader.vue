@@ -35,9 +35,9 @@
           <!-- Right Section: Button + Hamburger -->
           <div class="col-4 col-md-2 d-flex justify-content-end align-items-center">
             <!-- <div class="header-right me-2 d-none d-md-flex"> -->
-              <router-link  class="header-right me-2 d-none d-md-flex" style="text-decoration: none;" to="/info">
+              <!-- <router-link  class="header-right me-2 d-none d-md-flex" style="text-decoration: none;" to="/info">
                 <div class="button-text" >Start!</div>
-              </router-link>
+              </router-link> -->
             <!-- </div> -->
 
             <!-- Mobile Toggler -->

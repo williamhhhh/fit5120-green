@@ -20,7 +20,7 @@
           <img src="@/assets/images/ballon.png" alt="ballon" class="ballon animate__animated animate__bounceInUp">
         </div>
         <!-- CTA button scrolls to chart section -->
-        <button @click="scrollToSection" class="button-get-started animate__animated animate__fadeIn">Let's tackle it!</button>
+        <button @click="scrollToSection" class="button-get-started animate__animated animate__fadeIn">Let's learn more!</button>
       </div>
     </div>
   </div>
@@ -314,8 +314,7 @@ watch(isTemp, async (newVal) => {
   }
 
   .title{
-    font-family: 'Domaine Display Narrow';
-    font-style: italic;
+    font-family: 'DM Serif Display';
     font-weight: 600;
     font-size: 70px;
     line-height: 66px;
@@ -338,7 +337,7 @@ watch(isTemp, async (newVal) => {
   }
 
   .title-description{
-    font-family: 'Be Vietnam Pro';
+    font-family: 'DM Serif Display';
     font-style: normal;
     font-weight: 400;
     font-size: 18px;
@@ -358,25 +357,26 @@ watch(isTemp, async (newVal) => {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
+    font-family: 'DM Sans';
+    font-weight: 600;
     width: 402px;
     height: 52px;
 
-    background: #90CF8E;
-    border-radius: 48px;
+    background: #75BE3A;
+    color: #fff;
     border: none;
-    cursor: pointer;
-    z-index: 100;
+    border-radius: 20px;
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
     /* animation: tracking-in-expand-fwd 1s cubic-bezier(0.215, 0.61, 0.355, 1) both; */
     animation-delay: 1s;
   }
   
   .button-get-started:hover {
     cursor: pointer;
-    transform: scale(1.05);
-    transition: background 0.5s ease;
-    background: #bcff89;
-
+    background: #70ce23;
+    transform: scale(1.1);
 
   }
   
@@ -402,8 +402,8 @@ watch(isTemp, async (newVal) => {
   /* Go Green Air Balloon */
 
   position: absolute;
-  right: -20px;       /* Adjust as needed */
-  bottom: -40px;      /* Adjust as needed */
+  right: -40px;       /* Adjust as needed */
+  bottom: -80px;      /* Adjust as needed */
   width: 182px;
   height: 185px;
   animation-delay: 0.3s;
@@ -491,20 +491,21 @@ watch(isTemp, async (newVal) => {
   align-items: center;
   padding: 14px 22px;
   gap: 12px;
-
   width: 70%;
   height: 65px;
-
-  background: #90CF8E;
-  border-radius: 48px;
+  background: #75BE3A;
+  color: #fff;
   border: none;
+  border-radius: 20px;
+  transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .button-cool:hover {
   cursor: pointer;
-  transform: scale(1.05);
-  transition: background 0.5s ease;
-  background: #bcff89;
+  background: #70ce23;
+  transform: scale(1.1);
 }
 
 .button-cool:active {
@@ -517,11 +518,14 @@ watch(isTemp, async (newVal) => {
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
+  text-decoration: none;
+
   /* identical to box height, or 150% */
   display: flex;
   align-items: center;
 
-  color: #000000;
+
+  color: #ffffff;
 }
 .container{
   display: flex;

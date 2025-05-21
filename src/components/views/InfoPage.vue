@@ -68,61 +68,40 @@
             </div>
           </div>
         </div>
+        
         <div v-else-if="currentTab === 1" key="tab1">
-          <!-- Why Cooling Matters -->
-          <div class="info-section">
-            <div class="info-section-row">
-              <div class="info-section-col">
-                <h2 class="info-section-title">
-                  <span class="emoji">🌡️</span>
-                  What is the Urban Heat Island Effect?
-                </h2>
-                <div class="info-section-desc">
-                  Concrete, glass and asphalt absorb and trap heat — raising local temperatures far beyond nearby green areas. This is known as the <b>Urban Heat Island (UHI)</b> effect.
-                </div>
-                <div class="info-section-desc" style="margin-top:1.1em;">
-                  <b>How Greening Helps</b>
-                  <ul class="info-list">
-                    <li>· Trees <b>shade surfaces,</b> lowering temperatures</li>
-                    <li>· Plants release<b>moisture</b>for natural cooling</li>
-                    <li>· Green walls, rooftop gardens and parks help reduce surrounding heat</li>
-                  </ul>
-                </div>
-                <div class="info-section-desc" style="margin-top:1.1em;">
-                  <b>Energy Impact</b><br>
-                  Cooler environments need <b>less air conditioning</b>, which means <b>lower power bills</b> and fewer carbon emissions.
-                </div>
-              </div>
-              <div class="info-section-col info-section-img">
-                <!-- bar chart -->
-                <img src="@/assets/images/g1.jpg" alt="UHI Bar Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
-              </div>
+          <div v-if="!impactStarted" class="impact-intro">
+            <h2 class="impact-title">
+              Do you know that&nbsp; heating and<br/>
+              cooling can account for 20% to 50%<br/>
+              of energy used in Australian homes?
+            </h2>
+            <div class="impact-desc">
+              What will happen if 27,309,396 Australians turn off their<br/>
+              air conditioner an hour earlier than before?
+            </div>
+            <div class="impact-btn-area">
+              <button class="impact-btn" @click="impactStarted = true">What will happen?</button>
             </div>
           </div>
-        </div>
-        <div v-else-if="currentTab === 2" key="tab2">
-          <!-- Why It Matters for Sustainability -->
-          <div class="info-section">
-            <div class="info-section-row">
-              <div class="info-section-col">
-                <h2 class="info-section-title">
-                  Greening Supports Sustainable Cities
-                </h2>
-                <div class="info-section-desc">
-                  Urban vegetation is one of the simplest and most effective sustainability strategies for a growing city like Melbourne. It offers real benefits for both people and the planet.
-                </div>
-                <ul class="info-list info-list-green">
-                  <li> Reduces household energy usage</li>
-                  <li> Lowers carbon emissions</li>
-                  <li> Filters air pollutants</li>
-                  <li> Improves mental health and physical wellbeing</li>
-                  <li> Helps manage stormwater and flooding</li>
-                </ul>
+          <div v-else class="impact-sim">
+            <div class="impact-top-figures">
+              <img src="@/assets/images/girls.png" class="impact-figure" alt="Action Figure" />
+              <div class="impact-sim-title">Your action toward green city matters!</div>
+              <img src="@/assets/images/earth1.png" class="impact-earth" alt="Earth" />
+            </div>
+            <div class="impact-card">
+              <div class="impact-slider-label">
+                Adjust the slider to reduce air conditioning usage by hours per person
               </div>
-              <div class="info-section-col info-section-img">
-                <!-- line chart -->
-                <img src="@/assets/images/g2.jpg" alt="Energy Line Chart" style="border-radius:16px;box-shadow:0 4px 16px #0001;"/>
+              <div class="impact-slider-row">
+                <span v-for="n in 11" :key="n" class="slider-num" :class="{active: slider == n-1}">{{ n-1 }}</span>
               </div>
+              <input type="range" min="0" max="10" v-model="slider" class="impact-slider" />
+              <div class="impact-chart-area">
+                <EnergyCompareChart :slider="slider"/>
+              </div>
+              <img src="@/assets/images/tent.png" class="impact-tent" alt="Tent Sticker" />
             </div>
           </div>
         </div>
@@ -143,6 +122,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import EnergyCompareChart from '@/components/EnergyCompareChart.vue'
+const currentTab = ref(0)
+const impactStarted = ref(false)
+const slider = ref(3)
+
+
 const router = useRouter()
 function goToGreenMap() {
   router.push('/GreenMap')
@@ -150,10 +135,8 @@ function goToGreenMap() {
 
 const tabs = [
   { label: 'What is Urban Greening?', key: 'urban' },
-  { label: 'Why Cooling Matters', key: 'cooling' },
-  { label: 'Why It Matters for Sustainability', key: 'sustain' }
+  { label: 'Your Impact on Energy', key: 'impact' }
 ]
-const currentTab = ref(0)
 </script>
 
 <style scoped>
@@ -280,7 +263,7 @@ const currentTab = ref(0)
 .info-section-col {
   flex: 1 1 340px;
   min-width: 270px;
-  max-width: 100%;
+  /* max-width: 200%; */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -471,5 +454,195 @@ const currentTab = ref(0)
     padding: 7px 6px;
     margin-left: 0;
   }
+}
+
+.impact-intro {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0px;
+  padding-bottom: 40px;
+}
+
+.impact-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 48px;
+  color: #181818;
+}
+
+@media (max-width: 800px) {
+  .impact-title { font-size: 2.4rem; }
+}
+@media (max-width: 500px) {
+  .impact-title { font-size: 1.45rem; }
+}
+
+.impact-desc {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #181818;
+  font-weight: 600;
+}
+
+.impact-btn-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.impact-btn {
+  width: 330px;
+  max-width: 90vw;
+  background: #a2e8b0;
+  color: #222;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 1.18rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 38px;
+  padding: 26px 0 22px 0;
+  margin-top: 10px;
+  box-shadow: 0 4px 24px 0 rgba(30, 180, 80, 0.08);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.14s, transform 0.12s;
+}
+.impact-btn:hover {
+  background: #71d08c;
+  color: #fff;
+  transform: scale(1.04);
+}
+
+.impact-sim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80vh;
+  position: relative;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.impact-top-figures {
+  width: 100%;
+  max-width: 800px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.impact-figure {
+  position: absolute;
+  left: 0;
+  top: -16px;
+  width: 120px;
+  height: auto;
+  z-index: 2;
+}
+
+.impact-earth {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 70px;
+  height: auto;
+  z-index: 2;
+}
+
+.impact-sim-title {
+  margin: 0 auto;
+  padding-top: 16px;
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #181818;
+  z-index: 3;
+  max-width: 700px;
+}
+
+.impact-card {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 8px 32px 0 rgba(30, 180, 80, 0.08);
+  border-radius: 32px;
+  padding: 40px 32px 40px 32px;
+  margin-top: 12px;
+  max-width: 800px;
+  width: 95vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.impact-slider-label {
+  text-align: center;
+  font-size: 1.21rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+.impact-slider-row {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+  font-family: 'DM Sans', Arial, sans-serif;
+  color: #888;
+  letter-spacing: 0.05em;
+}
+.slider-num.active {
+  color: #19b548;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.impact-slider {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto 30px auto;
+  accent-color: #19b548;
+  height: 6px;
+}
+
+.impact-chart-area {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  margin-bottom: 16px;
+}
+
+.impact-tent {
+  position: absolute;
+  left: 18px;
+  bottom: 8px;
+  width: 60px;
+  height: auto;
+  z-index: 1;
+}
+
+@media (max-width: 700px) {
+  .impact-top-figures {
+    max-width: 98vw;
+  }
+  .impact-figure { width: 64px; }
+  .impact-earth { width: 38px; }
+  .impact-sim-title { font-size: 1.1rem; }
+  .impact-card { padding: 16px 4vw 30px 4vw; }
+  .impact-tent { width: 32px; }
 }
 </style>

@@ -92,17 +92,42 @@
             </div>
             <div class="impact-card">
               <div class="impact-slider-label">
-                Adjust the slider to reduce air conditioning usage by hours per person
+                If all residents turned off their air conditioners a few minutes earlier each day, how much less residential energy would be consumed across Australia?
               </div>
+              <input
+                type="range"
+                min="0"
+                max="4"
+                step="1"
+                v-model="slider"
+                class="impact-slider"
+              />
+
               <div class="impact-slider-row">
-                <span v-for="n in 11" :key="n" class="slider-num" :class="{active: slider == n-1}">{{ n-1 }}</span>
+                <span v-for="n in 5" :key="n" class="slider-num" :class="{active: slider == n-1}">
+                  {{ (n-1)*30 }}
+                </span>
               </div>
-              <input type="range" min="0" max="10" v-model="slider" class="impact-slider" />
+
               <div class="impact-chart-area">
                 <EnergyCompareChart :slider="slider"/>
               </div>
               <img src="@/assets/images/tent.png" class="impact-tent" alt="Tent Sticker" />
             </div>
+
+            <div style="margin-left: 12px; color: #888; font-size: 14px;">
+              <span style="background: #eef6fb; border-radius: 4px; padding: 4px 8px;">
+                ℹ️ Australians average 2 hours of air conditioning cooling per person per day
+              </span>
+            </div>
+
+            <div class="bubble-tip">
+              <span class="bubble-icon">💡</span>
+              <span class="bubble-content">
+                Did you know that a nuclear power station generates approximately <b>35 petajoules</b> of energy per year?
+              </span>
+            </div>
+
           </div>
         </div>
       </transition>
@@ -644,5 +669,50 @@ const tabs = [
   .impact-sim-title { font-size: 1.1rem; }
   .impact-card { padding: 16px 4vw 30px 4vw; }
   .impact-tent { width: 32px; }
+}
+.bubble-tip {
+  top: -620px; 
+  right: -570px;
+  display: flex;
+  align-items: flex-start;
+  margin-left: 18px;
+  background: #f2f9ff;
+  padding: 14px 18px;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px #0001;
+  color: #2b607a;
+  font-size: 1.05rem;
+  max-width: 270px;
+  position: relative;
+}
+.bubble-tip::before {
+  content: '';
+  position: absolute;
+  left: -18px; top: 18px;
+  border-width: 10px 18px 10px 0;
+  border-style: solid;
+  border-color: transparent #f2f9ff transparent transparent;
+}
+.bubble-icon {
+  font-size: 1.3em;
+  margin-right: 8px;
+  margin-top: 2px;
+}
+.bubble-content {
+  display: block;
+}
+@media (max-width: 700px) {
+  .table-row-with-tip {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bubble-tip {
+    margin-left: 0;
+    margin-top: 16px;
+    max-width: 100%;
+  }
+  .bubble-tip::before {
+    display: none;
+  }
 }
 </style>

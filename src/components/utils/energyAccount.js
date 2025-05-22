@@ -4,9 +4,11 @@ export async function fetchEnergyAccountData() {
 }
 
 export function transformResidentialToChartJsFormat(data, slider = 0) {
-  const reductionRatio = slider * 0.01;
+  const reductionPerHour = 98.55; // PJ
+  const totalReduction = slider * reductionPerHour;
+
   const reducedResidential = data.residential.map(val =>
-    parseFloat((val * (1 - reductionRatio)).toFixed(2))
+    Math.max(0, parseFloat((val - totalReduction).toFixed(2)))
   );
 
   return {
@@ -23,7 +25,7 @@ export function transformResidentialToChartJsFormat(data, slider = 0) {
           tension: 0.34,
         },
         {
-          label: `Residential (AC reduced by ${slider}h)`,
+          label: `Residential (AC reduced by ${slider}h, -${(totalReduction).toFixed(2)} PJ)`,
           data: reducedResidential,
           borderColor: '#19b548',
           backgroundColor: '#19b54833',
@@ -45,7 +47,7 @@ export function transformResidentialToChartJsFormat(data, slider = 0) {
       scales: {
         y: {
           beginAtZero: false,
-          min: 800,
+          min: 0,
           max: 1200,
           title: { display: true, text: 'Energy use (PJ)' }
         },

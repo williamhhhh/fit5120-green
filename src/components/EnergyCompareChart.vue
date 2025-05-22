@@ -32,12 +32,15 @@ async function initChart() {
 
 function updateCompareLine() {
   if (!chartInstance || !latestRawData) return
-  const reductionRatio = props.slider * 0.01
+  const reductionMinutes = props.slider * 30; // 0, 30, 60, 90, 120
+  const reductionHours = reductionMinutes / 60; // 0, 0.5, 1, 1.5, 2
+  const totalReduction = reductionHours * 98.55;
+
   const reducedResidential = latestRawData.residential.map(val =>
-    parseFloat((val * (1 - reductionRatio)).toFixed(2))
-  )
+    Math.max(0, parseFloat((val - totalReduction).toFixed(2)))
+  );
   chartInstance.data.datasets[1].data = reducedResidential
-  chartInstance.data.datasets[1].label = `Residential (AC reduced by ${props.slider}h)`
+  chartInstance.data.datasets[1].label = `Residential (AC reduced by ${reductionMinutes}mins)`
   chartInstance.data.datasets[1].hidden = props.slider === 0
   chartInstance.update('none')
 }

@@ -5,27 +5,49 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { Chart } from 'chart.js/auto'
-import { fetchEnergyAccountData, transformEnergyAccountToChartJsFormat } from '../components/utils/energyAccount.js'
+import { fetchEnergyAccountData, transformResidentialToChartJsFormat } from '../components/utils/energyAccount.js'
+
+const props = defineProps({
+  slider: { type: Number, default: 0 }
+})
 
 const canvas = ref(null)
 let chartInstance = null
+let latestRawData = null
 
-async function renderChart() {
-  const data = await fetchEnergyAccountData()
-  const chartData = transformEnergyAccountToChartJsFormat(data)
-
-  if (chartInstance) chartInstance.destroy()
+async function initChart() {
+  latestRawData = await fetchEnergyAccountData()
+  const chartData = transformResidentialToChartJsFormat(latestRawData, props.slider)
   chartInstance = new Chart(canvas.value, {
     type: 'line',
     data: chartData.data,
-    options: chartData.options,
+    options: {
+      ...chartData.options,
+      animation: false
+    },
   })
 }
 
+function updateCompareLine() {
+  if (!chartInstance || !latestRawData) return
+  const reductionRatio = props.slider * 0.01
+  const reducedResidential = latestRawData.residential.map(val =>
+    parseFloat((val * (1 - reductionRatio)).toFixed(2))
+  )
+  chartInstance.data.datasets[1].data = reducedResidential
+  chartInstance.data.datasets[1].label = `Residential (AC reduced by ${props.slider}h)`
+  chartInstance.data.datasets[1].hidden = props.slider === 0
+  chartInstance.update('none')
+}
+
 onMounted(() => {
-  renderChart()
+  initChart()
+})
+
+watch(() => props.slider, () => {
+  updateCompareLine()
 })
 
 onBeforeUnmount(() => {

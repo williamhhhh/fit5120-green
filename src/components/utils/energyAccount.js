@@ -1,46 +1,35 @@
-
 export async function fetchEnergyAccountData() {
   const res = await fetch('https://api.coolthecities.com/energy_account')
   return res.json()
 }
 
-export function transformEnergyAccountToChartJsFormat(data) {
+export function transformResidentialToChartJsFormat(data, slider = 0) {
+  const reductionRatio = slider * 0.01;
+  const reducedResidential = data.residential.map(val =>
+    parseFloat((val * (1 - reductionRatio)).toFixed(2))
+  );
+
   return {
-    title: 'Victoria Energy Use (PJ) by Year',
+    title: 'Residential Energy Use (PJ) by Year',
     data: {
       labels: data.years,
       datasets: [
         {
-          label: 'Industry End Use (PJ)',
-          data: data.industry_end_use,
+          label: 'Residential (Current)',
+          data: data.residential,
           borderColor: '#2a94e6',
           backgroundColor: '#2a94e633',
           fill: false,
           tension: 0.34,
         },
         {
-          label: 'Residential (PJ)',
-          data: data.residential,
-          borderColor: '#e6a42a',
-          backgroundColor: '#e6a42a33',
+          label: `Residential (AC reduced by ${slider}h)`,
+          data: reducedResidential,
+          borderColor: '#19b548',
+          backgroundColor: '#19b54833',
           fill: false,
           tension: 0.34,
-        },
-        {
-          label: 'Exports (PJ)',
-          data: data.exports,
-          borderColor: '#e62a2a',
-          backgroundColor: '#e62a2a33',
-          fill: false,
-          tension: 0.34,
-        },
-        {
-          label: 'Total Use (Net) (PJ)',
-          data: data.total_use_net,
-          borderColor: '#16ba5d',
-          backgroundColor: '#16ba5d33',
-          fill: false,
-          tension: 0.34,
+          hidden: slider === 0
         }
       ]
     },
@@ -50,12 +39,14 @@ export function transformEnergyAccountToChartJsFormat(data) {
       plugins: {
         title: {
           display: true,
-          text: 'Victoria Energy Use (PJ) by Year'
+          text: 'Residential Energy Use (PJ) by Year'
         }
       },
       scales: {
         y: {
-          beginAtZero: true,
+          beginAtZero: false,
+          min: 800,
+          max: 1200,
           title: { display: true, text: 'Energy use (PJ)' }
         },
         x: { title: { display: true, text: 'Year' } }

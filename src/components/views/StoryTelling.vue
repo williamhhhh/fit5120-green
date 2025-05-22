@@ -574,14 +574,9 @@ h1, h2, h3, h4, h5, h6,
   min-width: 100%;    
   max-width: 100%;
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #75be3a, #f0f0f0);
-  background: none;
-  min-height: 100vh;
-  background-size: cover;
-  background-attachment: fixed;
-  box-sizing: border-box;
   padding-top: 20px;
   padding-bottom: 20px;
+  background: none;
 }
 
 .title {
@@ -725,10 +720,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .story-card-center {
-  position: fixed;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
+  margin: 400px 200px 0 auto; 
   width: 340px;
   max-width: 92vw;
   background: #fff;
@@ -1348,16 +1340,17 @@ h1, h2, h3, h4, h5, h6,
   padding-bottom: 40px;
 }
 
-.story-card-center.final-result-panel {
-  position: static;
-  left: auto;
-  top: auto;
-  transform: none;
-  margin-bottom: 32px; 
+.final-result-panel {
+  margin-top: 340px;
+  margin-left: 600px;
+  margin-right: 0;
+  width: 600px;
+  max-width: 95vw;
 }
 
 .back-home-btn {
   margin: 0 auto;
+  margin-top: -300px;
   display: block;
   padding: 15px 38px;
   font-size: 1.15rem;

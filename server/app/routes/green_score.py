@@ -135,7 +135,7 @@ def energy_account():
                    "Residential (PJ)" AS residential, 
                    "Exports (PJ)" AS exports, 
                    "Total use (net) (PJ)" AS total_use_net
-            FROM energyaccount
+            FROM "green-city".energyaccount
             ORDER BY year;
         """
         cur.execute(query)

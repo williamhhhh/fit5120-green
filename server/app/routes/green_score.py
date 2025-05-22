@@ -125,7 +125,7 @@ def green_gas():
         return jsonify({"error": str(e)}), 500
     
 @energy_account_bp.route('/energy_account', methods=['POST', "GET"])
-def get_energy_account():
+def energy_account():
     try:
         conn = db.get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)

@@ -17,6 +17,7 @@ chat_bp = Blueprint('chat', __name__)
 temp_min_bp = Blueprint('temp_min', __name__)
 temp_max_bp = Blueprint('temp_max', __name__)
 green_gas_bp = Blueprint('green_gas', __name__)
+energy_account_bp = Blueprint('energy_account', __name__)
 
 @green_score_bp.route('/green_score', methods=['POST','GET'])
 def green_score():
@@ -120,5 +121,35 @@ def green_gas():
 
         return jsonify(response_data)
 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@energy_account_bp.route('/energy_account', methods=['POST', "GET"])
+def get_energy_account():
+    try:
+        conn = db.get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        query = """
+            SELECT year, 
+                   "Industry End use (PJ)" AS industry_end_use, 
+                   "Residential (PJ)" AS residential, 
+                   "Exports (PJ)" AS exports, 
+                   "Total use (net) (PJ)" AS total_use_net
+            FROM energyaccount
+            ORDER BY year;
+        """
+        cur.execute(query)
+        results = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        response_data = {
+            "years": [row["year"] for row in results],
+            "industry_end_use": [float(row["industry_end_use"]) for row in results],
+            "residential": [float(row["residential"]) for row in results],
+            "exports": [float(row["exports"]) for row in results],
+            "total_use_net": [float(row["total_use_net"]) for row in results]
+        }
+        return jsonify(response_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

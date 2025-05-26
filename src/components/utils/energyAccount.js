@@ -1,3 +1,5 @@
+import { Ticks } from "chart.js";
+
 export async function fetchEnergyAccountData() {
   const res = await fetch('https://api.coolthecities.com/energy_account')
   return res.json()
@@ -47,8 +49,11 @@ export function transformResidentialToChartJsFormat(data, slider = 0) {
       scales: {
         y: {
           beginAtZero: false,
-          min: 0,
+          min: 700,
           max: 1200,
+          Ticks: {
+            stepSize: 50
+          },
           title: { display: true, text: 'Energy use (PJ)' }
         },
         x: { title: { display: true, text: 'Year' } }

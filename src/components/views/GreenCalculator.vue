@@ -38,7 +38,7 @@
                       <label for="gas" class="label-text">How much is your monthly gas bill?</label>
                       <input type="text" id="gas" name="gas" placeholder="$0.00" v-model="formDataOne.gas" />
                       <div v-if="errors.gas" class="text-danger"> {{ errors.gas }} </div>
-                      <label for="oil" class="label-text">How much is your monthly oil bill?</label>
+                      <label for="oil" class="label-text">How much is your monthly petrol bill?</label>
                       <input type="text" id="oil" name="oil" placeholder="$0.00" v-model="formDataOne.oil"/>
                       <div v-if="errors.oil" class="text-danger"> {{ errors.oil }} </div>
 
@@ -309,6 +309,8 @@ const displayLabel = computed(() => {
 switch (highest.value) {
   case 'mileage':
     return 'driving';
+  case 'oil':
+    return 'petrol';
   default:
     return highest.value; // fallback to original key
 }
@@ -320,7 +322,7 @@ electric: 'Your electricity usage contributes significantly to your carbon footp
 
 gas: 'High natural gas usage can mean excess emissions from heating and cooking. Try lowering your thermostat by just a few degrees in winter and dressing more warmly indoors. Seal gaps around windows and doors to retain heat. Installing programmable thermostats and insulating your water heater can also cut down gas consumption. If you cook with gas, use lids on pots and consider using energy-efficient cooking appliances like induction cooktops.',
 
-oil: 'Heating oil is one of the most carbon-intensive fuel sources. If your home uses oil heating, consider transitioning to a more sustainable option like electric heat pumps or solar heating. Until then, perform regular maintenance on your system, insulate pipes and your water tank, and reduce heating demand by improving insulation and using heavy curtains during colder months.',
+oil: 'Petrol is a highly carbon-intensive fuel source. If your home or appliances rely on petrol for heating or power, consider transitioning to more sustainable alternatives such as electric heat pumps or solar energy systems. In the meantime, maintain your equipment regularly, ensure proper insulation of any fuel lines or tanks, and reduce overall energy demand by improving your home’s insulation and using thermal curtains during colder months.',
 
 mileage: 'Frequent driving increases emissions, especially if using a gas-powered vehicle. Carpool with colleagues, use public transport when available, or explore biking and walking for shorter distances. Combine errands into one trip and drive efficiently—avoiding harsh acceleration and excessive idling. If feasible, consider switching to a hybrid or electric vehicle, and keep your tires inflated and your engine maintained to improve fuel efficiency.',
 

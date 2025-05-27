@@ -30,7 +30,7 @@
     <!-- Section title -->
     <div class="graph-section-title-container row">
       <div class="graph-section-title-text col-8 col-md-12">
-        <div>Melbourne had increased <span class="heat-highlight">6 degrees</span> in recent years</div>
+        <div>Melbourne had increased by <span class="heat-highlight">6 degrees</span> in recent years</div>
       </div>
     </div>
 

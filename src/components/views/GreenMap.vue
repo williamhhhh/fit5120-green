@@ -77,7 +77,7 @@
         <h3 style="margin-top: 30px; font-family: 'DM Serif Display', serif;">Get some personal plant advice➡️</h3>
       </div>
       <div class="col-6 text-center">
-        <button @click="navigateToChat" class="btn-load" style="margin-top: 40px; font-family: Garamond, serif; ">Chat with Green specialist</button>
+        <button @click="navigateToChat" class="btn-load" style="margin-top: 40px; font-family: Garamond, serif; ">Indoor planting advice</button>
       </div>  
     </div>
   

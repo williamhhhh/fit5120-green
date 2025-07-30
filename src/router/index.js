@@ -23,7 +23,7 @@ const routes = [
     meta: { hideHeader: false }
   },
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: Home,
     meta: { hideHeader: false, requiresAuth: false }

@@ -12,7 +12,7 @@
             <!-- Desktop Nav -->
             <ul class="d-none d-md-flex flex-row list-unstyled mb-0">
               <li class="nav-item">
-                <router-link to="/home" class="nav-link" active-class="active">Home</router-link>
+                <router-link to="/" class="nav-link" active-class="active">Home</router-link>
               </li>
               <li class="nav-item">
                 <router-link to="/info" class="nav-link" active-class="active">What is Greening?</router-link>

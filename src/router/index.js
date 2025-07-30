@@ -10,12 +10,12 @@ import { getAuth } from 'firebase/auth'
 import InfoPage from '@/components/views/InfoPage.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'Login',
-    component: LoginPage,
-    meta: { hideHeader: true }
-  },
+  // {
+  //   path: '/',
+  //   name: 'Login',
+  //   component: LoginPage,
+  //   meta: { hideHeader: true }
+  // },
   {
     path: '/info',
     name: 'InfoPage',
@@ -26,37 +26,37 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   },
   {
     path: '/GreenAdvice',
     name: 'GreenAdvice',
     component: GreenAdvice,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   },
   {
     path: '/GreenMap',
     name: 'GreenMap',
     component: GreenMap,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   },
   {
     path: '/Chat',
     name: 'ChatPage',
     component: ChatPage,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   },
   {
     path: '/GreenCalculator',
     name: 'GreenCalculator',
     component: GreenCalculator,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   },
   {
     path: '/StoryTelling',
     name: 'StoryTelling',
     component: StoryTelling,
-    meta: { hideHeader: false, requiresAuth: true }
+    meta: { hideHeader: false, requiresAuth: false }
   }
 ]
 
@@ -66,14 +66,14 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => {
-  const auth = getAuth()
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth && !auth.currentUser) {
-    next({ path: '/' })
-  } else {
-    next() 
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const auth = getAuth()
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   if (requiresAuth && !auth.currentUser) {
+//     next({ path: '/' })
+//   } else {
+//     next() 
+//   }
+// })
 
 export default router
